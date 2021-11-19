@@ -4,7 +4,7 @@
 ARG VARIANT="buster"
 FROM mcr.microsoft.com/vscode/devcontainers/base:0-${VARIANT}
 
-# ** [Optional] Uncomment this section to install additional packages. **
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
-
+# Using Debian, as root
+RUN echo "Installing node" && apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && curl -fsSL https://deb.nodesource.com/setup_17.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs
