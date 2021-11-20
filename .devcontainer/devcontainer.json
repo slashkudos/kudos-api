@@ -28,7 +28,8 @@
 	"redhat.vscode-yaml",
 	"yzhang.markdown-all-in-one",
 	"aws-amplify.aws-amplify-vscode",
-	"graphql.vscode-graphql"
+	"graphql.vscode-graphql",
+	"kumar-harsh.graphql-for-vscode"
 ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
