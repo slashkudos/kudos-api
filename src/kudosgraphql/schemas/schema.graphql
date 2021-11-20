@@ -1,0 +1,321 @@
+﻿input CreateGitHubMetadataInput {
+  url: AWSURL!
+  owner: String!
+  repo: String
+  team: String
+}
+
+input CreateKudoConnectionInput {
+  nextToken: String!
+}
+
+input CreateKudoInput {
+  id: ID!
+  giverUsername: String!
+  receiverUsername: String!
+  message: String!
+  createdAt: AWSDateTime!
+  kudoVerb: KudoVerb!
+  dataSource: GitHubMetadataInput!
+}
+
+input CreatePersonInput {
+  id: ID!
+  username: String!
+  email: ID!
+}
+
+enum DataSourceApp {
+  github
+  slack
+  teams
+  twitter
+}
+
+union DataSourceMetadata = GitHubMetadata | SlackMetadata
+
+input DeleteGitHubMetadataInput {
+  url: AWSURL!
+}
+
+input DeleteKudoConnectionInput {
+  nextToken: String!
+}
+
+input DeleteKudoInput {
+  id: ID!
+  createdAt: AWSDateTime!
+}
+
+input DeletePersonInput {
+  id: ID!
+  username: String!
+}
+
+enum GitHubItem {
+  issue
+  pullRequest
+  discussion
+  teamPost
+}
+
+type GitHubMetadata implements IDataSource {
+  name: DataSourceApp!
+  url: AWSURL!
+  owner: String!
+  repo: String
+  team: String
+  item: GitHubItem
+}
+
+type GitHubMetadataConnection {
+  items: [GitHubMetadata]
+  nextToken: String
+}
+
+input GitHubMetadataInput {
+  name: DataSourceApp!
+  url: AWSURL!
+  owner: String!
+  repo: String
+  team: String
+  item: GitHubItem
+}
+
+interface IDataSource {
+  name: DataSourceApp!
+  url: AWSURL!
+}
+
+type Kudo
+  @model
+  @key(name: "byPerson", fields: ["giverUsername", "receiverUsername"])
+  @key(name: "byGiver", fields: ["giverUsername"])
+  @key(name: "byReceiver", fields: ["receiverUsername"]) {
+  id: ID!
+  giverUsername: String!
+  receiverUsername: String!
+  message: String!
+  kudoVerb: KudoVerb!
+  dataSource: DataSourceMetadata
+  createdAt: AWSDateTime!
+  giver: Person @connection(keyName: "byUsername", fields: ["giverUsername"])
+  receiver: Person
+    @connection(keyName: "byUsername", fields: ["receiverUsername"])
+}
+
+type KudoConnection {
+  items: [Kudo]
+  nextToken: String
+}
+
+enum KudoVerb {
+  kudos
+  props
+  sparkles
+  fireworks
+}
+
+type Mutation {
+  createKudo(input: CreateKudoInput!): Kudo
+  updateKudo(input: UpdateKudoInput!): Kudo
+  deleteKudo(input: DeleteKudoInput!): Kudo
+  createPerson(input: CreatePersonInput!): Person
+  updatePerson(input: UpdatePersonInput!): Person
+  deletePerson(input: DeletePersonInput!): Person
+  createGitHubMetadata(input: CreateGitHubMetadataInput!): GitHubMetadata
+  updateGitHubMetadata(input: UpdateGitHubMetadataInput!): GitHubMetadata
+  deleteGitHubMetadata(input: DeleteGitHubMetadataInput!): GitHubMetadata
+}
+
+type Person @model @key(name: "byUsername", fields: ["username"]) {
+  id: ID!
+  username: String!
+  email: ID!
+  kudosGiven: [Kudo] @connection(keyName: "byGiver", fields: ["username"])
+  kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["username"])
+}
+
+type PersonConnection {
+  items: [Person]
+  nextToken: String
+}
+
+type Query {
+  getKudo(id: ID, createdAt: AWSDateTime): Kudo
+  listKudos(
+    filter: TableKudoFilterInput
+    limit: Int
+    nextToken: String
+  ): KudoConnection
+  getPerson(id: ID!, username: String!): Person
+  listPeople(
+    filter: TablePersonFilterInput
+    limit: Int
+    nextToken: String
+  ): PersonConnection
+}
+
+type SlackMetadata implements IDataSource {
+  name: DataSourceApp!
+  url: AWSURL!
+}
+
+type Subscription {
+  onCreateKudo(
+    id: ID
+    giverUsername: String
+    receiverUsername: String
+    message: String
+    createdAt: AWSDateTime
+  ): Kudo @aws_subscribe(mutations: ["createKudo"])
+  onUpdateKudo(
+    id: ID
+    giverUsername: String
+    receiverUsername: String
+    message: String
+    createdAt: AWSDateTime
+  ): Kudo @aws_subscribe(mutations: ["updateKudo"])
+  onDeleteKudo(
+    id: ID
+    giverUsername: String
+    receiverUsername: String
+    message: String
+    createdAt: AWSDateTime
+  ): Kudo @aws_subscribe(mutations: ["deleteKudo"])
+  onCreatePerson(id: ID, username: String, email: ID): Person
+    @aws_subscribe(mutations: ["createPerson"])
+  onUpdatePerson(id: ID, username: String, email: ID): Person
+    @aws_subscribe(mutations: ["updatePerson"])
+  onDeletePerson(id: ID, username: String, email: ID): Person
+    @aws_subscribe(mutations: ["deletePerson"])
+  onCreateGitHubMetadata(
+    url: AWSURL
+    owner: String
+    repo: String
+    team: String
+  ): GitHubMetadata @aws_subscribe(mutations: ["createGitHubMetadata"])
+  onUpdateGitHubMetadata(
+    url: AWSURL
+    owner: String
+    repo: String
+    team: String
+  ): GitHubMetadata @aws_subscribe(mutations: ["updateGitHubMetadata"])
+  onDeleteGitHubMetadata(
+    url: AWSURL
+    owner: String
+    repo: String
+    team: String
+  ): GitHubMetadata @aws_subscribe(mutations: ["deleteGitHubMetadata"])
+}
+
+input TableBooleanFilterInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input TableFloatFilterInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  contains: Float
+  notContains: Float
+  between: [Float]
+}
+
+input TableGitHubMetadataFilterInput {
+  url: TableStringFilterInput
+  owner: TableStringFilterInput
+  repo: TableStringFilterInput
+  team: TableStringFilterInput
+}
+
+input TableIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input TableIntFilterInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  contains: Int
+  notContains: Int
+  between: [Int]
+}
+
+input TableKudoConnectionFilterInput {
+  nextToken: TableStringFilterInput
+}
+
+input TableKudoFilterInput {
+  id: TableIDFilterInput
+  giverUsername: TableStringFilterInput
+  receiverUsername: TableStringFilterInput
+  message: TableStringFilterInput
+  createdAt: TableStringFilterInput
+}
+
+input TablePersonFilterInput {
+  id: TableIDFilterInput
+  username: TableStringFilterInput
+  email: TableIDFilterInput
+}
+
+input TableStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input UpdateGitHubMetadataInput {
+  url: AWSURL!
+  owner: String
+  repo: String
+  team: String
+}
+
+input UpdateKudoConnectionInput {
+  nextToken: String!
+}
+
+input UpdateKudoInput {
+  id: ID!
+  giverUsername: String
+  receiverUsername: String
+  message: String
+  createdAt: AWSDateTime!
+}
+
+input UpdatePersonInput {
+  id: ID!
+  username: String!
+  email: ID
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
