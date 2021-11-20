@@ -1,0 +1,33 @@
+mutation createKudoTest {
+  createKudo(
+    input: {
+      id: "4"
+      message: "Hello World!"
+      receiverUsername: "philip-gai"
+      giverUsername: "philip-gai"
+      createdAt: "2021-11-20T07:40:05Z"
+      kudoVerb: kudos
+      dataSource: {
+        item: issue
+        url: "https://github.com/kudos-etc/kudos-test/issues/1"
+        name: github
+        owner: "kudos-etc"
+        repo: "kudos-test"
+      }
+    }
+  ) {
+    id
+  }
+}
+
+query listKudosTest {
+  listKudos {
+    items {
+      id
+      kudoVerb
+      message
+      giverUsername
+      githubMetadata
+    }
+  }
+}
