@@ -1,0 +1,66 @@
+enum DataSourceApp {
+  github
+  slack
+  teams
+  twitter
+}
+
+union DataSourceMetadata = GitHubMetadata | SlackMetadata
+
+enum GitHubItem {
+  issue
+  pullRequest
+  discussion
+  teamPost
+}
+
+type GitHubMetadata implements IDataSource {
+  name: DataSourceApp!
+  url: AWSURL!
+  owner: String!
+  repo: String
+  team: String
+  item: GitHubItem
+}
+
+interface IDataSource {
+  name: DataSourceApp!
+  url: AWSURL!
+}
+
+type Kudo
+  @model
+  @key(name: "byPerson", fields: ["giverUsername", "receiverUsername"])
+  @key(name: "byGiver", fields: ["giverUsername"])
+  @key(name: "byReceiver", fields: ["receiverUsername"]) {
+  id: ID!
+  giverUsername: String!
+  receiverUsername: String!
+  message: String!
+  kudoVerb: KudoVerb!
+  dataSource: DataSourceMetadata
+  createdAt: AWSDateTime!
+  giver: Person @connection(keyName: "byUsername", fields: ["giverUsername"])
+  receiver: Person
+    @connection(keyName: "byUsername", fields: ["receiverUsername"])
+}
+
+enum KudoVerb {
+  kudos
+  props
+  sparkles
+  fireworks
+}
+
+type Person @model @key(name: "byUsername", fields: ["username"]) {
+  id: ID!
+  username: String!
+  email: ID!
+  kudosGiven: [Kudo] @connection(keyName: "byGiver", fields: ["username"])
+  kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["username"])
+}
+
+type SlackMetadata implements IDataSource {
+  name: DataSourceApp!
+  url: AWSURL!
+}
