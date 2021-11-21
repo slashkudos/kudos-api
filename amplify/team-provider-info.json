@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-kudosapi-dev-51900-authRole",
+      "UnauthRoleArn": "arn:aws:iam::391437285077:role/amplify-kudosapi-dev-51900-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::391437285077:role/amplify-kudosapi-dev-51900-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-kudosapi-dev-51900-deployment",
+      "UnauthRoleName": "amplify-kudosapi-dev-51900-unauthRole",
+      "StackName": "amplify-kudosapi-dev-51900",
+      "StackId": "arn:aws:cloudformation:us-east-1:391437285077:stack/amplify-kudosapi-dev-51900/8a057b00-4a8a-11ec-8aac-0ea18edc90ff",
+      "AmplifyAppId": "d5u222qsuh3lu"
+    }
+  }
+}
