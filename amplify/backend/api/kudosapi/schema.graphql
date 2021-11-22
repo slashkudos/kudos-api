@@ -1,3 +1,8 @@
+#
+# BUG: https://github.com/aws-amplify/amplify-cli/issues/3878#issuecomment-786829573
+# tl;dr: The has-one connections can only reference the primary index of the table (ie. you can't specify a keyName for has-one connections)
+#
+
 enum DataSourceApp {
   github
   slack
@@ -30,19 +35,18 @@ interface IDataSource {
 
 type Kudo
   @model
-  @key(name: "byPerson", fields: ["giverUsername", "receiverUsername"])
-  @key(name: "byGiver", fields: ["giverUsername"])
-  @key(name: "byReceiver", fields: ["receiverUsername"]) {
+  @key(name: "byPerson", fields: ["giverId", "receiverId"])
+  @key(name: "byGiver", fields: ["giverId"])
+  @key(name: "byReceiver", fields: ["receiverId"]) {
   id: ID!
-  giverUsername: String!
-  receiverUsername: String!
+  giverId: ID!
+  receiverId: ID!
   message: String!
   kudoVerb: KudoVerb!
   dataSource: DataSourceMetadata
   createdAt: AWSDateTime!
-  giver: Person @connection(keyName: "byUsername", fields: ["giverUsername"])
-  receiver: Person
-    @connection(keyName: "byUsername", fields: ["receiverUsername"])
+  giver: Person @connection(fields: ["giverId"])
+  receiver: Person @connection(fields: ["receiverId"])
 }
 
 enum KudoVerb {
@@ -56,8 +60,8 @@ type Person @model @key(name: "byUsername", fields: ["username"]) {
   id: ID!
   username: String!
   email: ID!
-  kudosGiven: [Kudo] @connection(keyName: "byGiver", fields: ["username"])
-  kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["username"])
+  kudosGiven: [Kudo] @connection(keyName: "byGiver", fields: ["id"])
+  kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["id"])
 }
 
 type SlackMetadata implements IDataSource {
