@@ -10,8 +10,6 @@ enum DataSourceApp {
   twitter
 }
 
-union DataSourceMetadata = GitHubMetadata | SlackMetadata
-
 enum GitHubItem {
   issue
   pullRequest
@@ -19,16 +17,15 @@ enum GitHubItem {
   teamPost
 }
 
-type GitHubMetadata implements IDataSource {
-  name: DataSourceApp!
-  url: AWSURL!
-  owner: String!
-  repo: String
-  team: String
-  item: GitHubItem
+enum KudoVerb {
+  kudos
+  props
+  sparkles
+  fireworks
 }
 
 interface IDataSource {
+  id: ID!
   name: DataSourceApp!
   url: AWSURL!
 }
@@ -43,17 +40,11 @@ type Kudo
   receiverId: ID!
   message: String!
   kudoVerb: KudoVerb!
-  dataSource: DataSourceMetadata
+  dataSourceApp: DataSourceApp
+  github: GitHubMetadata
   createdAt: AWSDateTime!
   giver: Person @connection(fields: ["giverId"])
   receiver: Person @connection(fields: ["receiverId"])
-}
-
-enum KudoVerb {
-  kudos
-  props
-  sparkles
-  fireworks
 }
 
 type Person @model @key(name: "byUsername", fields: ["username"]) {
@@ -64,7 +55,12 @@ type Person @model @key(name: "byUsername", fields: ["username"]) {
   kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["id"])
 }
 
-type SlackMetadata implements IDataSource {
+type GitHubMetadata implements IDataSource {
+  id: ID!
   name: DataSourceApp!
   url: AWSURL!
+  owner: String!
+  repo: String
+  team: String
+  item: GitHubItem
 }

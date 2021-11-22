@@ -13,19 +13,15 @@ export const createKudo = /* GraphQL */ `
       receiverId
       message
       kudoVerb
-      dataSource {
-        ... on GitHubMetadata {
-          name
-          url
-          owner
-          repo
-          team
-          item
-        }
-        ... on SlackMetadata {
-          name
-          url
-        }
+      dataSourceApp
+      github {
+        id
+        name
+        url
+        owner
+        repo
+        team
+        item
       }
       createdAt
       giver {
@@ -69,19 +65,15 @@ export const updateKudo = /* GraphQL */ `
       receiverId
       message
       kudoVerb
-      dataSource {
-        ... on GitHubMetadata {
-          name
-          url
-          owner
-          repo
-          team
-          item
-        }
-        ... on SlackMetadata {
-          name
-          url
-        }
+      dataSourceApp
+      github {
+        id
+        name
+        url
+        owner
+        repo
+        team
+        item
       }
       createdAt
       giver {
@@ -125,19 +117,15 @@ export const deleteKudo = /* GraphQL */ `
       receiverId
       message
       kudoVerb
-      dataSource {
-        ... on GitHubMetadata {
-          name
-          url
-          owner
-          repo
-          team
-          item
-        }
-        ... on SlackMetadata {
-          name
-          url
-        }
+      dataSourceApp
+      github {
+        id
+        name
+        url
+        owner
+        repo
+        team
+        item
       }
       createdAt
       giver {
@@ -186,6 +174,7 @@ export const createPerson = /* GraphQL */ `
           receiverId
           message
           kudoVerb
+          dataSourceApp
           createdAt
           updatedAt
         }
@@ -198,6 +187,7 @@ export const createPerson = /* GraphQL */ `
           receiverId
           message
           kudoVerb
+          dataSourceApp
           createdAt
           updatedAt
         }
@@ -224,6 +214,7 @@ export const updatePerson = /* GraphQL */ `
           receiverId
           message
           kudoVerb
+          dataSourceApp
           createdAt
           updatedAt
         }
@@ -236,6 +227,7 @@ export const updatePerson = /* GraphQL */ `
           receiverId
           message
           kudoVerb
+          dataSourceApp
           createdAt
           updatedAt
         }
@@ -262,6 +254,7 @@ export const deletePerson = /* GraphQL */ `
           receiverId
           message
           kudoVerb
+          dataSourceApp
           createdAt
           updatedAt
         }
@@ -274,6 +267,7 @@ export const deletePerson = /* GraphQL */ `
           receiverId
           message
           kudoVerb
+          dataSourceApp
           createdAt
           updatedAt
         }

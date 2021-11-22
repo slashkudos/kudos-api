@@ -223,12 +223,23 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "dataSource",
+          "name" : "dataSourceApp",
           "description" : null,
           "args" : [ ],
           "type" : {
-            "kind" : "UNION",
-            "name" : "DataSourceMetadata",
+            "kind" : "ENUM",
+            "name" : "DataSourceApp",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "github",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "GitHubMetadata",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -338,27 +349,54 @@
         } ],
         "possibleTypes" : null
       }, {
-        "kind" : "UNION",
-        "name" : "DataSourceMetadata",
+        "kind" : "ENUM",
+        "name" : "DataSourceApp",
         "description" : null,
         "fields" : null,
         "inputFields" : null,
         "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : [ {
-          "kind" : "OBJECT",
-          "name" : "GitHubMetadata",
-          "ofType" : null
+        "enumValues" : [ {
+          "name" : "github",
+          "description" : null,
+          "isDeprecated" : false,
+          "deprecationReason" : null
         }, {
-          "kind" : "OBJECT",
-          "name" : "SlackMetadata",
-          "ofType" : null
-        } ]
+          "name" : "slack",
+          "description" : null,
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "teams",
+          "description" : null,
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "twitter",
+          "description" : null,
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "possibleTypes" : null
       }, {
         "kind" : "OBJECT",
         "name" : "GitHubMetadata",
         "description" : null,
         "fields" : [ {
+          "name" : "id",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "ID",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
           "name" : "name",
           "description" : null,
           "args" : [ ],
@@ -446,35 +484,6 @@
         "enumValues" : null,
         "possibleTypes" : null
       }, {
-        "kind" : "ENUM",
-        "name" : "DataSourceApp",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : null,
-        "interfaces" : null,
-        "enumValues" : [ {
-          "name" : "github",
-          "description" : null,
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "slack",
-          "description" : null,
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "teams",
-          "description" : null,
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "twitter",
-          "description" : null,
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        } ],
-        "possibleTypes" : null
-      }, {
         "kind" : "SCALAR",
         "name" : "AWSURL",
         "description" : "The `AWSURL` scalar type provided by AWS AppSync, represents a valid URL string (Ex: <https://www.amazon.com/>). The URL may use any scheme and may also be a local URL (Ex: <http://localhost/>).  URLs without schemes like \"**amazon.com**\" or \"**www.amazon.com**\" are considered invalid. URLs which contain double slashes (two consecutive forward slashes) in their path are also considered invalid.",
@@ -517,6 +526,21 @@
         "name" : "IDataSource",
         "description" : null,
         "fields" : [ {
+          "name" : "id",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "ID",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
           "name" : "name",
           "description" : null,
           "args" : [ ],
@@ -554,54 +578,7 @@
           "kind" : "OBJECT",
           "name" : "GitHubMetadata",
           "ofType" : null
-        }, {
-          "kind" : "OBJECT",
-          "name" : "SlackMetadata",
-          "ofType" : null
         } ]
-      }, {
-        "kind" : "OBJECT",
-        "name" : "SlackMetadata",
-        "description" : null,
-        "fields" : [ {
-          "name" : "name",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "NON_NULL",
-            "name" : null,
-            "ofType" : {
-              "kind" : "ENUM",
-              "name" : "DataSourceApp",
-              "ofType" : null
-            }
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "url",
-          "description" : null,
-          "args" : [ ],
-          "type" : {
-            "kind" : "NON_NULL",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "AWSURL",
-              "ofType" : null
-            }
-          },
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        } ],
-        "inputFields" : null,
-        "interfaces" : [ {
-          "kind" : "INTERFACE",
-          "name" : "IDataSource",
-          "ofType" : null
-        } ],
-        "enumValues" : null,
-        "possibleTypes" : null
       }, {
         "kind" : "SCALAR",
         "name" : "AWSDateTime",
@@ -879,6 +856,15 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "ModelKudoVerbInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "dataSourceApp",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelDataSourceAppInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -1371,6 +1357,33 @@
         "enumValues" : null,
         "possibleTypes" : null
       }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "ModelDataSourceAppInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "eq",
+          "description" : null,
+          "type" : {
+            "kind" : "ENUM",
+            "name" : "DataSourceApp",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "ne",
+          "description" : null,
+          "type" : {
+            "kind" : "ENUM",
+            "name" : "DataSourceApp",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
         "kind" : "ENUM",
         "name" : "ModelSortDirection",
         "description" : null,
@@ -1777,11 +1790,117 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "dataSourceApp",
+          "description" : null,
+          "type" : {
+            "kind" : "ENUM",
+            "name" : "DataSourceApp",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "github",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "GitHubMetadataInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
           "name" : "createdAt",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
             "name" : "AWSDateTime",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "GitHubMetadataInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "id",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "ID",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "name",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "ENUM",
+              "name" : "DataSourceApp",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "url",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "AWSURL",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "owner",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "repo",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "team",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "item",
+          "description" : null,
+          "type" : {
+            "kind" : "ENUM",
+            "name" : "GitHubItem",
             "ofType" : null
           },
           "defaultValue" : null
@@ -1827,6 +1946,15 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "ModelKudoVerbInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "dataSourceApp",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelDataSourceAppInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -1929,6 +2057,24 @@
           "type" : {
             "kind" : "ENUM",
             "name" : "KudoVerb",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "dataSourceApp",
+          "description" : null,
+          "type" : {
+            "kind" : "ENUM",
+            "name" : "DataSourceApp",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "github",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "GitHubMetadataInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -2212,24 +2358,15 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "ModelFloatInput",
+        "name" : "ModelIDKeyConditionInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
-          "name" : "ne",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Float",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
           "name" : "eq",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "Float",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
@@ -2238,7 +2375,7 @@
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "Float",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
@@ -2247,7 +2384,7 @@
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "Float",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
@@ -2256,7 +2393,7 @@
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "Float",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
@@ -2265,7 +2402,7 @@
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "Float",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
@@ -2277,39 +2414,21 @@
             "name" : null,
             "ofType" : {
               "kind" : "SCALAR",
-              "name" : "Float",
+              "name" : "ID",
               "ofType" : null
             }
           },
           "defaultValue" : null
         }, {
-          "name" : "attributeExists",
+          "name" : "beginsWith",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "Boolean",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "attributeType",
-          "description" : null,
-          "type" : {
-            "kind" : "ENUM",
-            "name" : "ModelAttributeTypes",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
         } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "SCALAR",
-        "name" : "Float",
-        "description" : "Built-in Float",
-        "fields" : null,
-        "inputFields" : null,
         "interfaces" : null,
         "enumValues" : null,
         "possibleTypes" : null
@@ -2409,82 +2528,6 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-        "name" : "ModelIDKeyConditionInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "eq",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "le",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "lt",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "ge",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "gt",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "between",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "ID",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "beginsWith",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
         "name" : "ModelBooleanInput",
         "description" : null,
         "fields" : null,
@@ -2525,6 +2568,109 @@
           },
           "defaultValue" : null
         } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "ModelFloatInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "ne",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "eq",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "le",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "lt",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "ge",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "gt",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "between",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "Float",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "attributeExists",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Boolean",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "attributeType",
+          "description" : null,
+          "type" : {
+            "kind" : "ENUM",
+            "name" : "ModelAttributeTypes",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "SCALAR",
+        "name" : "Float",
+        "description" : "Built-in Float",
+        "fields" : null,
+        "inputFields" : null,
         "interfaces" : null,
         "enumValues" : null,
         "possibleTypes" : null
@@ -3320,23 +3466,6 @@
         "onFragment" : false,
         "onField" : false
       }, {
-        "name" : "deprecated",
-        "description" : null,
-        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
-        "args" : [ {
-          "name" : "reason",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "String",
-            "ofType" : null
-          },
-          "defaultValue" : "\"No longer supported\""
-        } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
         "name" : "aws_auth",
         "description" : "Directs the schema to enforce authorization on a field",
         "locations" : [ "FIELD_DEFINITION" ],
@@ -3432,6 +3561,23 @@
             }
           },
           "defaultValue" : null
+        } ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "deprecated",
+        "description" : null,
+        "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
+        "args" : [ {
+          "name" : "reason",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : "\"No longer supported\""
         } ],
         "onOperation" : false,
         "onFragment" : false,

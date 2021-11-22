@@ -10,19 +10,15 @@ export const getKudo = /* GraphQL */ `
       receiverId
       message
       kudoVerb
-      dataSource {
-        ... on GitHubMetadata {
-          name
-          url
-          owner
-          repo
-          team
-          item
-        }
-        ... on SlackMetadata {
-          name
-          url
-        }
+      dataSourceApp
+      github {
+        id
+        name
+        url
+        owner
+        repo
+        team
+        item
       }
       createdAt
       giver {
@@ -68,19 +64,15 @@ export const listKudos = /* GraphQL */ `
         receiverId
         message
         kudoVerb
-        dataSource {
-          ... on GitHubMetadata {
-            name
-            url
-            owner
-            repo
-            team
-            item
-          }
-          ... on SlackMetadata {
-            name
-            url
-          }
+        dataSourceApp
+        github {
+          id
+          name
+          url
+          owner
+          repo
+          team
+          item
         }
         createdAt
         giver {
@@ -116,6 +108,7 @@ export const getPerson = /* GraphQL */ `
           receiverId
           message
           kudoVerb
+          dataSourceApp
           createdAt
           updatedAt
         }
@@ -128,6 +121,7 @@ export const getPerson = /* GraphQL */ `
           receiverId
           message
           kudoVerb
+          dataSourceApp
           createdAt
           updatedAt
         }

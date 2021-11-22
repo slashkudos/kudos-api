@@ -8,6 +8,8 @@ export type CreateKudoInput = {
   receiverId: string,
   message: string,
   kudoVerb: KudoVerb,
+  dataSourceApp?: DataSourceApp | null,
+  github?: GitHubMetadataInput | null,
   createdAt?: string | null,
 };
 
@@ -19,11 +21,38 @@ export enum KudoVerb {
 }
 
 
+export enum DataSourceApp {
+  github = "github",
+  slack = "slack",
+  teams = "teams",
+  twitter = "twitter",
+}
+
+
+export type GitHubMetadataInput = {
+  id: string,
+  name: DataSourceApp,
+  url: string,
+  owner: string,
+  repo?: string | null,
+  team?: string | null,
+  item?: GitHubItem | null,
+};
+
+export enum GitHubItem {
+  issue = "issue",
+  pullRequest = "pullRequest",
+  discussion = "discussion",
+  teamPost = "teamPost",
+}
+
+
 export type ModelKudoConditionInput = {
   giverId?: ModelIDInput | null,
   receiverId?: ModelIDInput | null,
   message?: ModelStringInput | null,
   kudoVerb?: ModelKudoVerbInput | null,
+  dataSourceApp?: ModelDataSourceAppInput | null,
   createdAt?: ModelStringInput | null,
   and?: Array< ModelKudoConditionInput | null > | null,
   or?: Array< ModelKudoConditionInput | null > | null,
@@ -91,6 +120,11 @@ export type ModelKudoVerbInput = {
   ne?: KudoVerb | null,
 };
 
+export type ModelDataSourceAppInput = {
+  eq?: DataSourceApp | null,
+  ne?: DataSourceApp | null,
+};
+
 export type Kudo = {
   __typename: "Kudo",
   id: string,
@@ -98,18 +132,17 @@ export type Kudo = {
   receiverId: string,
   message: string,
   kudoVerb: KudoVerb,
-  dataSource?: DataSourceMetadata | null,
+  dataSourceApp?: DataSourceApp | null,
+  github?: GitHubMetadata | null,
   createdAt: string,
   giver?: Person | null,
   receiver?: Person | null,
   updatedAt: string,
 };
 
-export type DataSourceMetadata = GitHubMetadata | SlackMetadata
-
-
 export type GitHubMetadata = {
   __typename: "GitHubMetadata",
+  id: string,
   name: DataSourceApp,
   url: string,
   owner: string,
@@ -120,31 +153,10 @@ export type GitHubMetadata = {
 
 export type IDataSource = {
   __typename: "IDataSource",
+  id: string,
   name: DataSourceApp,
   url: string,
 };
-
-export type SlackMetadata = {
-  __typename: "SlackMetadata",
-  name: DataSourceApp,
-  url: string,
-};
-
-export enum DataSourceApp {
-  github = "github",
-  slack = "slack",
-  teams = "teams",
-  twitter = "twitter",
-}
-
-
-export enum GitHubItem {
-  issue = "issue",
-  pullRequest = "pullRequest",
-  discussion = "discussion",
-  teamPost = "teamPost",
-}
-
 
 export type Person = {
   __typename: "Person",
@@ -169,6 +181,8 @@ export type UpdateKudoInput = {
   receiverId?: string | null,
   message?: string | null,
   kudoVerb?: KudoVerb | null,
+  dataSourceApp?: DataSourceApp | null,
+  github?: GitHubMetadataInput | null,
   createdAt?: string | null,
 };
 
@@ -206,6 +220,7 @@ export type ModelKudoFilterInput = {
   receiverId?: ModelIDInput | null,
   message?: ModelStringInput | null,
   kudoVerb?: ModelKudoVerbInput | null,
+  dataSourceApp?: ModelDataSourceAppInput | null,
   createdAt?: ModelStringInput | null,
   and?: Array< ModelKudoFilterInput | null > | null,
   or?: Array< ModelKudoFilterInput | null > | null,
@@ -240,20 +255,17 @@ export type CreateKudoMutation = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSource: ( {
-        __typename: "GitHubMetadata",
-        name: DataSourceApp,
-        url: string,
-        owner: string,
-        repo?: string | null,
-        team?: string | null,
-        item?: GitHubItem | null,
-      } | {
-        __typename: "SlackMetadata",
-        name: DataSourceApp,
-        url: string,
-      }
-    ) | null,
+    dataSourceApp?: DataSourceApp | null,
+    github?:  {
+      __typename: "GitHubMetadata",
+      id: string,
+      name: DataSourceApp,
+      url: string,
+      owner: string,
+      repo?: string | null,
+      team?: string | null,
+      item?: GitHubItem | null,
+    } | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
@@ -304,20 +316,17 @@ export type UpdateKudoMutation = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSource: ( {
-        __typename: "GitHubMetadata",
-        name: DataSourceApp,
-        url: string,
-        owner: string,
-        repo?: string | null,
-        team?: string | null,
-        item?: GitHubItem | null,
-      } | {
-        __typename: "SlackMetadata",
-        name: DataSourceApp,
-        url: string,
-      }
-    ) | null,
+    dataSourceApp?: DataSourceApp | null,
+    github?:  {
+      __typename: "GitHubMetadata",
+      id: string,
+      name: DataSourceApp,
+      url: string,
+      owner: string,
+      repo?: string | null,
+      team?: string | null,
+      item?: GitHubItem | null,
+    } | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
@@ -368,20 +377,17 @@ export type DeleteKudoMutation = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSource: ( {
-        __typename: "GitHubMetadata",
-        name: DataSourceApp,
-        url: string,
-        owner: string,
-        repo?: string | null,
-        team?: string | null,
-        item?: GitHubItem | null,
-      } | {
-        __typename: "SlackMetadata",
-        name: DataSourceApp,
-        url: string,
-      }
-    ) | null,
+    dataSourceApp?: DataSourceApp | null,
+    github?:  {
+      __typename: "GitHubMetadata",
+      id: string,
+      name: DataSourceApp,
+      url: string,
+      owner: string,
+      repo?: string | null,
+      team?: string | null,
+      item?: GitHubItem | null,
+    } | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
@@ -439,6 +445,7 @@ export type CreatePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -453,6 +460,7 @@ export type CreatePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -483,6 +491,7 @@ export type UpdatePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -497,6 +506,7 @@ export type UpdatePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -527,6 +537,7 @@ export type DeletePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -541,6 +552,7 @@ export type DeletePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -563,20 +575,17 @@ export type GetKudoQuery = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSource: ( {
-        __typename: "GitHubMetadata",
-        name: DataSourceApp,
-        url: string,
-        owner: string,
-        repo?: string | null,
-        team?: string | null,
-        item?: GitHubItem | null,
-      } | {
-        __typename: "SlackMetadata",
-        name: DataSourceApp,
-        url: string,
-      }
-    ) | null,
+    dataSourceApp?: DataSourceApp | null,
+    github?:  {
+      __typename: "GitHubMetadata",
+      id: string,
+      name: DataSourceApp,
+      url: string,
+      owner: string,
+      repo?: string | null,
+      team?: string | null,
+      item?: GitHubItem | null,
+    } | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
@@ -630,20 +639,17 @@ export type ListKudosQuery = {
       receiverId: string,
       message: string,
       kudoVerb: KudoVerb,
-      dataSource: ( {
-          __typename: "GitHubMetadata",
-          name: DataSourceApp,
-          url: string,
-          owner: string,
-          repo?: string | null,
-          team?: string | null,
-          item?: GitHubItem | null,
-        } | {
-          __typename: "SlackMetadata",
-          name: DataSourceApp,
-          url: string,
-        }
-      ) | null,
+      dataSourceApp?: DataSourceApp | null,
+      github?:  {
+        __typename: "GitHubMetadata",
+        id: string,
+        name: DataSourceApp,
+        url: string,
+        owner: string,
+        repo?: string | null,
+        team?: string | null,
+        item?: GitHubItem | null,
+      } | null,
       createdAt: string,
       giver?:  {
         __typename: "Person",
@@ -686,6 +692,7 @@ export type GetPersonQuery = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -700,6 +707,7 @@ export type GetPersonQuery = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -747,20 +755,17 @@ export type OnCreateKudoSubscription = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSource: ( {
-        __typename: "GitHubMetadata",
-        name: DataSourceApp,
-        url: string,
-        owner: string,
-        repo?: string | null,
-        team?: string | null,
-        item?: GitHubItem | null,
-      } | {
-        __typename: "SlackMetadata",
-        name: DataSourceApp,
-        url: string,
-      }
-    ) | null,
+    dataSourceApp?: DataSourceApp | null,
+    github?:  {
+      __typename: "GitHubMetadata",
+      id: string,
+      name: DataSourceApp,
+      url: string,
+      owner: string,
+      repo?: string | null,
+      team?: string | null,
+      item?: GitHubItem | null,
+    } | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
@@ -806,20 +811,17 @@ export type OnUpdateKudoSubscription = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSource: ( {
-        __typename: "GitHubMetadata",
-        name: DataSourceApp,
-        url: string,
-        owner: string,
-        repo?: string | null,
-        team?: string | null,
-        item?: GitHubItem | null,
-      } | {
-        __typename: "SlackMetadata",
-        name: DataSourceApp,
-        url: string,
-      }
-    ) | null,
+    dataSourceApp?: DataSourceApp | null,
+    github?:  {
+      __typename: "GitHubMetadata",
+      id: string,
+      name: DataSourceApp,
+      url: string,
+      owner: string,
+      repo?: string | null,
+      team?: string | null,
+      item?: GitHubItem | null,
+    } | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
@@ -865,20 +867,17 @@ export type OnDeleteKudoSubscription = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSource: ( {
-        __typename: "GitHubMetadata",
-        name: DataSourceApp,
-        url: string,
-        owner: string,
-        repo?: string | null,
-        team?: string | null,
-        item?: GitHubItem | null,
-      } | {
-        __typename: "SlackMetadata",
-        name: DataSourceApp,
-        url: string,
-      }
-    ) | null,
+    dataSourceApp?: DataSourceApp | null,
+    github?:  {
+      __typename: "GitHubMetadata",
+      id: string,
+      name: DataSourceApp,
+      url: string,
+      owner: string,
+      repo?: string | null,
+      team?: string | null,
+      item?: GitHubItem | null,
+    } | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
@@ -931,6 +930,7 @@ export type OnCreatePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -945,6 +945,7 @@ export type OnCreatePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -970,6 +971,7 @@ export type OnUpdatePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -984,6 +986,7 @@ export type OnUpdatePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -1009,6 +1012,7 @@ export type OnDeletePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
@@ -1023,6 +1027,7 @@ export type OnDeletePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
+        dataSourceApp?: DataSourceApp | null,
         createdAt: string,
         updatedAt: string,
       } >,
