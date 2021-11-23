@@ -10,6 +10,14 @@
       "StackName": "amplify-kudosapi-dev-51900",
       "StackId": "arn:aws:cloudformation:us-east-1:391437285077:stack/amplify-kudosapi-dev-51900/8a057b00-4a8a-11ec-8aac-0ea18edc90ff",
       "AmplifyAppId": "d5u222qsuh3lu"
+    },
+    "categories": {
+      "function": {
+        "githubWebhookHandler": {
+          "deploymentBucketName": "amplify-kudosapi-dev-51900-deployment",
+          "s3Key": "amplify-builds/githubWebhookHandler-743030504d4a4a6a4b50-build.zip"
+        }
+      }
     }
   }
 }
