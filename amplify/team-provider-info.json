@@ -19,5 +19,26 @@
         }
       }
     }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-kudosapi-prod-62303-authRole",
+      "UnauthRoleArn": "arn:aws:iam::391437285077:role/amplify-kudosapi-prod-62303-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::391437285077:role/amplify-kudosapi-prod-62303-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-kudosapi-prod-62303-deployment",
+      "UnauthRoleName": "amplify-kudosapi-prod-62303-unauthRole",
+      "StackName": "amplify-kudosapi-prod-62303",
+      "StackId": "arn:aws:cloudformation:us-east-1:391437285077:stack/amplify-kudosapi-prod-62303/1f49f690-6094-11ec-abe8-0a7fd7c86da5",
+      "AmplifyAppId": "d5u222qsuh3lu"
+    },
+    "categories": {
+      "function": {
+        "githubWebhookHandler": {
+          "deploymentBucketName": "amplify-kudosapi-prod-62303-deployment",
+          "s3Key": "amplify-builds/githubWebhookHandler-743030504d4a4a6a4b50-build.zip"
+        }
+      }
+    }
   }
 }

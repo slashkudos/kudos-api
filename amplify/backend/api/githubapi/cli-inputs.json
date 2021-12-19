@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "paths": {
+    "/github/webhooks": {
+      "permissions": {
+        "setting": "open"
+      },
+      "lambdaFunction": "githubWebhookHandler"
+    }
+  }
+}
