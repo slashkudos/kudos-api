@@ -12,6 +12,7 @@ The Kudos API.
 ## Project Setup
 
 1. Create the follow Codespace secrets for your user
-   1. `AWS_ACCESS_KEY_ID`
-   2. `AWS_SECRET_ACCESS_KEY`
+   1. `AWS_ACCESS_KEY_ID` - Get from AWS Console profile
+   2. `AWS_SECRET_ACCESS_KEY` - Get from AWS Console profile
+   3. `SLASHKUDOS_PAT` - Create a PAT with scopes `repo`, `admin:public_key` and `codespace`, store it in this secret
 2. Create a Codespace and you should be good to go 🚀
