@@ -1,7 +1,14 @@
 #!/usr/bin/env pwsh
-# Post devcontainer create script to run
 
-git config pull.rebase true
+<#
+    .SYNOPSIS
+    Post devcontainer create script to run.
+
+    .DESCRIPTION
+    Installs required dev tools and configurations.
+#>
+
+git config --global pull.rebase true
 sudo npm install -g @aws-amplify/cli
 
 # Setup AWS default profile
