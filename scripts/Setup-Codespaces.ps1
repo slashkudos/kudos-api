@@ -19,11 +19,18 @@ echo @"
 region=us-east-1
 "@ > ~/.aws/config
 
-echo @"
+if($env:AWS_ACCESS_KEY_ID -and $env:AWS_SECRET_ACCESS_KEY) {
+    echo @"
 [default]
 aws_access_key_id = $env:AWS_ACCESS_KEY_ID
 aws_secret_access_key = $env:AWS_SECRET_ACCESS_KEY
 "@ > ~/.aws/credentials
+} else {
+    Write-Warning "User's Codespace environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY not set. `nRunning 'aws configure'"
+    aws configure
+}
+
+aws configure list
 
 Write-Host "amplify version: " -NoNewLine
 amplify --version
