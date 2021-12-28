@@ -8,6 +8,9 @@
     Installs required dev tools and configurations.
 #>
 
+[CmdletBinding()]
+Param()
+
 git config --global pull.rebase true
 sudo npm install -g @aws-amplify/cli
 
