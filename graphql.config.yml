@@ -1,0 +1,23 @@
+# Added for executing graphql queries from VS Code
+
+projects:
+  kudosapi:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.ts
+      - src/graphql/tests.graphql
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: src/API.ts
+        docsFilePath: src/graphql
+      endpoints:
+        default:
+          url: https://graphqlapi.slashkudos.com/graphql/
+          headers:
+            x-api-key: <KUDOS_GRAPHQL_API_KEY>
+extensions:
+  amplify:
+    version: 3
