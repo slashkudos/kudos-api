@@ -1,0 +1,297 @@
+# Mutations copied from src/graphql/mutations.ts
+# Pass Map object with double-quoted JSON (i.e. { "username" : "philip" } )
+
+mutation CreateKudo(
+  $input: CreateKudoInput!
+  $condition: ModelKudoConditionInput
+) {
+  createKudo(input: $input, condition: $condition) {
+    id
+    giverId
+    receiverId
+    message
+    kudoVerb
+    dataSourceApp
+    metadata {
+      ... on GitHubMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+        owner
+        repo
+        team
+        item
+      }
+      ... on TwitterMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+      }
+    }
+    createdAt
+    giver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    receiver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    updatedAt
+  }
+}
+mutation UpdateKudo(
+  $input: UpdateKudoInput!
+  $condition: ModelKudoConditionInput
+) {
+  updateKudo(input: $input, condition: $condition) {
+    id
+    giverId
+    receiverId
+    message
+    kudoVerb
+    dataSourceApp
+    metadata {
+      ... on GitHubMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+        owner
+        repo
+        team
+        item
+      }
+      ... on TwitterMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+      }
+    }
+    createdAt
+    giver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    receiver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    updatedAt
+  }
+}
+mutation DeleteKudo(
+  $input: DeleteKudoInput!
+  $condition: ModelKudoConditionInput
+) {
+  deleteKudo(input: $input, condition: $condition) {
+    id
+    giverId
+    receiverId
+    message
+    kudoVerb
+    dataSourceApp
+    metadata {
+      ... on GitHubMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+        owner
+        repo
+        team
+        item
+      }
+      ... on TwitterMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+      }
+    }
+    createdAt
+    giver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    receiver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    updatedAt
+  }
+}
+mutation CreatePerson(
+  $input: CreatePersonInput!
+  $condition: ModelPersonConditionInput
+) {
+  createPerson(input: $input, condition: $condition) {
+    id
+    username
+    email
+    dataSourceApp
+    kudosGiven {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    kudosReceived {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdatePerson(
+  $input: UpdatePersonInput!
+  $condition: ModelPersonConditionInput
+) {
+  updatePerson(input: $input, condition: $condition) {
+    id
+    username
+    email
+    dataSourceApp
+    kudosGiven {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    kudosReceived {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation DeletePerson(
+  $input: DeletePersonInput!
+  $condition: ModelPersonConditionInput
+) {
+  deletePerson(input: $input, condition: $condition) {
+    id
+    username
+    email
+    dataSourceApp
+    kudosGiven {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    kudosReceived {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}

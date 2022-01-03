@@ -1,0 +1,174 @@
+# Queries copied from src/graphql/queries.ts
+# Pass Map object with double-quoted JSON (i.e. { "username" : "philip" } )
+
+query GetKudo($id: ID!) {
+  getKudo(id: $id) {
+    id
+    giverId
+    receiverId
+    message
+    kudoVerb
+    dataSourceApp
+    metadata {
+      ... on GitHubMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+        owner
+        repo
+        team
+        item
+      }
+      ... on TwitterMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+      }
+    }
+    createdAt
+    giver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    receiver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    updatedAt
+  }
+}
+
+query ListKudos(
+  $filter: ModelKudoFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listKudos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      giverId
+      receiverId
+      message
+      kudoVerb
+      dataSourceApp
+      metadata {
+        ... on GitHubMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+          owner
+          repo
+          team
+          item
+        }
+        ... on TwitterMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+        }
+      }
+      createdAt
+      giver {
+        id
+        username
+        email
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      receiver {
+        id
+        username
+        email
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+    nextToken
+  }
+}
+
+query GetPerson($id: ID!) {
+  getPerson(id: $id) {
+    id
+    username
+    email
+    dataSourceApp
+    kudosGiven {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    kudosReceived {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+# Examples
+# $filter: { "username": { "contains": "philip" }, "dataSourceApp": {"eq":"twitter"} }
+query ListPersons(
+  $filter: ModelPersonFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listPersons(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
