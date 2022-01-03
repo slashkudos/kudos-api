@@ -57,7 +57,7 @@ type Person
   @key(name: "byUsername", fields: ["username"]) {
   id: ID!
   username: String!
-  email: ID!
+  email: String
   dataSourceApp: DataSourceApp!
   kudosGiven: [Kudo] @connection(keyName: "byGiver", fields: ["id"])
   kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["id"])

@@ -162,7 +162,7 @@ export type Person = {
   __typename: "Person",
   id: string,
   username: string,
-  email: string,
+  email?: string | null,
   dataSourceApp: DataSourceApp,
   kudosGiven?: ModelKudoConnection | null,
   kudosReceived?: ModelKudoConnection | null,
@@ -193,13 +193,13 @@ export type DeleteKudoInput = {
 export type CreatePersonInput = {
   id?: string | null,
   username: string,
-  email: string,
+  email?: string | null,
   dataSourceApp: DataSourceApp,
 };
 
 export type ModelPersonConditionInput = {
   username?: ModelStringInput | null,
-  email?: ModelIDInput | null,
+  email?: ModelStringInput | null,
   dataSourceApp?: ModelDataSourceAppInput | null,
   and?: Array< ModelPersonConditionInput | null > | null,
   or?: Array< ModelPersonConditionInput | null > | null,
@@ -233,7 +233,7 @@ export type ModelKudoFilterInput = {
 export type ModelPersonFilterInput = {
   id?: ModelIDInput | null,
   username?: ModelStringInput | null,
-  email?: ModelIDInput | null,
+  email?: ModelStringInput | null,
   dataSourceApp?: ModelDataSourceAppInput | null,
   and?: Array< ModelPersonFilterInput | null > | null,
   or?: Array< ModelPersonFilterInput | null > | null,
@@ -281,7 +281,7 @@ export type CreateKudoMutation = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -298,7 +298,7 @@ export type CreateKudoMutation = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -350,7 +350,7 @@ export type UpdateKudoMutation = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -367,7 +367,7 @@ export type UpdateKudoMutation = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -419,7 +419,7 @@ export type DeleteKudoMutation = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -436,7 +436,7 @@ export type DeleteKudoMutation = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -463,7 +463,7 @@ export type CreatePersonMutation = {
     __typename: "Person",
     id: string,
     username: string,
-    email: string,
+    email?: string | null,
     dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
@@ -510,7 +510,7 @@ export type UpdatePersonMutation = {
     __typename: "Person",
     id: string,
     username: string,
-    email: string,
+    email?: string | null,
     dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
@@ -557,7 +557,7 @@ export type DeletePersonMutation = {
     __typename: "Person",
     id: string,
     username: string,
-    email: string,
+    email?: string | null,
     dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
@@ -628,7 +628,7 @@ export type GetKudoQuery = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -645,7 +645,7 @@ export type GetKudoQuery = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -700,7 +700,7 @@ export type ListKudosQuery = {
         __typename: "Person",
         id: string,
         username: string,
-        email: string,
+        email?: string | null,
         dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
@@ -709,7 +709,7 @@ export type ListKudosQuery = {
         __typename: "Person",
         id: string,
         username: string,
-        email: string,
+        email?: string | null,
         dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
@@ -729,7 +729,7 @@ export type GetPersonQuery = {
     __typename: "Person",
     id: string,
     username: string,
-    email: string,
+    email?: string | null,
     dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
@@ -779,7 +779,7 @@ export type ListPersonsQuery = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -826,7 +826,7 @@ export type OnCreateKudoSubscription = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -843,7 +843,7 @@ export type OnCreateKudoSubscription = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -890,7 +890,7 @@ export type OnUpdateKudoSubscription = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -907,7 +907,7 @@ export type OnUpdateKudoSubscription = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -954,7 +954,7 @@ export type OnDeleteKudoSubscription = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -971,7 +971,7 @@ export type OnDeleteKudoSubscription = {
       __typename: "Person",
       id: string,
       username: string,
-      email: string,
+      email?: string | null,
       dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
@@ -993,7 +993,7 @@ export type OnCreatePersonSubscription = {
     __typename: "Person",
     id: string,
     username: string,
-    email: string,
+    email?: string | null,
     dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
@@ -1035,7 +1035,7 @@ export type OnUpdatePersonSubscription = {
     __typename: "Person",
     id: string,
     username: string,
-    email: string,
+    email?: string | null,
     dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
@@ -1077,7 +1077,7 @@ export type OnDeletePersonSubscription = {
     __typename: "Person",
     id: string,
     username: string,
-    email: string,
+    email?: string | null,
     dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
