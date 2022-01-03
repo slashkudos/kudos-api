@@ -1,0 +1,185 @@
+# Queries and Mutations copied from src/graphql/queries.ts and src/graphql/mutations.ts
+
+query ListKudos(
+  $filter: ModelKudoFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listKudos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      giverId
+      receiverId
+      message
+      kudoVerb
+      metadata {
+        ... on GitHubMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+          owner
+          repo
+          team
+          item
+        }
+        ... on TwitterMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+        }
+      }
+      createdAt
+      giver {
+        id
+        username
+        email
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      receiver {
+        id
+        username
+        email
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+    nextToken
+  }
+}
+
+query ListPersons(
+  $filter: ModelPersonFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listPersons(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+
+mutation CreatePerson(
+  $username: String!
+  $email: String!
+  $dataSourceApp: DataSourceApp!
+) {
+  createPerson(
+    input: { username: $username, email: $email, dataSourceApp: $dataSourceApp }
+  ) {
+    id
+    username
+    email
+    dataSourceApp
+    kudosGiven {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    kudosReceived {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+mutation CreateKudo(
+  $input: CreateKudoInput!
+  $condition: ModelKudoConditionInput
+) {
+  createKudo(input: $input, condition: $condition) {
+    id
+    giverId
+    receiverId
+    message
+    kudoVerb
+    dataSourceApp
+    metadata {
+      ... on GitHubMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+        owner
+        repo
+        team
+        item
+      }
+      ... on TwitterMetadata {
+        dataSourceId
+        dataSourceApp
+        url
+      }
+    }
+    createdAt
+    giver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    receiver {
+      id
+      username
+      email
+      dataSourceApp
+      kudosGiven {
+        nextToken
+      }
+      kudosReceived {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    updatedAt
+  }
+}
+
+mutation DeleteKudo($id: ID!, $condition: ModelKudoConditionInput) {
+  deleteKudo(input: { id: $id }, condition: $condition) {
+    id
+  }
+}

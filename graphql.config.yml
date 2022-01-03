@@ -5,7 +5,7 @@ projects:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.ts
-      - src/graphql/tests.graphql
+      - tests/graphql/tests.graphql
     excludes:
       - ./amplify/**
     extensions:
