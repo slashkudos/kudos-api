@@ -1,3 +1,5 @@
+# Queries and Mutations copied from src/graphql/queries.ts and src/graphql/mutations.ts
+
 query ListKudos(
   $filter: ModelKudoFilterInput
   $limit: Int
