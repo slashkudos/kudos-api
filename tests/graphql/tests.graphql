@@ -77,8 +77,8 @@ query ListPersons(
 
 mutation CreatePerson(
   $username: String!
-  $email: String!
   $dataSourceApp: DataSourceApp!
+  $email: String
 ) {
   createPerson(
     input: { username: $username, email: $email, dataSourceApp: $dataSourceApp }
@@ -119,10 +119,23 @@ mutation CreatePerson(
 }
 
 mutation CreateKudo(
-  $input: CreateKudoInput!
+  $giverId: ID!
+  $receiverId: ID!
+  $message: String!
+  $kudoVerb: KudoVerb!
+  $dataSourceApp: DataSourceApp!
   $condition: ModelKudoConditionInput
 ) {
-  createKudo(input: $input, condition: $condition) {
+  createKudo(
+    input: {
+      giverId: $giverId
+      receiverId: $receiverId
+      message: $message
+      kudoVerb: $kudoVerb
+      dataSourceApp: $dataSourceApp
+    }
+    condition: $condition
+  ) {
     id
     giverId
     receiverId
