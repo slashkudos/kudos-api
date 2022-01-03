@@ -8,8 +8,7 @@ export type CreateKudoInput = {
   receiverId: string,
   message: string,
   kudoVerb: KudoVerb,
-  dataSourceApp?: DataSourceApp | null,
-  github?: GitHubMetadataInput | null,
+  dataSourceApp: DataSourceApp,
   createdAt?: string | null,
 };
 
@@ -26,24 +25,7 @@ export enum DataSourceApp {
   slack = "slack",
   teams = "teams",
   twitter = "twitter",
-}
-
-
-export type GitHubMetadataInput = {
-  id: string,
-  name: DataSourceApp,
-  url: string,
-  owner: string,
-  repo?: string | null,
-  team?: string | null,
-  item?: GitHubItem | null,
-};
-
-export enum GitHubItem {
-  issue = "issue",
-  pullRequest = "pullRequest",
-  discussion = "discussion",
-  teamPost = "teamPost",
+  other = "other",
 }
 
 
@@ -132,18 +114,21 @@ export type Kudo = {
   receiverId: string,
   message: string,
   kudoVerb: KudoVerb,
-  dataSourceApp?: DataSourceApp | null,
-  github?: GitHubMetadata | null,
+  dataSourceApp: DataSourceApp,
+  metadata?: Metadata | null,
   createdAt: string,
   giver?: Person | null,
   receiver?: Person | null,
   updatedAt: string,
 };
 
+export type Metadata = GitHubMetadata | TwitterMetadata
+
+
 export type GitHubMetadata = {
   __typename: "GitHubMetadata",
-  id: string,
-  name: DataSourceApp,
+  dataSourceId: string,
+  dataSourceApp: DataSourceApp,
   url: string,
   owner: string,
   repo?: string | null,
@@ -153,16 +138,32 @@ export type GitHubMetadata = {
 
 export type IDataSource = {
   __typename: "IDataSource",
-  id: string,
-  name: DataSourceApp,
+  dataSourceId: string,
+  dataSourceApp: DataSourceApp,
   url: string,
 };
+
+export type TwitterMetadata = {
+  __typename: "TwitterMetadata",
+  dataSourceId: string,
+  dataSourceApp: DataSourceApp,
+  url: string,
+};
+
+export enum GitHubItem {
+  issue = "issue",
+  pullRequest = "pullRequest",
+  discussion = "discussion",
+  teamPost = "teamPost",
+}
+
 
 export type Person = {
   __typename: "Person",
   id: string,
   username: string,
   email: string,
+  dataSourceApp: DataSourceApp,
   kudosGiven?: ModelKudoConnection | null,
   kudosReceived?: ModelKudoConnection | null,
   createdAt: string,
@@ -171,7 +172,7 @@ export type Person = {
 
 export type ModelKudoConnection = {
   __typename: "ModelKudoConnection",
-  items:  Array<Kudo >,
+  items:  Array<Kudo | null >,
   nextToken?: string | null,
 };
 
@@ -182,7 +183,6 @@ export type UpdateKudoInput = {
   message?: string | null,
   kudoVerb?: KudoVerb | null,
   dataSourceApp?: DataSourceApp | null,
-  github?: GitHubMetadataInput | null,
   createdAt?: string | null,
 };
 
@@ -194,11 +194,13 @@ export type CreatePersonInput = {
   id?: string | null,
   username: string,
   email: string,
+  dataSourceApp: DataSourceApp,
 };
 
 export type ModelPersonConditionInput = {
   username?: ModelStringInput | null,
   email?: ModelIDInput | null,
+  dataSourceApp?: ModelDataSourceAppInput | null,
   and?: Array< ModelPersonConditionInput | null > | null,
   or?: Array< ModelPersonConditionInput | null > | null,
   not?: ModelPersonConditionInput | null,
@@ -208,6 +210,7 @@ export type UpdatePersonInput = {
   id: string,
   username?: string | null,
   email?: string | null,
+  dataSourceApp?: DataSourceApp | null,
 };
 
 export type DeletePersonInput = {
@@ -231,6 +234,7 @@ export type ModelPersonFilterInput = {
   id?: ModelIDInput | null,
   username?: ModelStringInput | null,
   email?: ModelIDInput | null,
+  dataSourceApp?: ModelDataSourceAppInput | null,
   and?: Array< ModelPersonFilterInput | null > | null,
   or?: Array< ModelPersonFilterInput | null > | null,
   not?: ModelPersonFilterInput | null,
@@ -238,7 +242,7 @@ export type ModelPersonFilterInput = {
 
 export type ModelPersonConnection = {
   __typename: "ModelPersonConnection",
-  items:  Array<Person >,
+  items:  Array<Person | null >,
   nextToken?: string | null,
 };
 
@@ -255,23 +259,30 @@ export type CreateKudoMutation = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSourceApp?: DataSourceApp | null,
-    github?:  {
-      __typename: "GitHubMetadata",
-      id: string,
-      name: DataSourceApp,
-      url: string,
-      owner: string,
-      repo?: string | null,
-      team?: string | null,
-      item?: GitHubItem | null,
-    } | null,
+    dataSourceApp: DataSourceApp,
+    metadata: ( {
+        __typename: "GitHubMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+        owner: string,
+        repo?: string | null,
+        team?: string | null,
+        item?: GitHubItem | null,
+      } | {
+        __typename: "TwitterMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+      }
+    ) | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -288,6 +299,7 @@ export type CreateKudoMutation = {
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -316,23 +328,30 @@ export type UpdateKudoMutation = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSourceApp?: DataSourceApp | null,
-    github?:  {
-      __typename: "GitHubMetadata",
-      id: string,
-      name: DataSourceApp,
-      url: string,
-      owner: string,
-      repo?: string | null,
-      team?: string | null,
-      item?: GitHubItem | null,
-    } | null,
+    dataSourceApp: DataSourceApp,
+    metadata: ( {
+        __typename: "GitHubMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+        owner: string,
+        repo?: string | null,
+        team?: string | null,
+        item?: GitHubItem | null,
+      } | {
+        __typename: "TwitterMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+      }
+    ) | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -349,6 +368,7 @@ export type UpdateKudoMutation = {
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -377,23 +397,30 @@ export type DeleteKudoMutation = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSourceApp?: DataSourceApp | null,
-    github?:  {
-      __typename: "GitHubMetadata",
-      id: string,
-      name: DataSourceApp,
-      url: string,
-      owner: string,
-      repo?: string | null,
-      team?: string | null,
-      item?: GitHubItem | null,
-    } | null,
+    dataSourceApp: DataSourceApp,
+    metadata: ( {
+        __typename: "GitHubMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+        owner: string,
+        repo?: string | null,
+        team?: string | null,
+        item?: GitHubItem | null,
+      } | {
+        __typename: "TwitterMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+      }
+    ) | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -410,6 +437,7 @@ export type DeleteKudoMutation = {
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -436,6 +464,7 @@ export type CreatePersonMutation = {
     id: string,
     username: string,
     email: string,
+    dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
       items:  Array< {
@@ -445,10 +474,10 @@ export type CreatePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     kudosReceived?:  {
@@ -460,10 +489,10 @@ export type CreatePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -482,6 +511,7 @@ export type UpdatePersonMutation = {
     id: string,
     username: string,
     email: string,
+    dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
       items:  Array< {
@@ -491,10 +521,10 @@ export type UpdatePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     kudosReceived?:  {
@@ -506,10 +536,10 @@ export type UpdatePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -528,6 +558,7 @@ export type DeletePersonMutation = {
     id: string,
     username: string,
     email: string,
+    dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
       items:  Array< {
@@ -537,10 +568,10 @@ export type DeletePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     kudosReceived?:  {
@@ -552,10 +583,10 @@ export type DeletePersonMutation = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -575,23 +606,30 @@ export type GetKudoQuery = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSourceApp?: DataSourceApp | null,
-    github?:  {
-      __typename: "GitHubMetadata",
-      id: string,
-      name: DataSourceApp,
-      url: string,
-      owner: string,
-      repo?: string | null,
-      team?: string | null,
-      item?: GitHubItem | null,
-    } | null,
+    dataSourceApp: DataSourceApp,
+    metadata: ( {
+        __typename: "GitHubMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+        owner: string,
+        repo?: string | null,
+        team?: string | null,
+        item?: GitHubItem | null,
+      } | {
+        __typename: "TwitterMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+      }
+    ) | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -608,6 +646,7 @@ export type GetKudoQuery = {
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -639,23 +678,30 @@ export type ListKudosQuery = {
       receiverId: string,
       message: string,
       kudoVerb: KudoVerb,
-      dataSourceApp?: DataSourceApp | null,
-      github?:  {
-        __typename: "GitHubMetadata",
-        id: string,
-        name: DataSourceApp,
-        url: string,
-        owner: string,
-        repo?: string | null,
-        team?: string | null,
-        item?: GitHubItem | null,
-      } | null,
+      dataSourceApp: DataSourceApp,
+      metadata: ( {
+          __typename: "GitHubMetadata",
+          dataSourceId: string,
+          dataSourceApp: DataSourceApp,
+          url: string,
+          owner: string,
+          repo?: string | null,
+          team?: string | null,
+          item?: GitHubItem | null,
+        } | {
+          __typename: "TwitterMetadata",
+          dataSourceId: string,
+          dataSourceApp: DataSourceApp,
+          url: string,
+        }
+      ) | null,
       createdAt: string,
       giver?:  {
         __typename: "Person",
         id: string,
         username: string,
         email: string,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -664,11 +710,12 @@ export type ListKudosQuery = {
         id: string,
         username: string,
         email: string,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
       } | null,
       updatedAt: string,
-    } >,
+    } | null >,
     nextToken?: string | null,
   } | null,
 };
@@ -683,6 +730,7 @@ export type GetPersonQuery = {
     id: string,
     username: string,
     email: string,
+    dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
       items:  Array< {
@@ -692,10 +740,10 @@ export type GetPersonQuery = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     kudosReceived?:  {
@@ -707,10 +755,10 @@ export type GetPersonQuery = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -732,6 +780,7 @@ export type ListPersonsQuery = {
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -742,7 +791,7 @@ export type ListPersonsQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
-    } >,
+    } | null >,
     nextToken?: string | null,
   } | null,
 };
@@ -755,23 +804,30 @@ export type OnCreateKudoSubscription = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSourceApp?: DataSourceApp | null,
-    github?:  {
-      __typename: "GitHubMetadata",
-      id: string,
-      name: DataSourceApp,
-      url: string,
-      owner: string,
-      repo?: string | null,
-      team?: string | null,
-      item?: GitHubItem | null,
-    } | null,
+    dataSourceApp: DataSourceApp,
+    metadata: ( {
+        __typename: "GitHubMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+        owner: string,
+        repo?: string | null,
+        team?: string | null,
+        item?: GitHubItem | null,
+      } | {
+        __typename: "TwitterMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+      }
+    ) | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -788,6 +844,7 @@ export type OnCreateKudoSubscription = {
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -811,23 +868,30 @@ export type OnUpdateKudoSubscription = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSourceApp?: DataSourceApp | null,
-    github?:  {
-      __typename: "GitHubMetadata",
-      id: string,
-      name: DataSourceApp,
-      url: string,
-      owner: string,
-      repo?: string | null,
-      team?: string | null,
-      item?: GitHubItem | null,
-    } | null,
+    dataSourceApp: DataSourceApp,
+    metadata: ( {
+        __typename: "GitHubMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+        owner: string,
+        repo?: string | null,
+        team?: string | null,
+        item?: GitHubItem | null,
+      } | {
+        __typename: "TwitterMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+      }
+    ) | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -844,6 +908,7 @@ export type OnUpdateKudoSubscription = {
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -867,23 +932,30 @@ export type OnDeleteKudoSubscription = {
     receiverId: string,
     message: string,
     kudoVerb: KudoVerb,
-    dataSourceApp?: DataSourceApp | null,
-    github?:  {
-      __typename: "GitHubMetadata",
-      id: string,
-      name: DataSourceApp,
-      url: string,
-      owner: string,
-      repo?: string | null,
-      team?: string | null,
-      item?: GitHubItem | null,
-    } | null,
+    dataSourceApp: DataSourceApp,
+    metadata: ( {
+        __typename: "GitHubMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+        owner: string,
+        repo?: string | null,
+        team?: string | null,
+        item?: GitHubItem | null,
+      } | {
+        __typename: "TwitterMetadata",
+        dataSourceId: string,
+        dataSourceApp: DataSourceApp,
+        url: string,
+      }
+    ) | null,
     createdAt: string,
     giver?:  {
       __typename: "Person",
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -900,6 +972,7 @@ export type OnDeleteKudoSubscription = {
       id: string,
       username: string,
       email: string,
+      dataSourceApp: DataSourceApp,
       kudosGiven?:  {
         __typename: "ModelKudoConnection",
         nextToken?: string | null,
@@ -921,6 +994,7 @@ export type OnCreatePersonSubscription = {
     id: string,
     username: string,
     email: string,
+    dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
       items:  Array< {
@@ -930,10 +1004,10 @@ export type OnCreatePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     kudosReceived?:  {
@@ -945,10 +1019,10 @@ export type OnCreatePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -962,6 +1036,7 @@ export type OnUpdatePersonSubscription = {
     id: string,
     username: string,
     email: string,
+    dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
       items:  Array< {
@@ -971,10 +1046,10 @@ export type OnUpdatePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     kudosReceived?:  {
@@ -986,10 +1061,10 @@ export type OnUpdatePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
@@ -1003,6 +1078,7 @@ export type OnDeletePersonSubscription = {
     id: string,
     username: string,
     email: string,
+    dataSourceApp: DataSourceApp,
     kudosGiven?:  {
       __typename: "ModelKudoConnection",
       items:  Array< {
@@ -1012,10 +1088,10 @@ export type OnDeletePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     kudosReceived?:  {
@@ -1027,10 +1103,10 @@ export type OnDeletePersonSubscription = {
         receiverId: string,
         message: string,
         kudoVerb: KudoVerb,
-        dataSourceApp?: DataSourceApp | null,
+        dataSourceApp: DataSourceApp,
         createdAt: string,
         updatedAt: string,
-      } >,
+      } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,

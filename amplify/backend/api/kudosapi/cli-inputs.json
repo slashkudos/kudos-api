@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "serviceName": "AppSync",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 365,
+      "apiKeyExpirationDate": "2023-01-02T21:35:17.087Z",
+      "keyDescription": "philipgaidev"
+    },
+    "conflictResolution": {},
+    "apiName": "kudosapi",
+    "gqlSchemaPath": "/workspaces/kudos-api/amplify/backend/api/kudosapi/schema.graphql",
+    "additionalAuthTypes": []
+  }
+}

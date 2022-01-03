@@ -14,20 +14,28 @@ export const createKudo = /* GraphQL */ `
       message
       kudoVerb
       dataSourceApp
-      github {
-        id
-        name
-        url
-        owner
-        repo
-        team
-        item
+      metadata {
+        ... on GitHubMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+          owner
+          repo
+          team
+          item
+        }
+        ... on TwitterMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+        }
       }
       createdAt
       giver {
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
@@ -41,6 +49,7 @@ export const createKudo = /* GraphQL */ `
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
@@ -66,20 +75,28 @@ export const updateKudo = /* GraphQL */ `
       message
       kudoVerb
       dataSourceApp
-      github {
-        id
-        name
-        url
-        owner
-        repo
-        team
-        item
+      metadata {
+        ... on GitHubMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+          owner
+          repo
+          team
+          item
+        }
+        ... on TwitterMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+        }
       }
       createdAt
       giver {
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
@@ -93,6 +110,7 @@ export const updateKudo = /* GraphQL */ `
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
@@ -118,20 +136,28 @@ export const deleteKudo = /* GraphQL */ `
       message
       kudoVerb
       dataSourceApp
-      github {
-        id
-        name
-        url
-        owner
-        repo
-        team
-        item
+      metadata {
+        ... on GitHubMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+          owner
+          repo
+          team
+          item
+        }
+        ... on TwitterMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+        }
       }
       createdAt
       giver {
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
@@ -145,6 +171,7 @@ export const deleteKudo = /* GraphQL */ `
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
@@ -167,6 +194,7 @@ export const createPerson = /* GraphQL */ `
       id
       username
       email
+      dataSourceApp
       kudosGiven {
         items {
           id
@@ -207,6 +235,7 @@ export const updatePerson = /* GraphQL */ `
       id
       username
       email
+      dataSourceApp
       kudosGiven {
         items {
           id
@@ -247,6 +276,7 @@ export const deletePerson = /* GraphQL */ `
       id
       username
       email
+      dataSourceApp
       kudosGiven {
         items {
           id

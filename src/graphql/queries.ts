@@ -11,20 +11,28 @@ export const getKudo = /* GraphQL */ `
       message
       kudoVerb
       dataSourceApp
-      github {
-        id
-        name
-        url
-        owner
-        repo
-        team
-        item
+      metadata {
+        ... on GitHubMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+          owner
+          repo
+          team
+          item
+        }
+        ... on TwitterMetadata {
+          dataSourceId
+          dataSourceApp
+          url
+        }
       }
       createdAt
       giver {
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
@@ -38,6 +46,7 @@ export const getKudo = /* GraphQL */ `
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
@@ -65,20 +74,28 @@ export const listKudos = /* GraphQL */ `
         message
         kudoVerb
         dataSourceApp
-        github {
-          id
-          name
-          url
-          owner
-          repo
-          team
-          item
+        metadata {
+          ... on GitHubMetadata {
+            dataSourceId
+            dataSourceApp
+            url
+            owner
+            repo
+            team
+            item
+          }
+          ... on TwitterMetadata {
+            dataSourceId
+            dataSourceApp
+            url
+          }
         }
         createdAt
         giver {
           id
           username
           email
+          dataSourceApp
           createdAt
           updatedAt
         }
@@ -86,6 +103,7 @@ export const listKudos = /* GraphQL */ `
           id
           username
           email
+          dataSourceApp
           createdAt
           updatedAt
         }
@@ -101,6 +119,7 @@ export const getPerson = /* GraphQL */ `
       id
       username
       email
+      dataSourceApp
       kudosGiven {
         items {
           id
@@ -143,6 +162,7 @@ export const listPersons = /* GraphQL */ `
         id
         username
         email
+        dataSourceApp
         kudosGiven {
           nextToken
         }
