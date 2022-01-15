@@ -161,9 +161,21 @@ query ListPersons(
       email
       dataSourceApp
       kudosGiven {
+        items {
+          id
+          message
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       kudosReceived {
+        items {
+          id
+          message
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
