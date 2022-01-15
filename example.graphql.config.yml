@@ -1,4 +1,5 @@
 # Added for executing graphql queries from VS Code
+# Copy this file, rename it graphql.config.yml and add your api key to test queries from the tests folder
 
 projects:
   kudosapi:
