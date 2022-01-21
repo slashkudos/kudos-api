@@ -9,23 +9,9 @@ query GetKudo($id: ID!) {
     message
     kudoVerb
     dataSourceApp
-    metadata {
-      ... on GitHubMetadata {
-        dataSourceId
-        dataSourceApp
-        url
-        owner
-        repo
-        team
-        item
-      }
-      ... on TwitterMetadata {
-        dataSourceId
-        dataSourceApp
-        url
-      }
-    }
     createdAt
+    link
+    metadata
     giver {
       id
       username
@@ -71,23 +57,9 @@ query ListKudos(
       message
       kudoVerb
       dataSourceApp
-      metadata {
-        ... on GitHubMetadata {
-          dataSourceId
-          dataSourceApp
-          url
-          owner
-          repo
-          team
-          item
-        }
-        ... on TwitterMetadata {
-          dataSourceId
-          dataSourceApp
-          url
-        }
-      }
       createdAt
+      link
+      metadata
       giver {
         id
         username
@@ -125,6 +97,8 @@ query GetPerson($id: ID!) {
         kudoVerb
         dataSourceApp
         createdAt
+        link
+        metadata
         updatedAt
       }
       nextToken
@@ -138,6 +112,8 @@ query GetPerson($id: ID!) {
         kudoVerb
         dataSourceApp
         createdAt
+        link
+        metadata
         updatedAt
       }
       nextToken
@@ -147,8 +123,6 @@ query GetPerson($id: ID!) {
   }
 }
 
-# Examples
-# $filter: { "username": { "contains": "philip" }, "dataSourceApp": {"eq":"twitter"} }
 query ListPersons(
   $filter: ModelPersonFilterInput
   $limit: Int
@@ -161,21 +135,9 @@ query ListPersons(
       email
       dataSourceApp
       kudosGiven {
-        items {
-          id
-          message
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       kudosReceived {
-        items {
-          id
-          message
-          createdAt
-          updatedAt
-        }
         nextToken
       }
       createdAt

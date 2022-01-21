@@ -11,27 +11,12 @@ enum DataSourceApp {
   other
 }
 
-enum GitHubItem {
-  issue
-  pullRequest
-  discussion
-  teamPost
-}
-
 enum KudoVerb {
   kudos
   props
   sparkles
   fireworks
 }
-
-interface IDataSource {
-  dataSourceId: ID!
-  dataSourceApp: DataSourceApp!
-  url: AWSURL!
-}
-
-union Metadata = GitHubMetadata | TwitterMetadata
 
 type Kudo
   @model
@@ -45,8 +30,9 @@ type Kudo
   message: String!
   kudoVerb: KudoVerb!
   dataSourceApp: DataSourceApp!
-  metadata: Metadata
   createdAt: AWSDateTime!
+  link: AWSURL!
+  metadata: AWSJSON
   giver: Person @connection(fields: ["giverId"])
   receiver: Person @connection(fields: ["receiverId"])
 }
@@ -61,20 +47,4 @@ type Person
   dataSourceApp: DataSourceApp!
   kudosGiven: [Kudo] @connection(keyName: "byGiver", fields: ["id"])
   kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["id"])
-}
-
-type GitHubMetadata implements IDataSource {
-  dataSourceId: ID!
-  dataSourceApp: DataSourceApp!
-  url: AWSURL!
-  owner: String!
-  repo: String
-  team: String
-  item: GitHubItem
-}
-
-type TwitterMetadata implements IDataSource {
-  dataSourceId: ID!
-  dataSourceApp: DataSourceApp!
-  url: AWSURL!
 }
