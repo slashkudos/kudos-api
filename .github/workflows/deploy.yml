@@ -34,13 +34,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Pull Amplify Environment
-        shell: bash
-        run: |
-          chmod +x ./scripts/amplify_pull.sh
-          ./scripts/amplify_pull.sh $amplify_env $amplify_appId
-          amplify status
-      - name: Amplify Push
-        shell: bash
-        run: |
-          amplify push --yes
+      - name: Amplify Deploy
+        uses: ./.github/workflows/composite/amplify-deploy
+        with:
+          amplify_appId: ${{ env.amplify_appId }}
+          amplify_env: ${{ env.amplify_env }}
+          command: push
