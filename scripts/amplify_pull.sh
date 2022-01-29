@@ -15,7 +15,14 @@ fi
 
 if [ -z "$(amplify env get --name $amplify_env | grep 'No environment found')" ]; then
     echo "Pulling $amplify_env ($amplify_appId)"
+    rm -rf amplify-temp
+    cp -r amplify amplify-temp
+
     amplify pull --appId $amplify_appId --envName $amplify_env --yes
+
+    cp -r amplify-temp/* amplify
+    rm -rf amplify-temp
+
     status=$?
     exit $status
 else

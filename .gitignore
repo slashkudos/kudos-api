@@ -20,4 +20,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
 graphql.config.yml
+amplify-temp
