@@ -1,0 +1,42 @@
+# This workflow will deploy the API using AWS Amplify
+
+name: Deploy Dev API
+
+on:
+  push:
+    branches: [develop]
+    paths: [amplify/**]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Dev
+    runs-on: ubuntu-latest
+    env:
+      amplify_env: dev
+      amplify_appId: d5u222qsuh3lu
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
+      - name: Install Amplify
+        shell: bash
+        run: |
+          node -v
+          npm -v
+          npm install -g @aws-amplify/cli
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Amplify Deploy
+        uses: ./.github/workflows/composite/amplify-deploy
+        with:
+          amplify_appId: ${{ env.amplify_appId }}
+          amplify_env: ${{ env.amplify_env }}
+          command: push
