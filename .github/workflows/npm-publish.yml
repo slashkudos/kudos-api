@@ -5,6 +5,11 @@ on:
     paths: [client/typescript/package.json]
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash
+    working-directory: client/typescript
+
 jobs:
   build:
     runs-on: ubuntu-latest
