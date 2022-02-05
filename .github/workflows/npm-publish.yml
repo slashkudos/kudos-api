@@ -11,7 +11,7 @@ defaults:
     working-directory: client/typescript
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
