@@ -12,7 +12,7 @@
 Param()
 
 git config --global pull.rebase true
-sudo npm install -g @aws-amplify/cli
+sudo npm install -g @aws-amplify/cli@7.6.15
 
 # Setup AWS default profile
 mkdir -p ~/.aws
