@@ -37,3 +37,6 @@ aws configure list
 
 Write-Host "amplify version: " -NoNewLine
 amplify --version
+
+nvm install lts/gallium
+nvm use lts/gallium
