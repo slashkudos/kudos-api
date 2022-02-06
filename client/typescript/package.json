@@ -1,23 +1,7 @@
 {
   "name": "@slashkudos/kudos-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The Kudos API SDK for Typescript",
-  "main": "lib/API.js",
-  "types": "lib/API.d.ts",
-  "files": [
-    "lib/**/*"
-  ],
-  "scripts": {
-    "build": "rm -rf lib && tsc -p ./tsconfig-build.json",
-    "lint": "eslint '**/*.{js,ts,tsx}'",
-    "format": "eslint '**/*.{js,ts,tsx}' --quiet --fix",
-    "test": "jest --config jestconfig.json",
-    "prepublishOnly": "npm test && npm run lint",
-    "prepare": "npm run build",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/slashkudos/kudos-api.git"
@@ -29,6 +13,13 @@
   "keywords": [],
   "author": "Philip Gai <philip@slashkudos.com>",
   "license": "ISC",
+  "scripts": {
+    "build": "scripts/run_build.sh",
+    "lint": "eslint '**/*.{js,ts,tsx}'",
+    "format": "eslint '**/*.{js,ts,tsx}' --quiet --fix",
+    "test": "jest --config jestconfig.json",
+    "prepublishOnly": "npm ci && npm test && npm run lint && npm run build"
+  },
   "dependencies": {
     "graphql": "^16.2.0",
     "graphql-request": "^4.0.0",
@@ -39,6 +30,7 @@
     "@types/node": "^14.18.3",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
+    "@vercel/ncc": "^0.33.1",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -47,6 +39,11 @@
     "ts-jest": "^27.1.3",
     "typescript": "^4.5.4"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   }
