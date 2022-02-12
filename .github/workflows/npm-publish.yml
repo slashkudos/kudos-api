@@ -2,13 +2,13 @@ name: Publish package to GitHub Packages
 on:
   push:
     branches: [main]
-    paths: [client/typescript/package.json]
+    paths: [clients/typescript/package.json]
   workflow_dispatch:
 
 defaults:
   run:
     shell: bash
-    working-directory: client/typescript
+    working-directory: clients/typescript
 
 jobs:
   publish:
