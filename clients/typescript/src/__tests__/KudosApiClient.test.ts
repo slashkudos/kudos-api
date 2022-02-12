@@ -32,7 +32,7 @@ test("Create Kudo Happy Path", () => {
   );
 
   KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
-    client.createKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
+    client.createTwitterKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
       expect(getUserFunc.mock.calls.length).toBe(2);
       expect(getUserFunc.mock.calls[0][0]).toBe(giverUsername);
       expect(getUserFunc.mock.calls[1][0]).toBe(receiverUsername);
@@ -56,7 +56,7 @@ test("Create Kudo with a new receiver", () => {
   );
 
   KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
-    client.createKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
+    client.createTwitterKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
       expect(createPersonFunc.mock.calls.length).toBe(1);
       expect(createPersonFunc.mock.calls[0][0].input.username).toBe(receiverUsername);
       expect(kudo).not.toBeNull();
@@ -89,7 +89,7 @@ test("Create kudo with a new giver", () => {
   );
 
   KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
-    client.createKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
+    client.createTwitterKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
       expect(createPersonFunc.mock.calls.length).toBe(1);
       expect(createPersonFunc.mock.calls[0][0].input.username).toBe(giverUsername);
       expect(kudo).not.toBeNull();

@@ -10,13 +10,16 @@ import {
   DataSourceApp,
   Kudo,
   KudoVerb,
+  ListKudosQuery,
+  ListKudosQueryVariables,
   ListPersonsQuery,
   ListPersonsQueryVariables,
+  ModelKudoConnection,
   ModelPersonConnection,
   Person,
 } from "./API";
 import { createKudo, createPerson } from "./graphql/mutations";
-import { listPersons } from "./graphql/queries";
+import { listKudos, listPersons } from "./graphql/queries";
 import { LoggerService } from "./LoggerService";
 
 export interface KudosGraphQLConfig {
@@ -41,20 +44,20 @@ export class KudosApiClient {
     return new KudosApiClient(kudosGraphQLConfig);
   }
 
-  public async createKudo(giverUsername: string, receiverUsername: string, message: string, tweetId: string): Promise<{ kudo: Kudo; receiver: Person }> {
+  public async createTwitterKudo(giverUsername: string, receiverUsername: string, message: string, tweetId: string): Promise<{ kudo: Kudo; receiver: Person }> {
     this.logger.info(`Creating Kudo from ${giverUsername} to ${receiverUsername} with message "${message}"`);
-    let giver: Person | null = await this.getUser(giverUsername);
+    let giver: Person | null = await this.getTwitterUser(giverUsername);
     if (!giver) {
-      giver = await this.createPerson({
+      giver = await this.createTwitterPerson({
         input: {
           username: giverUsername,
           dataSourceApp: DataSourceApp.twitter,
         },
       });
     }
-    let receiver: Person | null = await this.getUser(receiverUsername);
+    let receiver: Person | null = await this.getTwitterUser(receiverUsername);
     if (!receiver) {
-      receiver = await this.createPerson({
+      receiver = await this.createTwitterPerson({
         input: {
           username: receiverUsername,
           dataSourceApp: DataSourceApp.twitter,
@@ -63,7 +66,7 @@ export class KudosApiClient {
     }
 
     const tweetUrl = `https://twitter.com/${giverUsername}/status/${tweetId}`;
-    const kudo = await this.sendCreateKudoRequest({
+    const kudo = await this.sendCreateTwitterKudoRequest({
       input: {
         giverId: giver.id,
         receiverId: receiver.id,
@@ -78,13 +81,35 @@ export class KudosApiClient {
       throw new Error("Expected a receiver on the kudo");
     }
     if (!kudo.receiver?.kudosReceived?.items) {
-      throw new Error("Expected receiver kudosReceived to be returned from sendCreateKudoRequest");
+      throw new Error("Expected receiver kudosReceived to be returned from sendCreateTwitterKudoRequest");
     }
 
     return { kudo, receiver: kudo.receiver };
   }
 
-  private async sendCreateKudoRequest(mutationVariables: CreateKudoMutationVariables): Promise<Kudo> {
+  public async listPeople(queryVariables: ListPersonsQueryVariables): Promise<ModelPersonConnection> {
+    const rawResponse = await this.graphQLClient.request(listPersons, queryVariables);
+    this.logger.http(JSON.stringify(rawResponse));
+    const listPersonsResponse = rawResponse as ListPersonsQuery;
+    if (!listPersonsResponse) {
+      throw new Error("Expected a ListPersonsQuery response from listPersons");
+    }
+    const modelPersonConnection = listPersonsResponse.listPersons as ModelPersonConnection;
+    return modelPersonConnection;
+  }
+
+  public async listKudos(queryVariables: ListKudosQueryVariables): Promise<ModelKudoConnection> {
+    const rawResponse = await this.graphQLClient.request(listKudos, queryVariables);
+    this.logger.http(JSON.stringify(rawResponse));
+    const listKudosResponse = rawResponse as ListKudosQuery;
+    if (!listKudosResponse) {
+      throw new Error("Expected a ListKudosQuery response from listKudos");
+    }
+    const modelKudoConnection = listKudosResponse.listKudos as ModelKudoConnection;
+    return modelKudoConnection;
+  }
+
+  private async sendCreateTwitterKudoRequest(mutationVariables: CreateKudoMutationVariables): Promise<Kudo> {
     this.logger.info(`Sending create kudo request`);
     const input: CreateKudoInput = {
       ...mutationVariables.input,
@@ -105,7 +130,7 @@ export class KudosApiClient {
     return kudo;
   }
 
-  private async createPerson(mutationVariables: CreatePersonMutationVariables): Promise<Person> {
+  private async createTwitterPerson(mutationVariables: CreatePersonMutationVariables): Promise<Person> {
     this.logger.info(`Creating a person with the username ${mutationVariables.input.username}`);
     const input: CreatePersonInput = {
       ...mutationVariables.input,
@@ -124,18 +149,7 @@ export class KudosApiClient {
     return person;
   }
 
-  private async listPeople(queryVariables: ListPersonsQueryVariables): Promise<ModelPersonConnection> {
-    const rawResponse = await this.graphQLClient.request(listPersons, queryVariables);
-    this.logger.http(JSON.stringify(rawResponse));
-    const listPersonsResponse = rawResponse as ListPersonsQuery;
-    if (!listPersonsResponse) {
-      throw new Error("Expected a ListPersonsQuery response from listPersons");
-    }
-    const modelPersonConnection = listPersonsResponse.listPersons as ModelPersonConnection;
-    return modelPersonConnection;
-  }
-
-  private async getUser(username: string): Promise<Person | null> {
+  private async getTwitterUser(username: string): Promise<Person | null> {
     this.logger.info(`Getting user for username ${username}`);
 
     const peopleResponse = await this.listPeople({
