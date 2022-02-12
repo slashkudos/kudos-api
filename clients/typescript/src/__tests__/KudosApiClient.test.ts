@@ -2,12 +2,12 @@ import { CreateKudoMutationVariables, CreatePersonMutationVariables, Kudo, Perso
 import { KudosApiClient } from "../KudosApiClient";
 
 // Spy Instances
-const getUserFunc = jest.spyOn(KudosApiClient.prototype as any, "getUser") as unknown as jest.SpyInstance<Promise<Person | null>, [username: string]>;
-const createPersonFunc = jest.spyOn(KudosApiClient.prototype as any, "createPerson") as unknown as jest.SpyInstance<
+const getUserFunc = jest.spyOn(KudosApiClient.prototype as any, "getTwitterUser") as unknown as jest.SpyInstance<Promise<Person | null>, [username: string]>;
+const createPersonFunc = jest.spyOn(KudosApiClient.prototype as any, "createTwitterPerson") as unknown as jest.SpyInstance<
   Promise<Person>,
   [mutationVariables: CreatePersonMutationVariables]
 >;
-const sendCreateKudoRequestFunc = jest.spyOn(KudosApiClient.prototype as any, "sendCreateKudoRequest") as unknown as jest.SpyInstance<
+const sendCreateKudoRequestFunc = jest.spyOn(KudosApiClient.prototype as any, "sendCreateTwitterKudoRequest") as unknown as jest.SpyInstance<
   Promise<Kudo>,
   [mutationVariables: CreateKudoMutationVariables]
 >;
@@ -68,22 +68,11 @@ test("Create kudo with a new giver", () => {
   const receiverUsername = "testReceiverUsername";
   const giverUsername = "testGiverUsername";
 
-  const getUserFunc = jest.spyOn(KudosApiClient.prototype as any, "getUser") as unknown as jest.SpyInstance<Promise<Person | null>, [username: string]>;
   getUserFunc.mockImplementation((username: string): Promise<Person | null> => {
     if (username === giverUsername) return Promise.resolve(null);
     else return Promise.resolve({ id: receiverUsername } as Person);
   });
-
-  const createPersonFunc = jest.spyOn(KudosApiClient.prototype as any, "createPerson") as unknown as jest.SpyInstance<
-    Promise<Person>,
-    [mutationVariables: CreatePersonMutationVariables]
-  >;
   createPersonFunc.mockImplementation(() => Promise.resolve({ id: giverUsername } as Person));
-
-  const sendCreateKudoRequestFunc = jest.spyOn(KudosApiClient.prototype as any, "sendCreateKudoRequest") as unknown as jest.SpyInstance<
-    Promise<Kudo>,
-    [mutationVariables: CreateKudoMutationVariables]
-  >;
   sendCreateKudoRequestFunc.mockImplementation(() =>
     Promise.resolve({ id: "testKudoId", receiver: { id: receiverUsername, kudosReceived: { items: [{ id: "testKudoReceivedId" }] } } } as Kudo)
   );
