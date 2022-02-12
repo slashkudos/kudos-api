@@ -12,6 +12,9 @@ jobs:
   deploy:
     name: Deploy Dev
     runs-on: ubuntu-latest
+    environment:
+      name: Develop
+      url: https://graphqlapi-dev.slashkudos.com/graphql
     env:
       amplify_env: dev
       amplify_appId: d5u222qsuh3lu

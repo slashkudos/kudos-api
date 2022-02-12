@@ -16,6 +16,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    environment:
+      name: "@slashkudos/kudos-api - npm"
+      url: https://github.com/slashkudos/kudos-api/packages/1236830
     steps:
       - uses: actions/checkout@v2
       # Setup .npmrc file to publish to GitHub Packages

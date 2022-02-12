@@ -12,6 +12,9 @@ jobs:
   deploy:
     name: Deploy Prod
     runs-on: ubuntu-latest
+    environment:
+      name: Production
+      url: https://graphqlapi.slashkudos.com/graphql
     env:
       amplify_env: prod
       amplify_appId: d5u222qsuh3lu
@@ -22,7 +25,7 @@ jobs:
           ref: main
       - name: Setup Amplify
         uses: ./.github/workflows/composite/amplify-setup
-        with: 
+        with:
           node_version: "16.x"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
