@@ -4,12 +4,14 @@
 # so we have to rename tsconfig-build.json to tsconfig.json
 # https://github.com/vercel/ncc/issues/457
 
-mv tsconfig.json tsconfig-dev.json
-mv tsconfig-build.json tsconfig.json
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-rm -rf src/dist
-ncc build src/index.ts
-ncc run dist/index.js
+mv $SCRIPT_DIR/../tsconfig.json $SCRIPT_DIR/../tsconfig-dev.json
+mv $SCRIPT_DIR/../tsconfig-build.json $SCRIPT_DIR/../tsconfig.json
 
-mv tsconfig.json tsconfig-build.json
-mv tsconfig-dev.json tsconfig.json
+rm -rf $SCRIPT_DIR/../src/dist
+ncc build $SCRIPT_DIR/../src/index.ts
+ncc run $SCRIPT_DIR/../dist/index.js
+
+mv $SCRIPT_DIR/../tsconfig.json $SCRIPT_DIR/../tsconfig-build.json
+mv $SCRIPT_DIR/../tsconfig-dev.json $SCRIPT_DIR/../tsconfig.json

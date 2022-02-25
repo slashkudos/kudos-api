@@ -2,16 +2,93 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-// Manually Overridden
 export const createKudo = /* GraphQL */ `
-  mutation CreateKudo($input: CreateKudoInput!, $condition: ModelKudoConditionInput) {
+  mutation CreateKudo(
+    $input: CreateKudoInput!
+    $condition: ModelKudoConditionInput
+  ) {
     createKudo(input: $input, condition: $condition) {
       id
+      giverId
+      receiverId
+      message
+      kudoVerb
+      dataSourceApp
       createdAt
-      receiver {
+      link
+      metadata
+      giver {
+        id
+        username
+        email
+        profileImageUrl
+        dataSourceApp
+        kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
+          nextToken
+        }
         kudosReceived {
           items {
             id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      receiver {
+        id
+        username
+        email
+        profileImageUrl
+        dataSourceApp
+        kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
+          nextToken
+        }
+        kudosReceived {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
           }
           nextToken
         }
@@ -23,7 +100,10 @@ export const createKudo = /* GraphQL */ `
   }
 `;
 export const updateKudo = /* GraphQL */ `
-  mutation UpdateKudo($input: UpdateKudoInput!, $condition: ModelKudoConditionInput) {
+  mutation UpdateKudo(
+    $input: UpdateKudoInput!
+    $condition: ModelKudoConditionInput
+  ) {
     updateKudo(input: $input, condition: $condition) {
       id
       giverId
@@ -38,11 +118,36 @@ export const updateKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
         kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         kudosReceived {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -52,11 +157,36 @@ export const updateKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
         kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         kudosReceived {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -67,7 +197,10 @@ export const updateKudo = /* GraphQL */ `
   }
 `;
 export const deleteKudo = /* GraphQL */ `
-  mutation DeleteKudo($input: DeleteKudoInput!, $condition: ModelKudoConditionInput) {
+  mutation DeleteKudo(
+    $input: DeleteKudoInput!
+    $condition: ModelKudoConditionInput
+  ) {
     deleteKudo(input: $input, condition: $condition) {
       id
       giverId
@@ -82,11 +215,36 @@ export const deleteKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
         kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         kudosReceived {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -96,11 +254,36 @@ export const deleteKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
         kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         kudosReceived {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -111,11 +294,15 @@ export const deleteKudo = /* GraphQL */ `
   }
 `;
 export const createPerson = /* GraphQL */ `
-  mutation CreatePerson($input: CreatePersonInput!, $condition: ModelPersonConditionInput) {
+  mutation CreatePerson(
+    $input: CreatePersonInput!
+    $condition: ModelPersonConditionInput
+  ) {
     createPerson(input: $input, condition: $condition) {
       id
       username
       email
+      profileImageUrl
       dataSourceApp
       kudosGiven {
         items {
@@ -128,6 +315,24 @@ export const createPerson = /* GraphQL */ `
           createdAt
           link
           metadata
+          giver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
+          receiver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
           updatedAt
         }
         nextToken
@@ -143,6 +348,24 @@ export const createPerson = /* GraphQL */ `
           createdAt
           link
           metadata
+          giver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
+          receiver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
           updatedAt
         }
         nextToken
@@ -153,11 +376,15 @@ export const createPerson = /* GraphQL */ `
   }
 `;
 export const updatePerson = /* GraphQL */ `
-  mutation UpdatePerson($input: UpdatePersonInput!, $condition: ModelPersonConditionInput) {
+  mutation UpdatePerson(
+    $input: UpdatePersonInput!
+    $condition: ModelPersonConditionInput
+  ) {
     updatePerson(input: $input, condition: $condition) {
       id
       username
       email
+      profileImageUrl
       dataSourceApp
       kudosGiven {
         items {
@@ -170,6 +397,24 @@ export const updatePerson = /* GraphQL */ `
           createdAt
           link
           metadata
+          giver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
+          receiver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
           updatedAt
         }
         nextToken
@@ -185,6 +430,24 @@ export const updatePerson = /* GraphQL */ `
           createdAt
           link
           metadata
+          giver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
+          receiver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
           updatedAt
         }
         nextToken
@@ -195,11 +458,15 @@ export const updatePerson = /* GraphQL */ `
   }
 `;
 export const deletePerson = /* GraphQL */ `
-  mutation DeletePerson($input: DeletePersonInput!, $condition: ModelPersonConditionInput) {
+  mutation DeletePerson(
+    $input: DeletePersonInput!
+    $condition: ModelPersonConditionInput
+  ) {
     deletePerson(input: $input, condition: $condition) {
       id
       username
       email
+      profileImageUrl
       dataSourceApp
       kudosGiven {
         items {
@@ -212,6 +479,24 @@ export const deletePerson = /* GraphQL */ `
           createdAt
           link
           metadata
+          giver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
+          receiver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
           updatedAt
         }
         nextToken
@@ -227,6 +512,24 @@ export const deletePerson = /* GraphQL */ `
           createdAt
           link
           metadata
+          giver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
+          receiver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
           updatedAt
         }
         nextToken

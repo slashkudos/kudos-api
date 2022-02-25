@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CreateKudoMutationVariables, CreatePersonMutationVariables, Kudo, Person } from "../API";
 import { KudosApiClient } from "../KudosApiClient";
 

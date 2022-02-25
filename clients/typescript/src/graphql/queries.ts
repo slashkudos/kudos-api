@@ -18,11 +18,36 @@ export const getKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
         kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         kudosReceived {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -32,11 +57,36 @@ export const getKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
         kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         kudosReceived {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -67,7 +117,14 @@ export const listKudos = /* GraphQL */ `
           id
           username
           email
+          profileImageUrl
           dataSourceApp
+          kudosGiven {
+            nextToken
+          }
+          kudosReceived {
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -75,7 +132,14 @@ export const listKudos = /* GraphQL */ `
           id
           username
           email
+          profileImageUrl
           dataSourceApp
+          kudosGiven {
+            nextToken
+          }
+          kudosReceived {
+            nextToken
+          }
           createdAt
           updatedAt
         }
@@ -91,6 +155,7 @@ export const getPerson = /* GraphQL */ `
       id
       username
       email
+      profileImageUrl
       dataSourceApp
       kudosGiven {
         items {
@@ -103,6 +168,24 @@ export const getPerson = /* GraphQL */ `
           createdAt
           link
           metadata
+          giver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
+          receiver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
           updatedAt
         }
         nextToken
@@ -118,6 +201,24 @@ export const getPerson = /* GraphQL */ `
           createdAt
           link
           metadata
+          giver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
+          receiver {
+            id
+            username
+            email
+            profileImageUrl
+            dataSourceApp
+            createdAt
+            updatedAt
+          }
           updatedAt
         }
         nextToken
@@ -138,11 +239,36 @@ export const listPersons = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
         kudosGiven {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         kudosReceived {
+          items {
+            id
+            giverId
+            receiverId
+            message
+            kudoVerb
+            dataSourceApp
+            createdAt
+            link
+            metadata
+            updatedAt
+          }
           nextToken
         }
         createdAt
