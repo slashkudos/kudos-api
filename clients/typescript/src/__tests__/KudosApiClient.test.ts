@@ -21,7 +21,9 @@ beforeEach(() => {
 
 test("Create Kudo Happy Path", () => {
   const receiverUsername = "testReceiverUsername";
+  const receiverProfileImageUrl = "testReceiverProfileImageUrl";
   const giverUsername = "testGiverUsername";
+  const giverProfileImageUrl = "testGiverProfileImageUrl";
 
   getUserFunc.mockImplementation((username: string): Promise<Person | null> => {
     if (username === receiverUsername) return Promise.resolve({ id: receiverUsername } as Person);
@@ -33,19 +35,23 @@ test("Create Kudo Happy Path", () => {
   );
 
   KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
-    client.createTwitterKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
-      expect(getUserFunc.mock.calls.length).toBe(2);
-      expect(getUserFunc.mock.calls[0][0]).toBe(giverUsername);
-      expect(getUserFunc.mock.calls[1][0]).toBe(receiverUsername);
-      expect(createPersonFunc.mock.calls.length).toBe(0);
-      expect(kudo).not.toBeNull();
-    });
+    client
+      .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", giverProfileImageUrl, receiverProfileImageUrl })
+      .then((kudo) => {
+        expect(getUserFunc.mock.calls.length).toBe(2);
+        expect(getUserFunc.mock.calls[0][0]).toBe(giverUsername);
+        expect(getUserFunc.mock.calls[1][0]).toBe(receiverUsername);
+        expect(createPersonFunc.mock.calls.length).toBe(0);
+        expect(kudo).not.toBeNull();
+      });
   });
 });
 
 test("Create Kudo with a new receiver", () => {
   const receiverUsername = "testReceiverUsername";
+  const receiverProfileImageUrl = "testReceiverProfileImageUrl";
   const giverUsername = "testGiverUsername";
+  const giverProfileImageUrl = "testGiverProfileImageUrl";
 
   getUserFunc.mockImplementation((username: string): Promise<Person | null> => {
     if (username === receiverUsername) return Promise.resolve(null);
@@ -57,17 +63,21 @@ test("Create Kudo with a new receiver", () => {
   );
 
   KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
-    client.createTwitterKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
-      expect(createPersonFunc.mock.calls.length).toBe(1);
-      expect(createPersonFunc.mock.calls[0][0].input.username).toBe(receiverUsername);
-      expect(kudo).not.toBeNull();
-    });
+    client
+      .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", receiverProfileImageUrl, giverProfileImageUrl })
+      .then((kudo) => {
+        expect(createPersonFunc.mock.calls.length).toBe(1);
+        expect(createPersonFunc.mock.calls[0][0].input.username).toBe(receiverUsername);
+        expect(kudo).not.toBeNull();
+      });
   });
 });
 
 test("Create kudo with a new giver", () => {
   const receiverUsername = "testReceiverUsername";
+  const receiverProfileImageUrl = "testReceiverProfileImageUrl";
   const giverUsername = "testGiverUsername";
+  const giverProfileImageUrl = "testGiverProfileImageUrl";
 
   getUserFunc.mockImplementation((username: string): Promise<Person | null> => {
     if (username === giverUsername) return Promise.resolve(null);
@@ -79,10 +89,12 @@ test("Create kudo with a new giver", () => {
   );
 
   KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
-    client.createTwitterKudo(giverUsername, receiverUsername, "testMessage", "testTweetId").then((kudo) => {
-      expect(createPersonFunc.mock.calls.length).toBe(1);
-      expect(createPersonFunc.mock.calls[0][0].input.username).toBe(giverUsername);
-      expect(kudo).not.toBeNull();
-    });
+    client
+      .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", receiverProfileImageUrl, giverProfileImageUrl })
+      .then((kudo) => {
+        expect(createPersonFunc.mock.calls.length).toBe(1);
+        expect(createPersonFunc.mock.calls[0][0].input.username).toBe(giverUsername);
+        expect(kudo).not.toBeNull();
+      });
   });
 });

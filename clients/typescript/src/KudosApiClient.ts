@@ -27,6 +27,15 @@ export interface KudosGraphQLConfig {
   ApiUrl: string;
 }
 
+export interface createTwitterKudoOptions {
+  giverUsername: string;
+  receiverUsername: string;
+  message: string;
+  tweetId: string;
+  giverProfileImageUrl: string;
+  receiverProfileImageUrl: string;
+}
+
 export class KudosApiClient {
   private readonly graphQLClient: GraphQLClient;
   private readonly logger: winston.Logger;
@@ -44,33 +53,35 @@ export class KudosApiClient {
     return new KudosApiClient(kudosGraphQLConfig);
   }
 
-  public async createTwitterKudo(giverUsername: string, receiverUsername: string, message: string, tweetId: string): Promise<{ kudo: Kudo; receiver: Person }> {
-    this.logger.info(`Creating Kudo from ${giverUsername} to ${receiverUsername} with message "${message}"`);
-    let giver: Person | null = await this.getTwitterUser(giverUsername);
+  public async createTwitterKudo(options: createTwitterKudoOptions): Promise<{ kudo: Kudo; receiver: Person }> {
+    this.logger.info(`Creating Kudo from ${options.giverUsername} to ${options.receiverUsername} with message "${options.message}"`);
+    let giver: Person | null = await this.getTwitterUser(options.giverUsername);
     if (!giver) {
       giver = await this.createTwitterPerson({
         input: {
-          username: giverUsername,
+          username: options.giverUsername,
           dataSourceApp: DataSourceApp.twitter,
+          profileImageUrl: options.giverProfileImageUrl,
         },
       });
     }
-    let receiver: Person | null = await this.getTwitterUser(receiverUsername);
+    let receiver: Person | null = await this.getTwitterUser(options.receiverUsername);
     if (!receiver) {
       receiver = await this.createTwitterPerson({
         input: {
-          username: receiverUsername,
+          username: options.receiverUsername,
           dataSourceApp: DataSourceApp.twitter,
+          profileImageUrl: options.receiverProfileImageUrl,
         },
       });
     }
 
-    const tweetUrl = `https://twitter.com/${giverUsername}/status/${tweetId}`;
+    const tweetUrl = `https://twitter.com/${options.giverUsername}/status/${options.tweetId}`;
     const kudo = await this.sendCreateTwitterKudoRequest({
       input: {
         giverId: giver.id,
         receiverId: receiver.id,
-        message: message,
+        message: options.message,
         link: tweetUrl,
         dataSourceApp: DataSourceApp.twitter,
         kudoVerb: KudoVerb.kudos,
