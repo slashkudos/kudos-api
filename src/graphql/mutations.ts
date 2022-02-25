@@ -21,13 +21,8 @@ export const createKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
-        kudosGiven {
-          nextToken
-        }
-        kudosReceived {
-          nextToken
-        }
         createdAt
         updatedAt
       }
@@ -35,13 +30,8 @@ export const createKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
-        kudosGiven {
-          nextToken
-        }
-        kudosReceived {
-          nextToken
-        }
         createdAt
         updatedAt
       }
@@ -68,13 +58,8 @@ export const updateKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
-        kudosGiven {
-          nextToken
-        }
-        kudosReceived {
-          nextToken
-        }
         createdAt
         updatedAt
       }
@@ -82,13 +67,8 @@ export const updateKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
-        kudosGiven {
-          nextToken
-        }
-        kudosReceived {
-          nextToken
-        }
         createdAt
         updatedAt
       }
@@ -115,13 +95,8 @@ export const deleteKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
-        kudosGiven {
-          nextToken
-        }
-        kudosReceived {
-          nextToken
-        }
         createdAt
         updatedAt
       }
@@ -129,13 +104,8 @@ export const deleteKudo = /* GraphQL */ `
         id
         username
         email
+        profileImageUrl
         dataSourceApp
-        kudosGiven {
-          nextToken
-        }
-        kudosReceived {
-          nextToken
-        }
         createdAt
         updatedAt
       }
@@ -152,35 +122,12 @@ export const createPerson = /* GraphQL */ `
       id
       username
       email
+      profileImageUrl
       dataSourceApp
       kudosGiven {
-        items {
-          id
-          giverId
-          receiverId
-          message
-          kudoVerb
-          dataSourceApp
-          createdAt
-          link
-          metadata
-          updatedAt
-        }
         nextToken
       }
       kudosReceived {
-        items {
-          id
-          giverId
-          receiverId
-          message
-          kudoVerb
-          dataSourceApp
-          createdAt
-          link
-          metadata
-          updatedAt
-        }
         nextToken
       }
       createdAt
@@ -197,35 +144,12 @@ export const updatePerson = /* GraphQL */ `
       id
       username
       email
+      profileImageUrl
       dataSourceApp
       kudosGiven {
-        items {
-          id
-          giverId
-          receiverId
-          message
-          kudoVerb
-          dataSourceApp
-          createdAt
-          link
-          metadata
-          updatedAt
-        }
         nextToken
       }
       kudosReceived {
-        items {
-          id
-          giverId
-          receiverId
-          message
-          kudoVerb
-          dataSourceApp
-          createdAt
-          link
-          metadata
-          updatedAt
-        }
         nextToken
       }
       createdAt
@@ -242,35 +166,12 @@ export const deletePerson = /* GraphQL */ `
       id
       username
       email
+      profileImageUrl
       dataSourceApp
       kudosGiven {
-        items {
-          id
-          giverId
-          receiverId
-          message
-          kudoVerb
-          dataSourceApp
-          createdAt
-          link
-          metadata
-          updatedAt
-        }
         nextToken
       }
       kudosReceived {
-        items {
-          id
-          giverId
-          receiverId
-          message
-          kudoVerb
-          dataSourceApp
-          createdAt
-          link
-          metadata
-          updatedAt
-        }
         nextToken
       }
       createdAt

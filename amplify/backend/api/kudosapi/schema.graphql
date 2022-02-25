@@ -44,6 +44,7 @@ type Person
   id: ID!
   username: String!
   email: String
+  profileImageUrl: AWSURL
   dataSourceApp: DataSourceApp!
   kudosGiven: [Kudo] @connection(keyName: "byGiver", fields: ["id"])
   kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["id"])
