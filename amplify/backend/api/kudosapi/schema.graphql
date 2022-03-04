@@ -1,8 +1,3 @@
-#
-# BUG: https://github.com/aws-amplify/amplify-cli/issues/3878#issuecomment-786829573
-# tl;dr: The has-one connections can only reference the primary index of the table (ie. you can't specify a keyName for has-one connections)
-#
-
 enum DataSourceApp {
   github
   slack
@@ -18,34 +13,26 @@ enum KudoVerb {
   fireworks
 }
 
-type Kudo
-  @model
-  @auth(rules: [{ allow: public }])
-  @key(name: "byPerson", fields: ["giverId", "receiverId"])
-  @key(name: "byGiver", fields: ["giverId"])
-  @key(name: "byReceiver", fields: ["receiverId"]) {
+type Kudo @model @auth(rules: [{allow: public}]) {
   id: ID!
-  giverId: ID!
-  receiverId: ID!
+  giverId: ID! @index(name: "byPerson", sortKeyFields: ["receiverId"]) @index(name: "byGiver")
+  receiverId: ID! @index(name: "byReceiver")
   message: String!
   kudoVerb: KudoVerb!
   dataSourceApp: DataSourceApp!
   createdAt: AWSDateTime!
   link: AWSURL!
   metadata: AWSJSON
-  giver: Person @connection(fields: ["giverId"])
-  receiver: Person @connection(fields: ["receiverId"])
+  giver: Person @belongsTo(fields: ["giverId"])
+  receiver: Person @belongsTo(fields: ["receiverId"])
 }
 
-type Person
-  @model
-  @auth(rules: [{ allow: public }])
-  @key(name: "byUsername", fields: ["username"]) {
+type Person @model @auth(rules: [{allow: public}]) {
   id: ID!
-  username: String!
+  username: String! @index(name: "byUsername")
   email: String
   profileImageUrl: AWSURL
   dataSourceApp: DataSourceApp!
-  kudosGiven: [Kudo] @connection(keyName: "byGiver", fields: ["id"])
-  kudosReceived: [Kudo] @connection(keyName: "byReceiver", fields: ["id"])
+  kudosGiven: [Kudo] @hasMany(indexName: "byGiver", fields: ["id"])
+  kudosReceived: [Kudo] @hasMany(indexName: "byReceiver", fields: ["id"])
 }
