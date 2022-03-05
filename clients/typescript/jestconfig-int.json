@@ -1,0 +1,4 @@
+{
+  "testRegex": "src(/__tests__/integration/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  "preset": "ts-jest"
+}

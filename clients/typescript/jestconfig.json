@@ -1,7 +1,4 @@
 {
-  "transform": {
-    "^.+\\.(t|j)sx?$": "ts-jest"
-  },
-  "testRegex": "src(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+  "testRegex": "src(/__tests__/unit/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  "preset": "ts-jest"
 }
