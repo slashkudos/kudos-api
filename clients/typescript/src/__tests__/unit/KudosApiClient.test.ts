@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CreateKudoMutationVariables, CreatePersonMutationVariables, Kudo, Person } from "../API";
-import { KudosApiClient } from "../KudosApiClient";
+import { CreateKudoMutationVariables, CreatePersonMutationVariables, Kudo, Person } from "../../API";
+import { KudosApiClient } from "../../KudosApiClient";
 
 // Spy Instances
 const getUserFunc = jest.spyOn(KudosApiClient.prototype as any, "getTwitterUser") as unknown as jest.SpyInstance<Promise<Person | null>, [username: string]>;
@@ -34,7 +34,7 @@ test("Create Kudo Happy Path", () => {
     Promise.resolve({ id: "testKudoId", receiver: { id: receiverUsername, kudosReceived: { items: [{ id: "testKudoReceivedId" }] } } } as Kudo)
   );
 
-  KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
+  return KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
     client
       .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", giverProfileImageUrl, receiverProfileImageUrl })
       .then((kudo) => {
@@ -62,7 +62,7 @@ test("Create Kudo with a new receiver", () => {
     Promise.resolve({ id: "testKudoId", receiver: { id: receiverUsername, kudosReceived: { items: [{ id: "testKudoReceivedId" }] } } } as Kudo)
   );
 
-  KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
+  return KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
     client
       .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", receiverProfileImageUrl, giverProfileImageUrl })
       .then((kudo) => {
@@ -88,7 +88,7 @@ test("Create kudo with a new giver", () => {
     Promise.resolve({ id: "testKudoId", receiver: { id: receiverUsername, kudosReceived: { items: [{ id: "testKudoReceivedId" }] } } } as Kudo)
   );
 
-  KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
+  return KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
     client
       .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", receiverProfileImageUrl, giverProfileImageUrl })
       .then((kudo) => {

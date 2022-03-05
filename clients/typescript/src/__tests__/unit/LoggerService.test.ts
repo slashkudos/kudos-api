@@ -1,4 +1,4 @@
-import { LoggerService } from "../LoggerService";
+import { LoggerService } from "../../LoggerService";
 
 test("Set log level", () => {
   process.env.LOG_LEVEL = "verbose";

@@ -12,14 +12,14 @@ import {
   KudoVerb,
   ListKudosQuery,
   ListKudosQueryVariables,
-  ListPersonsQuery,
-  ListPersonsQueryVariables,
+  ListPeopleQuery,
+  ListPeopleQueryVariables,
   ModelKudoConnection,
   ModelPersonConnection,
   Person,
 } from "./API";
 import { createKudo, createPerson } from "./graphql/mutations";
-import { listKudos, listPersons } from "./graphql/queries";
+import { listKudos, listPeople } from "./graphql/queries";
 import { LoggerService } from "./LoggerService";
 
 export interface KudosGraphQLConfig {
@@ -98,14 +98,14 @@ export class KudosApiClient {
     return { kudo, receiver: kudo.receiver };
   }
 
-  public async listPeople(queryVariables: ListPersonsQueryVariables): Promise<ModelPersonConnection> {
-    const rawResponse = await this.graphQLClient.request(listPersons, queryVariables);
+  public async listPeople(queryVariables: ListPeopleQueryVariables): Promise<ModelPersonConnection> {
+    const rawResponse = await this.graphQLClient.request(listPeople, queryVariables);
     this.logger.http(JSON.stringify(rawResponse));
-    const listPersonsResponse = rawResponse as ListPersonsQuery;
-    if (!listPersonsResponse) {
-      throw new Error("Expected a ListPersonsQuery response from listPersons");
+    const listPeopleResponse = rawResponse as ListPeopleQuery;
+    if (!listPeopleResponse) {
+      throw new Error("Expected a ListPeopleQuery response from listPeople");
     }
-    const modelPersonConnection = listPersonsResponse.listPersons as ModelPersonConnection;
+    const modelPersonConnection = listPeopleResponse.listPeople as ModelPersonConnection;
     return modelPersonConnection;
   }
 

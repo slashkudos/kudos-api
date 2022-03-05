@@ -1,6 +1,6 @@
 {
   "name": "@slashkudos/kudos-api",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "The Kudos API SDK for Typescript",
   "type": "commonjs",
   "repository": {
@@ -16,10 +16,13 @@
   "license": "ISC",
   "scripts": {
     "build": "scripts/run_build.sh",
-    "lint": "eslint '**/*.{js,ts,tsx}'",
     "format": "eslint '**/*.{js,ts,tsx}' --quiet --fix",
-    "test": "jest --config jestconfig.json",
-    "prepublishOnly": "npm ci && npm test && npm run lint && npm run build"
+    "lint": "eslint '**/*.{js,ts,tsx}'",
+    "prepublishOnly": "npm ci && npm test && npm run lint && npm run build",
+    "test": "npm run test:unit && npm run test:mock",
+    "test:unit": "jest --config jestconfig.json",
+    "test:int": "jest --config jestconfig-int.json",
+    "test:mock": "scripts/run_mock_tests.sh"
   },
   "dependencies": {
     "graphql": "^16.2.0",

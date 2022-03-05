@@ -1088,14 +1088,14 @@ export type GetPersonQuery = {
   } | null,
 };
 
-export type ListPersonsQueryVariables = {
+export type ListPeopleQueryVariables = {
   filter?: ModelPersonFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListPersonsQuery = {
-  listPersons?:  {
+export type ListPeopleQuery = {
+  listPeople?:  {
     __typename: "ModelPersonConnection",
     items:  Array< {
       __typename: "Person",
