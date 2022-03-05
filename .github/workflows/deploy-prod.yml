@@ -33,9 +33,11 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Amplify Deploy
-        uses: ./.github/workflows/composite/amplify-deploy
-        with:
-          amplify_appId: ${{ env.amplify_appId }}
-          amplify_env: ${{ env.amplify_env }}
-          command: push
+      - name: amplify pull
+        run: ./scripts/amplify_pull.sh ${{ env.amplify_env }} ${{ env.amplify_appId }}
+      - name: Run Mock Integration Tests
+        run: |
+          ./scripts/update_src.sh
+          ./clients/typescript/scripts/run_mock_tests.sh
+      - name: amplify push
+        run: amplify push --yes
