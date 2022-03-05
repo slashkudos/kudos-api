@@ -36,6 +36,8 @@ jobs:
       - name: amplify pull
         run: ./scripts/amplify_pull.sh ${{ env.amplify_env }} ${{ env.amplify_appId }}
       - name: Run Mock Integration Tests
-        run: ./clients/typescript/scripts/run_mock_tests.sh
+        run: |
+          ./scripts/update_src.sh
+          ./clients/typescript/scripts/run_mock_tests.sh
       - name: amplify push
         run: amplify push --yes
