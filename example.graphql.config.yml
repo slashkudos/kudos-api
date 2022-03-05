@@ -3,7 +3,7 @@
 
 projects:
   kudosapi:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/kudosapi/build/schema.graphql
     includes:
       - src/graphql/**/*.ts
       - tests/graphql/*.graphql
