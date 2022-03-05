@@ -18,7 +18,6 @@
     "build": "scripts/run_build.sh",
     "format": "eslint '**/*.{js,ts,tsx}' --quiet --fix",
     "lint": "eslint '**/*.{js,ts,tsx}'",
-    "prepublishOnly": "npm ci && npm test && npm run lint && npm run build",
     "test": "npm run test:unit && npm run test:mock",
     "test:unit": "jest --config jestconfig.json",
     "test:int": "jest --config jestconfig-int.json",
