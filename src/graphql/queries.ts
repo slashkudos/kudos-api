@@ -228,13 +228,13 @@ export const getPerson = /* GraphQL */ `
     }
   }
 `;
-export const listPersons = /* GraphQL */ `
-  query ListPersons(
+export const listPeople = /* GraphQL */ `
+  query ListPeople(
     $filter: ModelPersonFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listPersons(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPeople(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         username
