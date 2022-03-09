@@ -1,9 +1,9 @@
-name: npm publish (prerelease)
+name: npm publish ci
 on:
   pull_request: {}
   push:
     branches: [develop]
-    paths: [clients/typescript/package.json]
+    paths: [clients/typescript/**]
   workflow_dispatch: {}
 
 defaults:
