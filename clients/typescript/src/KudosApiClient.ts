@@ -9,6 +9,8 @@ import {
   CreatePersonMutationVariables,
   DataSourceApp,
   Kudo,
+  KudosByDateQuery,
+  KudosByDateQueryVariables,
   KudoVerb,
   ListKudosQuery,
   ListKudosQueryVariables,
@@ -16,10 +18,11 @@ import {
   ListPeopleQueryVariables,
   ModelKudoConnection,
   ModelPersonConnection,
+  ModelSortDirection,
   Person,
 } from "./API";
 import { createKudo, createPerson } from "./graphql/mutations";
-import { listKudos, listPeople } from "./graphql/queries";
+import { kudosByDate, listKudos, listPeople } from "./graphql/queries";
 import { LoggerService } from "./LoggerService";
 
 export interface KudosGraphQLConfig {
@@ -109,7 +112,7 @@ export class KudosApiClient {
     return modelPersonConnection;
   }
 
-  public async listKudos(queryVariables: ListKudosQueryVariables): Promise<ModelKudoConnection> {
+  public async listKudos(queryVariables?: ListKudosQueryVariables): Promise<ModelKudoConnection> {
     const rawResponse = await this.graphQLClient.request(listKudos, queryVariables);
     this.logger.http(JSON.stringify(rawResponse));
     const listKudosResponse = rawResponse as ListKudosQuery;
@@ -117,6 +120,20 @@ export class KudosApiClient {
       throw new Error("Expected a ListKudosQuery response from listKudos");
     }
     const modelKudoConnection = listKudosResponse.listKudos as ModelKudoConnection;
+    return modelKudoConnection;
+  }
+
+  public async listKudosByDate(
+    queryVariables: KudosByDateQueryVariables = { type: "Kudo", sortDirection: ModelSortDirection.DESC }
+  ): Promise<ModelKudoConnection> {
+    queryVariables.type = "Kudo";
+    const rawResponse = await this.graphQLClient.request(kudosByDate, queryVariables);
+    this.logger.http(JSON.stringify(rawResponse));
+    const listKudosResponse = rawResponse as KudosByDateQuery;
+    if (!listKudosResponse) {
+      throw new Error("Expected a ListKudosQuery response from listKudos");
+    }
+    const modelKudoConnection = listKudosResponse.kudosByDate as ModelKudoConnection;
     return modelKudoConnection;
   }
 

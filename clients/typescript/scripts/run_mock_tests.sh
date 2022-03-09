@@ -17,12 +17,19 @@ while IFS= read -r line; do
     cd $ROOT_DIR
 
     echo "Installing dependencies..."
-    npm install
+    npm ci
 
     echo "Executing integration tests..."
     npm run test:int
 
     cd - 1>/dev/null
+
+    echo "Terminating mock api..."
+    lsof -ti tcp:20002 | xargs kill
+  fi
+  if [[ "$line" == *"Port 20003 is already in use"* ]]; then
+    echo "Port is already in use. Attempting to run tests..."
+    npm run test:int
 
     echo "Terminating mock api..."
     lsof -ti tcp:20002 | xargs kill

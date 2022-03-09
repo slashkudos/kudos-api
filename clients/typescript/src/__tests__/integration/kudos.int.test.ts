@@ -56,7 +56,21 @@ describe("kudos client", () => {
   describe("after kudos are created", () => {
     it("lists kudos with no filters", async () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
-      const kudos = await kudosClient.listKudos({});
+      const kudos = await kudosClient.listKudos();
+      expect(kudos).not.toBeNull();
+      expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it("lists kudos by date", async () => {
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const kudos = await kudosClient.listKudosByDate();
+      expect(kudos).not.toBeNull();
+      expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it("lists kudos by date with bad type", async () => {
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const kudos = await kudosClient.listKudosByDate({ type: "badType" });
       expect(kudos).not.toBeNull();
       expect(kudos.items.length).toBeGreaterThanOrEqual(1);
     });
