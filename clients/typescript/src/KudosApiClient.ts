@@ -20,7 +20,7 @@ import {
   ModelPersonConnection,
   ModelSortDirection,
   Person,
-  SearchableKudoConnection,
+  SearchKudosQuery,
   SearchKudosQueryVariables,
 } from "./API";
 import { createKudo, createPerson } from "./graphql/mutations";
@@ -154,12 +154,8 @@ export class KudosApiClient {
     queryVariables: KudosByDateQueryVariables = { type: "Kudo", sortDirection: ModelSortDirection.DESC }
   ): Promise<ModelKudoConnection> {
     queryVariables.type = "Kudo";
-    const rawResponse = await this.graphQLClient.request(kudosByDate, queryVariables);
-    this.logger.http(JSON.stringify(rawResponse));
-    const listKudosResponse = rawResponse as KudosByDateQuery;
-    if (!listKudosResponse) {
-      throw new Error("Expected a ListKudosQuery response from listKudos");
-    }
+    const listKudosResponse = await this.graphQLClient.request<KudosByDateQuery>(kudosByDate, queryVariables);
+    this.logger.http(JSON.stringify(listKudosResponse));
     const modelKudoConnection = listKudosResponse.kudosByDate as ModelKudoConnection;
     return modelKudoConnection;
   }
@@ -175,8 +171,9 @@ export class KudosApiClient {
         dataSourceApp: { eq: dataSource },
       },
     };
-    const result = await this.graphQLClient.request<SearchableKudoConnection>(searchKudosTotal, queryVariables);
-    return result.total;
+    const result = await this.graphQLClient.request<SearchKudosQuery>(searchKudosTotal, queryVariables);
+    this.logger.http(JSON.stringify(result));
+    return result.searchKudos?.total || undefined;
   }
 
   private async sendCreateKudoRequest(mutationVariables: CreateKudoMutationVariables): Promise<Kudo> {
