@@ -13,6 +13,7 @@ defaults:
 
 jobs:
   publish:
+    name: npm publish CI
     runs-on: ubuntu-latest
     permissions:
       contents: read

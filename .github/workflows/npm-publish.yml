@@ -12,6 +12,7 @@ defaults:
 
 jobs:
   publish:
+    name: npm publish
     runs-on: ubuntu-latest
     permissions:
       contents: read
