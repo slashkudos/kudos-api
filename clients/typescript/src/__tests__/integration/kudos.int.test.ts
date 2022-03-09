@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { KudosApiClient } from "../../KudosApiClient";
 
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.API_URL || "http://localhost:20002/graphql";
 if (!apiUrl) {
   throw new Error("API_URL environment variable is not set");
 }
-const apiKey = process.env.API_KEY || "";
+const apiKey = process.env.API_KEY || "da2-fakeApiId123456";
 
 describe("kudos client", () => {
   it("creates twitter kudos for new users", async () => {
