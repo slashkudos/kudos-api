@@ -20,6 +20,8 @@ import {
   ModelPersonConnection,
   ModelSortDirection,
   Person,
+  SearchableKudoConnection,
+  SearchKudosQueryVariables,
 } from "./API";
 import { createKudo, createPerson } from "./graphql/mutations";
 import { kudosByDate, listKudos, listPeople } from "./graphql/queries";
@@ -30,14 +32,30 @@ export interface KudosGraphQLConfig {
   ApiUrl: string;
 }
 
-export interface createTwitterKudoOptions {
+export interface createKudoOptions {
+  dataSource: DataSourceApp;
   giverUsername: string;
   receiverUsername: string;
   message: string;
-  tweetId: string;
-  giverProfileImageUrl: string;
-  receiverProfileImageUrl: string;
+  tweetId?: string;
+  giverProfileImageUrl?: string;
+  receiverProfileImageUrl?: string;
 }
+
+const searchKudosTotal = /* GraphQL */ `
+  query SearchKudos(
+    $filter: SearchableKudoFilterInput
+    $sort: [SearchableKudoSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableKudoAggregationInput]
+  ) {
+    searchKudos(filter: $filter, sort: $sort, limit: $limit, nextToken: $nextToken, from: $from, aggregates: $aggregates) {
+      total
+    }
+  }
+`;
 
 export class KudosApiClient {
   private readonly graphQLClient: GraphQLClient;
@@ -56,37 +74,37 @@ export class KudosApiClient {
     return new KudosApiClient(kudosGraphQLConfig);
   }
 
-  public async createTwitterKudo(options: createTwitterKudoOptions): Promise<{ kudo: Kudo; receiver: Person }> {
+  public async createKudo(options: createKudoOptions): Promise<{ kudo: Kudo; receiver: Person }> {
     this.logger.info(`Creating Kudo from ${options.giverUsername} to ${options.receiverUsername} with message "${options.message}"`);
-    let giver: Person | null = await this.getTwitterUser(options.giverUsername);
+    let giver: Person | null = await this.getUser(options.giverUsername, options.dataSource);
     if (!giver) {
-      giver = await this.createTwitterPerson({
+      giver = await this.createPerson({
         input: {
           username: options.giverUsername,
-          dataSourceApp: DataSourceApp.twitter,
+          dataSourceApp: options.dataSource,
           profileImageUrl: options.giverProfileImageUrl,
         },
       });
     }
-    let receiver: Person | null = await this.getTwitterUser(options.receiverUsername);
+    let receiver: Person | null = await this.getUser(options.receiverUsername, options.dataSource);
     if (!receiver) {
-      receiver = await this.createTwitterPerson({
+      receiver = await this.createPerson({
         input: {
           username: options.receiverUsername,
-          dataSourceApp: DataSourceApp.twitter,
+          dataSourceApp: options.dataSource,
           profileImageUrl: options.receiverProfileImageUrl,
         },
       });
     }
 
-    const tweetUrl = `https://twitter.com/${options.giverUsername}/status/${options.tweetId}`;
-    const kudo = await this.sendCreateTwitterKudoRequest({
+    const link = this.getLink(options);
+    const kudo = await this.sendCreateKudoRequest({
       input: {
         giverId: giver.id,
         receiverId: receiver.id,
         message: options.message,
-        link: tweetUrl,
-        dataSourceApp: DataSourceApp.twitter,
+        link: link,
+        dataSourceApp: options.dataSource,
         kudoVerb: KudoVerb.kudos,
       },
     });
@@ -95,10 +113,19 @@ export class KudosApiClient {
       throw new Error("Expected a receiver on the kudo");
     }
     if (!kudo.receiver?.kudosReceived?.items) {
-      throw new Error("Expected receiver kudosReceived to be returned from sendCreateTwitterKudoRequest");
+      throw new Error("Expected receiver kudosReceived to be returned from sendCreateKudoRequest");
     }
 
     return { kudo, receiver: kudo.receiver };
+  }
+
+  private getLink(options: createKudoOptions): string {
+    switch (options.dataSource) {
+      case DataSourceApp.twitter:
+        return `https://twitter.com/${options.giverUsername}/status/${options.tweetId}`;
+      default:
+        throw new Error(`Unsupported dataSource ${options.dataSource}`);
+    }
   }
 
   public async listPeople(queryVariables: ListPeopleQueryVariables): Promise<ModelPersonConnection> {
@@ -137,11 +164,25 @@ export class KudosApiClient {
     return modelKudoConnection;
   }
 
-  private async sendCreateTwitterKudoRequest(mutationVariables: CreateKudoMutationVariables): Promise<Kudo> {
+  public async getTotalKudosForReceiver(username: string, dataSource: DataSourceApp): Promise<number | null | undefined> {
+    const receiver = await this.getUser(username, dataSource);
+    if (!receiver) {
+      return null;
+    }
+    const queryVariables: SearchKudosQueryVariables = {
+      filter: {
+        receiverId: { eq: receiver.id },
+        dataSourceApp: { eq: dataSource },
+      },
+    };
+    const result = await this.graphQLClient.request<SearchableKudoConnection>(searchKudosTotal, queryVariables);
+    return result.total;
+  }
+
+  private async sendCreateKudoRequest(mutationVariables: CreateKudoMutationVariables): Promise<Kudo> {
     this.logger.info(`Sending create kudo request`);
     const input: CreateKudoInput = {
       ...mutationVariables.input,
-      dataSourceApp: DataSourceApp.twitter,
       kudoVerb: KudoVerb.kudos,
     };
     const rawResponse = await this.graphQLClient.request(createKudo, {
@@ -158,11 +199,10 @@ export class KudosApiClient {
     return kudo;
   }
 
-  private async createTwitterPerson(mutationVariables: CreatePersonMutationVariables): Promise<Person> {
+  private async createPerson(mutationVariables: CreatePersonMutationVariables): Promise<Person> {
     this.logger.info(`Creating a person with the username ${mutationVariables.input.username}`);
     const input: CreatePersonInput = {
       ...mutationVariables.input,
-      dataSourceApp: DataSourceApp.twitter,
     };
     const rawResponse = await this.graphQLClient.request(createPerson, {
       ...mutationVariables,
@@ -177,13 +217,13 @@ export class KudosApiClient {
     return person;
   }
 
-  private async getTwitterUser(username: string): Promise<Person | null> {
+  private async getUser(username: string, dataSource: DataSourceApp): Promise<Person | null> {
     this.logger.info(`Getting user for username ${username}`);
 
     const peopleResponse = await this.listPeople({
       filter: {
         username: { eq: username },
-        dataSourceApp: { eq: DataSourceApp.twitter },
+        dataSourceApp: { eq: dataSource },
       },
     });
 

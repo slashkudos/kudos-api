@@ -1,9 +1,10 @@
 name: npm publish (prerelease)
 on:
+  pull_request: {}
   push:
     branches: [develop]
     paths: [clients/typescript/package.json]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 defaults:
   run:
@@ -51,6 +52,3 @@ jobs:
           ./scripts/update_src.sh
           ./clients/typescript/scripts/run_mock_tests.sh
         working-directory: .
-      - run: npm publish --tag next
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

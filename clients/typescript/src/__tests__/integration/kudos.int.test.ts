@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { DataSourceApp } from "../../API";
 import { KudosApiClient } from "../../KudosApiClient";
 
 const apiUrl = process.env.API_URL || "http://localhost:20002/graphql";
@@ -17,13 +18,14 @@ describe("kudos client", () => {
     const tweetId = "testTweetId";
 
     const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
-    const { kudo, receiver } = await kudosClient.createTwitterKudo({
+    const { kudo, receiver } = await kudosClient.createKudo({
       giverUsername,
       receiverUsername,
       message: message,
       tweetId: tweetId,
       giverProfileImageUrl,
       receiverProfileImageUrl,
+      dataSource: DataSourceApp.twitter,
     });
     expect(kudo.message).toEqual(message);
     expect(kudo.giver?.username).toEqual(giverUsername);
@@ -42,13 +44,14 @@ describe("kudos client", () => {
     const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
     expect(
       async () =>
-        await kudosClient.createTwitterKudo({
+        await kudosClient.createKudo({
           giverUsername,
           receiverUsername,
           message: "testMessage",
           tweetId: "testTweetId",
           giverProfileImageUrl,
           receiverProfileImageUrl,
+          dataSource: DataSourceApp.twitter,
         })
     ).rejects.toThrow();
   });
@@ -73,6 +76,14 @@ describe("kudos client", () => {
       const kudos = await kudosClient.listKudosByDate({ type: "badType" });
       expect(kudos).not.toBeNull();
       expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+    });
+
+    // @searchable mocking is not supported. Search queries will not work as expected.
+    it.skip("get total kudos for receiver", async () => {
+      const receiverUsername = "testReceiverUsername";
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const total = await kudosClient.getTotalKudosForReceiver(receiverUsername, DataSourceApp.twitter);
+      expect(total).toBeGreaterThanOrEqual(1);
     });
   });
 });

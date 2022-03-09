@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CreateKudoMutationVariables, CreatePersonMutationVariables, Kudo, Person } from "../../API";
+import { CreateKudoMutationVariables, CreatePersonMutationVariables, DataSourceApp, Kudo, Person } from "../../API";
 import { KudosApiClient } from "../../KudosApiClient";
 
 // Spy Instances
-const getUserFunc = jest.spyOn(KudosApiClient.prototype as any, "getTwitterUser") as unknown as jest.SpyInstance<Promise<Person | null>, [username: string]>;
-const createPersonFunc = jest.spyOn(KudosApiClient.prototype as any, "createTwitterPerson") as unknown as jest.SpyInstance<
+const getUserFunc = jest.spyOn(KudosApiClient.prototype as any, "getUser") as unknown as jest.SpyInstance<Promise<Person | null>, [username: string]>;
+const createPersonFunc = jest.spyOn(KudosApiClient.prototype as any, "createPerson") as unknown as jest.SpyInstance<
   Promise<Person>,
   [mutationVariables: CreatePersonMutationVariables]
 >;
-const sendCreateKudoRequestFunc = jest.spyOn(KudosApiClient.prototype as any, "sendCreateTwitterKudoRequest") as unknown as jest.SpyInstance<
+const sendCreateKudoRequestFunc = jest.spyOn(KudosApiClient.prototype as any, "sendCreateKudoRequest") as unknown as jest.SpyInstance<
   Promise<Kudo>,
   [mutationVariables: CreateKudoMutationVariables]
 >;
@@ -19,7 +19,7 @@ beforeEach(() => {
   sendCreateKudoRequestFunc.mockClear();
 });
 
-test("Create Kudo Happy Path", () => {
+test("Create twitter Kudo Happy Path", () => {
   const receiverUsername = "testReceiverUsername";
   const receiverProfileImageUrl = "testReceiverProfileImageUrl";
   const giverUsername = "testGiverUsername";
@@ -36,7 +36,15 @@ test("Create Kudo Happy Path", () => {
 
   return KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
     client
-      .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", giverProfileImageUrl, receiverProfileImageUrl })
+      .createKudo({
+        giverUsername,
+        receiverUsername,
+        message: "testMessage",
+        tweetId: "testTweetId",
+        giverProfileImageUrl,
+        receiverProfileImageUrl,
+        dataSource: DataSourceApp.twitter,
+      })
       .then((kudo) => {
         expect(getUserFunc.mock.calls.length).toBe(2);
         expect(getUserFunc.mock.calls[0][0]).toBe(giverUsername);
@@ -47,7 +55,7 @@ test("Create Kudo Happy Path", () => {
   });
 });
 
-test("Create Kudo with a new receiver", () => {
+test("Create twitter Kudo with a new receiver", () => {
   const receiverUsername = "testReceiverUsername";
   const receiverProfileImageUrl = "testReceiverProfileImageUrl";
   const giverUsername = "testGiverUsername";
@@ -64,7 +72,15 @@ test("Create Kudo with a new receiver", () => {
 
   return KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
     client
-      .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", receiverProfileImageUrl, giverProfileImageUrl })
+      .createKudo({
+        giverUsername,
+        receiverUsername,
+        message: "testMessage",
+        tweetId: "testTweetId",
+        receiverProfileImageUrl,
+        giverProfileImageUrl,
+        dataSource: DataSourceApp.twitter,
+      })
       .then((kudo) => {
         expect(createPersonFunc.mock.calls.length).toBe(1);
         expect(createPersonFunc.mock.calls[0][0].input.username).toBe(receiverUsername);
@@ -73,7 +89,7 @@ test("Create Kudo with a new receiver", () => {
   });
 });
 
-test("Create kudo with a new giver", () => {
+test("Create twitter kudo with a new giver", () => {
   const receiverUsername = "testReceiverUsername";
   const receiverProfileImageUrl = "testReceiverProfileImageUrl";
   const giverUsername = "testGiverUsername";
@@ -90,7 +106,15 @@ test("Create kudo with a new giver", () => {
 
   return KudosApiClient.build({ ApiKey: "TestApiKey", ApiUrl: "TestApiUrl" }).then((client) => {
     client
-      .createTwitterKudo({ giverUsername, receiverUsername, message: "testMessage", tweetId: "testTweetId", receiverProfileImageUrl, giverProfileImageUrl })
+      .createKudo({
+        giverUsername,
+        receiverUsername,
+        message: "testMessage",
+        tweetId: "testTweetId",
+        receiverProfileImageUrl,
+        giverProfileImageUrl,
+        dataSource: DataSourceApp.twitter,
+      })
       .then((kudo) => {
         expect(createPersonFunc.mock.calls.length).toBe(1);
         expect(createPersonFunc.mock.calls[0][0].input.username).toBe(giverUsername);
