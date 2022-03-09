@@ -44,6 +44,8 @@ jobs:
       - name: amplify pull
         run: ./scripts/amplify_pull.sh ${{ env.amplify_env }} ${{ env.amplify_appId }}
         working-directory: .
+      - name: amplify diff
+        run: amplify status -v
       - name: Run Mock Integration Tests
         run: |
           ./scripts/update_src.sh
