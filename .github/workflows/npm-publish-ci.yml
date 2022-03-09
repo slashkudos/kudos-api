@@ -1,9 +1,10 @@
-name: npm publish (prerelease)
+name: npm publish ci
 on:
+  pull_request: {}
   push:
     branches: [develop]
-    paths: [clients/typescript/package.json]
-  workflow_dispatch:
+    paths: [clients/typescript/**]
+  workflow_dispatch: {}
 
 defaults:
   run:
@@ -16,9 +17,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    environment:
-      name: "@slashkudos/kudos-api - npm"
-      url: https://github.com/slashkudos/kudos-api/packages/1236830
     env:
       amplify_env: dev
       amplify_appId: d5u222qsuh3lu
@@ -46,11 +44,10 @@ jobs:
       - name: amplify pull
         run: ./scripts/amplify_pull.sh ${{ env.amplify_env }} ${{ env.amplify_appId }}
         working-directory: .
+      - name: amplify diff
+        run: amplify status -v
       - name: Run Mock Integration Tests
         run: |
           ./scripts/update_src.sh
           ./clients/typescript/scripts/run_mock_tests.sh
         working-directory: .
-      - run: npm publish --tag next
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

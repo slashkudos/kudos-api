@@ -1,7 +1,7 @@
 import * as winston from "winston";
 
 export class LoggerService {
-  static createLogger = () => {
+  static createLogger = (): winston.Logger => {
     const logConfiguration: winston.LoggerOptions = {
       levels: winston.config.npm.levels,
       level: process.env.LOG_LEVEL || "debug",

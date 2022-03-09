@@ -1,29 +1,21 @@
-# This workflow will deploy the API using AWS Amplify
+# This workflow will run CI but NOT deploy
 
-name: Deploy Dev API
+name: Deploy CI (Dry Run)
 
 on:
-  push:
-    branches: [develop]
-    paths: [amplify/**]
-  workflow_dispatch:
+  pull_request: {}
+  workflow_dispatch: {}
 
 jobs:
   deploy:
-    name: Deploy Dev
+    name: CI
     runs-on: ubuntu-latest
-    environment:
-      name: Develop
-      url: https://graphqlapi-dev.slashkudos.com/graphql
     env:
       amplify_env: dev
       amplify_appId: d5u222qsuh3lu
-    concurrency: ${{ github.workflow }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: develop
       - name: Setup Amplify
         uses: ./.github/workflows/composite/amplify-setup
         with:
@@ -36,9 +28,9 @@ jobs:
           aws-region: us-east-1
       - name: amplify pull
         run: ./scripts/amplify_pull.sh ${{ env.amplify_env }} ${{ env.amplify_appId }}
+      - name: amplify diff
+        run: amplify status -v
       - name: Run Mock Integration Tests
         run: |
           ./scripts/update_src.sh
           ./clients/typescript/scripts/run_mock_tests.sh
-      - name: amplify push
-        run: amplify push --yes

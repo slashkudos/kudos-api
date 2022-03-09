@@ -15,6 +15,7 @@ export const createKudo = /* GraphQL */ `
       kudoVerb
       dataSourceApp
       createdAt
+      type
       link
       metadata
       giver {
@@ -32,6 +33,7 @@ export const createKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -47,6 +49,7 @@ export const createKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -71,6 +74,7 @@ export const createKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -86,6 +90,7 @@ export const createKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -112,6 +117,7 @@ export const updateKudo = /* GraphQL */ `
       kudoVerb
       dataSourceApp
       createdAt
+      type
       link
       metadata
       giver {
@@ -129,6 +135,7 @@ export const updateKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -144,6 +151,7 @@ export const updateKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -168,6 +176,7 @@ export const updateKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -183,6 +192,7 @@ export const updateKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -209,6 +219,7 @@ export const deleteKudo = /* GraphQL */ `
       kudoVerb
       dataSourceApp
       createdAt
+      type
       link
       metadata
       giver {
@@ -226,6 +237,7 @@ export const deleteKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -241,6 +253,7 @@ export const deleteKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -265,6 +278,7 @@ export const deleteKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -280,6 +294,7 @@ export const deleteKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -313,6 +328,7 @@ export const createPerson = /* GraphQL */ `
           kudoVerb
           dataSourceApp
           createdAt
+          type
           link
           metadata
           giver {
@@ -346,6 +362,7 @@ export const createPerson = /* GraphQL */ `
           kudoVerb
           dataSourceApp
           createdAt
+          type
           link
           metadata
           giver {
@@ -395,6 +412,7 @@ export const updatePerson = /* GraphQL */ `
           kudoVerb
           dataSourceApp
           createdAt
+          type
           link
           metadata
           giver {
@@ -428,6 +446,7 @@ export const updatePerson = /* GraphQL */ `
           kudoVerb
           dataSourceApp
           createdAt
+          type
           link
           metadata
           giver {
@@ -477,6 +496,7 @@ export const deletePerson = /* GraphQL */ `
           kudoVerb
           dataSourceApp
           createdAt
+          type
           link
           metadata
           giver {
@@ -510,6 +530,7 @@ export const deletePerson = /* GraphQL */ `
           kudoVerb
           dataSourceApp
           createdAt
+          type
           link
           metadata
           giver {

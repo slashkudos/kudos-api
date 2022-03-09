@@ -10,6 +10,7 @@ export type CreateKudoInput = {
   kudoVerb: KudoVerb,
   dataSourceApp: DataSourceApp,
   createdAt?: string | null,
+  type?: string | null,
   link: string,
   metadata?: string | null,
 };
@@ -38,6 +39,7 @@ export type ModelKudoConditionInput = {
   kudoVerb?: ModelKudoVerbInput | null,
   dataSourceApp?: ModelDataSourceAppInput | null,
   createdAt?: ModelStringInput | null,
+  type?: ModelStringInput | null,
   link?: ModelStringInput | null,
   metadata?: ModelStringInput | null,
   and?: Array< ModelKudoConditionInput | null > | null,
@@ -120,6 +122,7 @@ export type Kudo = {
   kudoVerb: KudoVerb,
   dataSourceApp: DataSourceApp,
   createdAt: string,
+  type?: string | null,
   link: string,
   metadata?: string | null,
   giver?: Person | null,
@@ -154,6 +157,7 @@ export type UpdateKudoInput = {
   kudoVerb?: KudoVerb | null,
   dataSourceApp?: DataSourceApp | null,
   createdAt?: string | null,
+  type?: string | null,
   link?: string | null,
   metadata?: string | null,
 };
@@ -192,6 +196,197 @@ export type DeletePersonInput = {
   id: string,
 };
 
+export type SearchableKudoFilterInput = {
+  id?: SearchableIDFilterInput | null,
+  giverId?: SearchableIDFilterInput | null,
+  receiverId?: SearchableIDFilterInput | null,
+  message?: SearchableStringFilterInput | null,
+  createdAt?: SearchableStringFilterInput | null,
+  type?: SearchableStringFilterInput | null,
+  link?: SearchableStringFilterInput | null,
+  metadata?: SearchableStringFilterInput | null,
+  updatedAt?: SearchableStringFilterInput | null,
+  kudoVerb?: SearchableStringFilterInput | null,
+  dataSourceApp?: SearchableStringFilterInput | null,
+  and?: Array< SearchableKudoFilterInput | null > | null,
+  or?: Array< SearchableKudoFilterInput | null > | null,
+  not?: SearchableKudoFilterInput | null,
+};
+
+export type SearchableIDFilterInput = {
+  ne?: string | null,
+  gt?: string | null,
+  lt?: string | null,
+  gte?: string | null,
+  lte?: string | null,
+  eq?: string | null,
+  match?: string | null,
+  matchPhrase?: string | null,
+  matchPhrasePrefix?: string | null,
+  multiMatch?: string | null,
+  exists?: boolean | null,
+  wildcard?: string | null,
+  regexp?: string | null,
+  range?: Array< string | null > | null,
+};
+
+export type SearchableStringFilterInput = {
+  ne?: string | null,
+  gt?: string | null,
+  lt?: string | null,
+  gte?: string | null,
+  lte?: string | null,
+  eq?: string | null,
+  match?: string | null,
+  matchPhrase?: string | null,
+  matchPhrasePrefix?: string | null,
+  multiMatch?: string | null,
+  exists?: boolean | null,
+  wildcard?: string | null,
+  regexp?: string | null,
+  range?: Array< string | null > | null,
+};
+
+export type SearchableKudoSortInput = {
+  field?: SearchableKudoSortableFields | null,
+  direction?: SearchableSortDirection | null,
+};
+
+export enum SearchableKudoSortableFields {
+  id = "id",
+  giverId = "giverId",
+  receiverId = "receiverId",
+  message = "message",
+  createdAt = "createdAt",
+  type = "type",
+  link = "link",
+  metadata = "metadata",
+  updatedAt = "updatedAt",
+}
+
+
+export enum SearchableSortDirection {
+  asc = "asc",
+  desc = "desc",
+}
+
+
+export type SearchableKudoAggregationInput = {
+  name: string,
+  type: SearchableAggregateType,
+  field: SearchableKudoAggregateField,
+};
+
+export enum SearchableAggregateType {
+  terms = "terms",
+  avg = "avg",
+  min = "min",
+  max = "max",
+  sum = "sum",
+}
+
+
+export enum SearchableKudoAggregateField {
+  id = "id",
+  giverId = "giverId",
+  receiverId = "receiverId",
+  message = "message",
+  kudoVerb = "kudoVerb",
+  dataSourceApp = "dataSourceApp",
+  createdAt = "createdAt",
+  type = "type",
+  link = "link",
+  metadata = "metadata",
+  updatedAt = "updatedAt",
+}
+
+
+export type SearchableKudoConnection = {
+  __typename: "SearchableKudoConnection",
+  items:  Array<Kudo | null >,
+  nextToken?: string | null,
+  total?: number | null,
+  aggregateItems:  Array<SearchableAggregateResult | null >,
+};
+
+export type SearchableAggregateResult = {
+  __typename: "SearchableAggregateResult",
+  name: string,
+  result?: SearchableAggregateGenericResult | null,
+};
+
+export type SearchableAggregateGenericResult = SearchableAggregateScalarResult | SearchableAggregateBucketResult
+
+
+export type SearchableAggregateScalarResult = {
+  __typename: "SearchableAggregateScalarResult",
+  value: number,
+};
+
+export type SearchableAggregateBucketResult = {
+  __typename: "SearchableAggregateBucketResult",
+  buckets?:  Array<SearchableAggregateBucketResultItem | null > | null,
+};
+
+export type SearchableAggregateBucketResultItem = {
+  __typename: "SearchableAggregateBucketResultItem",
+  key: string,
+  doc_count: number,
+};
+
+export type SearchablePersonFilterInput = {
+  id?: SearchableIDFilterInput | null,
+  username?: SearchableStringFilterInput | null,
+  email?: SearchableStringFilterInput | null,
+  profileImageUrl?: SearchableStringFilterInput | null,
+  createdAt?: SearchableStringFilterInput | null,
+  updatedAt?: SearchableStringFilterInput | null,
+  dataSourceApp?: SearchableStringFilterInput | null,
+  and?: Array< SearchablePersonFilterInput | null > | null,
+  or?: Array< SearchablePersonFilterInput | null > | null,
+  not?: SearchablePersonFilterInput | null,
+};
+
+export type SearchablePersonSortInput = {
+  field?: SearchablePersonSortableFields | null,
+  direction?: SearchableSortDirection | null,
+};
+
+export enum SearchablePersonSortableFields {
+  id = "id",
+  username = "username",
+  email = "email",
+  profileImageUrl = "profileImageUrl",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt",
+}
+
+
+export type SearchablePersonAggregationInput = {
+  name: string,
+  type: SearchableAggregateType,
+  field: SearchablePersonAggregateField,
+};
+
+export enum SearchablePersonAggregateField {
+  id = "id",
+  username = "username",
+  email = "email",
+  profileImageUrl = "profileImageUrl",
+  dataSourceApp = "dataSourceApp",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt",
+}
+
+
+export type SearchablePersonConnection = {
+  __typename: "SearchablePersonConnection",
+  items:  Array<Person | null >,
+  nextToken?: string | null,
+  total?: number | null,
+  aggregateItems:  Array<SearchableAggregateResult | null >,
+};
+
 export type ModelKudoFilterInput = {
   id?: ModelIDInput | null,
   giverId?: ModelIDInput | null,
@@ -200,6 +395,7 @@ export type ModelKudoFilterInput = {
   kudoVerb?: ModelKudoVerbInput | null,
   dataSourceApp?: ModelDataSourceAppInput | null,
   createdAt?: ModelStringInput | null,
+  type?: ModelStringInput | null,
   link?: ModelStringInput | null,
   metadata?: ModelStringInput | null,
   and?: Array< ModelKudoFilterInput | null > | null,
@@ -224,6 +420,22 @@ export type ModelPersonConnection = {
   nextToken?: string | null,
 };
 
+export type ModelStringKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type CreateKudoMutationVariables = {
   input: CreateKudoInput,
   condition?: ModelKudoConditionInput | null,
@@ -239,6 +451,7 @@ export type CreateKudoMutation = {
     kudoVerb: KudoVerb,
     dataSourceApp: DataSourceApp,
     createdAt: string,
+    type?: string | null,
     link: string,
     metadata?: string | null,
     giver?:  {
@@ -259,6 +472,7 @@ export type CreateKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -276,6 +490,7 @@ export type CreateKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -303,6 +518,7 @@ export type CreateKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -320,6 +536,7 @@ export type CreateKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -348,6 +565,7 @@ export type UpdateKudoMutation = {
     kudoVerb: KudoVerb,
     dataSourceApp: DataSourceApp,
     createdAt: string,
+    type?: string | null,
     link: string,
     metadata?: string | null,
     giver?:  {
@@ -368,6 +586,7 @@ export type UpdateKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -385,6 +604,7 @@ export type UpdateKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -412,6 +632,7 @@ export type UpdateKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -429,6 +650,7 @@ export type UpdateKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -457,6 +679,7 @@ export type DeleteKudoMutation = {
     kudoVerb: KudoVerb,
     dataSourceApp: DataSourceApp,
     createdAt: string,
+    type?: string | null,
     link: string,
     metadata?: string | null,
     giver?:  {
@@ -477,6 +700,7 @@ export type DeleteKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -494,6 +718,7 @@ export type DeleteKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -521,6 +746,7 @@ export type DeleteKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -538,6 +764,7 @@ export type DeleteKudoMutation = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -575,6 +802,7 @@ export type CreatePersonMutation = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -612,6 +840,7 @@ export type CreatePersonMutation = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -667,6 +896,7 @@ export type UpdatePersonMutation = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -704,6 +934,7 @@ export type UpdatePersonMutation = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -759,6 +990,7 @@ export type DeletePersonMutation = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -796,6 +1028,7 @@ export type DeletePersonMutation = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -827,6 +1060,168 @@ export type DeletePersonMutation = {
   } | null,
 };
 
+export type SearchKudosQueryVariables = {
+  filter?: SearchableKudoFilterInput | null,
+  sort?: Array< SearchableKudoSortInput | null > | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  from?: number | null,
+  aggregates?: Array< SearchableKudoAggregationInput | null > | null,
+};
+
+export type SearchKudosQuery = {
+  searchKudos?:  {
+    __typename: "SearchableKudoConnection",
+    items:  Array< {
+      __typename: "Kudo",
+      id: string,
+      giverId: string,
+      receiverId: string,
+      message: string,
+      kudoVerb: KudoVerb,
+      dataSourceApp: DataSourceApp,
+      createdAt: string,
+      type?: string | null,
+      link: string,
+      metadata?: string | null,
+      giver?:  {
+        __typename: "Person",
+        id: string,
+        username: string,
+        email?: string | null,
+        profileImageUrl?: string | null,
+        dataSourceApp: DataSourceApp,
+        kudosGiven?:  {
+          __typename: "ModelKudoConnection",
+          nextToken?: string | null,
+        } | null,
+        kudosReceived?:  {
+          __typename: "ModelKudoConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      receiver?:  {
+        __typename: "Person",
+        id: string,
+        username: string,
+        email?: string | null,
+        profileImageUrl?: string | null,
+        dataSourceApp: DataSourceApp,
+        kudosGiven?:  {
+          __typename: "ModelKudoConnection",
+          nextToken?: string | null,
+        } | null,
+        kudosReceived?:  {
+          __typename: "ModelKudoConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+    total?: number | null,
+    aggregateItems:  Array< {
+      __typename: "SearchableAggregateResult",
+      name: string,
+      result: ( {
+          __typename: "SearchableAggregateScalarResult",
+          value: number,
+        } | {
+          __typename: "SearchableAggregateBucketResult",
+          buckets?:  Array< {
+            __typename: string,
+            key: string,
+            doc_count: number,
+          } | null > | null,
+        }
+      ) | null,
+    } | null >,
+  } | null,
+};
+
+export type SearchPeopleQueryVariables = {
+  filter?: SearchablePersonFilterInput | null,
+  sort?: Array< SearchablePersonSortInput | null > | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  from?: number | null,
+  aggregates?: Array< SearchablePersonAggregationInput | null > | null,
+};
+
+export type SearchPeopleQuery = {
+  searchPeople?:  {
+    __typename: "SearchablePersonConnection",
+    items:  Array< {
+      __typename: "Person",
+      id: string,
+      username: string,
+      email?: string | null,
+      profileImageUrl?: string | null,
+      dataSourceApp: DataSourceApp,
+      kudosGiven?:  {
+        __typename: "ModelKudoConnection",
+        items:  Array< {
+          __typename: "Kudo",
+          id: string,
+          giverId: string,
+          receiverId: string,
+          message: string,
+          kudoVerb: KudoVerb,
+          dataSourceApp: DataSourceApp,
+          createdAt: string,
+          type?: string | null,
+          link: string,
+          metadata?: string | null,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      kudosReceived?:  {
+        __typename: "ModelKudoConnection",
+        items:  Array< {
+          __typename: "Kudo",
+          id: string,
+          giverId: string,
+          receiverId: string,
+          message: string,
+          kudoVerb: KudoVerb,
+          dataSourceApp: DataSourceApp,
+          createdAt: string,
+          type?: string | null,
+          link: string,
+          metadata?: string | null,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+    total?: number | null,
+    aggregateItems:  Array< {
+      __typename: "SearchableAggregateResult",
+      name: string,
+      result: ( {
+          __typename: "SearchableAggregateScalarResult",
+          value: number,
+        } | {
+          __typename: "SearchableAggregateBucketResult",
+          buckets?:  Array< {
+            __typename: string,
+            key: string,
+            doc_count: number,
+          } | null > | null,
+        }
+      ) | null,
+    } | null >,
+  } | null,
+};
+
 export type GetKudoQueryVariables = {
   id: string,
 };
@@ -841,6 +1236,7 @@ export type GetKudoQuery = {
     kudoVerb: KudoVerb,
     dataSourceApp: DataSourceApp,
     createdAt: string,
+    type?: string | null,
     link: string,
     metadata?: string | null,
     giver?:  {
@@ -861,6 +1257,7 @@ export type GetKudoQuery = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -878,6 +1275,7 @@ export type GetKudoQuery = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -905,6 +1303,7 @@ export type GetKudoQuery = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -922,6 +1321,7 @@ export type GetKudoQuery = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -953,6 +1353,7 @@ export type ListKudosQuery = {
       kudoVerb: KudoVerb,
       dataSourceApp: DataSourceApp,
       createdAt: string,
+      type?: string | null,
       link: string,
       metadata?: string | null,
       giver?:  {
@@ -1020,6 +1421,7 @@ export type GetPersonQuery = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -1057,6 +1459,7 @@ export type GetPersonQuery = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -1115,6 +1518,7 @@ export type ListPeopleQuery = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1132,6 +1536,7 @@ export type ListPeopleQuery = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1139,6 +1544,72 @@ export type ListPeopleQuery = {
         nextToken?: string | null,
       } | null,
       createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type KudosByDateQueryVariables = {
+  type: string,
+  createdAt?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelKudoFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type KudosByDateQuery = {
+  kudosByDate?:  {
+    __typename: "ModelKudoConnection",
+    items:  Array< {
+      __typename: "Kudo",
+      id: string,
+      giverId: string,
+      receiverId: string,
+      message: string,
+      kudoVerb: KudoVerb,
+      dataSourceApp: DataSourceApp,
+      createdAt: string,
+      type?: string | null,
+      link: string,
+      metadata?: string | null,
+      giver?:  {
+        __typename: "Person",
+        id: string,
+        username: string,
+        email?: string | null,
+        profileImageUrl?: string | null,
+        dataSourceApp: DataSourceApp,
+        kudosGiven?:  {
+          __typename: "ModelKudoConnection",
+          nextToken?: string | null,
+        } | null,
+        kudosReceived?:  {
+          __typename: "ModelKudoConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      receiver?:  {
+        __typename: "Person",
+        id: string,
+        username: string,
+        email?: string | null,
+        profileImageUrl?: string | null,
+        dataSourceApp: DataSourceApp,
+        kudosGiven?:  {
+          __typename: "ModelKudoConnection",
+          nextToken?: string | null,
+        } | null,
+        kudosReceived?:  {
+          __typename: "ModelKudoConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -1155,6 +1626,7 @@ export type OnCreateKudoSubscription = {
     kudoVerb: KudoVerb,
     dataSourceApp: DataSourceApp,
     createdAt: string,
+    type?: string | null,
     link: string,
     metadata?: string | null,
     giver?:  {
@@ -1175,6 +1647,7 @@ export type OnCreateKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1192,6 +1665,7 @@ export type OnCreateKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1219,6 +1693,7 @@ export type OnCreateKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1236,6 +1711,7 @@ export type OnCreateKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1259,6 +1735,7 @@ export type OnUpdateKudoSubscription = {
     kudoVerb: KudoVerb,
     dataSourceApp: DataSourceApp,
     createdAt: string,
+    type?: string | null,
     link: string,
     metadata?: string | null,
     giver?:  {
@@ -1279,6 +1756,7 @@ export type OnUpdateKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1296,6 +1774,7 @@ export type OnUpdateKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1323,6 +1802,7 @@ export type OnUpdateKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1340,6 +1820,7 @@ export type OnUpdateKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1363,6 +1844,7 @@ export type OnDeleteKudoSubscription = {
     kudoVerb: KudoVerb,
     dataSourceApp: DataSourceApp,
     createdAt: string,
+    type?: string | null,
     link: string,
     metadata?: string | null,
     giver?:  {
@@ -1383,6 +1865,7 @@ export type OnDeleteKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1400,6 +1883,7 @@ export type OnDeleteKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1427,6 +1911,7 @@ export type OnDeleteKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1444,6 +1929,7 @@ export type OnDeleteKudoSubscription = {
           kudoVerb: KudoVerb,
           dataSourceApp: DataSourceApp,
           createdAt: string,
+          type?: string | null,
           link: string,
           metadata?: string | null,
           updatedAt: string,
@@ -1476,6 +1962,7 @@ export type OnCreatePersonSubscription = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -1513,6 +2000,7 @@ export type OnCreatePersonSubscription = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -1563,6 +2051,7 @@ export type OnUpdatePersonSubscription = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -1600,6 +2089,7 @@ export type OnUpdatePersonSubscription = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -1650,6 +2140,7 @@ export type OnDeletePersonSubscription = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
@@ -1687,6 +2178,7 @@ export type OnDeletePersonSubscription = {
         kudoVerb: KudoVerb,
         dataSourceApp: DataSourceApp,
         createdAt: string,
+        type?: string | null,
         link: string,
         metadata?: string | null,
         giver?:  {
