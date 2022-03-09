@@ -13,21 +13,30 @@ enum KudoVerb {
   fireworks
 }
 
-type Kudo @model @auth(rules: [{allow: public}]) {
+type Kudo @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  giverId: ID! @index(name: "byPerson", sortKeyFields: ["receiverId"]) @index(name: "byGiver")
+  giverId: ID!
+    @index(name: "byPerson", sortKeyFields: ["receiverId"])
+    @index(name: "byGiver")
   receiverId: ID! @index(name: "byReceiver")
   message: String!
   kudoVerb: KudoVerb!
   dataSourceApp: DataSourceApp!
   createdAt: AWSDateTime!
+  type: String
+    @default(value: "Kudo")
+    @index(
+      name: "kudosByDate"
+      queryField: "kudosByDate"
+      sortKeyFields: ["createdAt"]
+    )
   link: AWSURL!
   metadata: AWSJSON
   giver: Person @belongsTo(fields: ["giverId"])
   receiver: Person @belongsTo(fields: ["receiverId"])
 }
 
-type Person @model @auth(rules: [{allow: public}]) {
+type Person @model @auth(rules: [{ allow: public }]) {
   id: ID!
   username: String! @index(name: "byUsername")
   email: String

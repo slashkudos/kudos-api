@@ -12,6 +12,7 @@ export const getKudo = /* GraphQL */ `
       kudoVerb
       dataSourceApp
       createdAt
+      type
       link
       metadata
       giver {
@@ -29,6 +30,7 @@ export const getKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -44,6 +46,7 @@ export const getKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -68,6 +71,7 @@ export const getKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -83,6 +87,7 @@ export const getKudo = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -111,6 +116,7 @@ export const listKudos = /* GraphQL */ `
         kudoVerb
         dataSourceApp
         createdAt
+        type
         link
         metadata
         giver {
@@ -166,6 +172,7 @@ export const getPerson = /* GraphQL */ `
           kudoVerb
           dataSourceApp
           createdAt
+          type
           link
           metadata
           giver {
@@ -199,6 +206,7 @@ export const getPerson = /* GraphQL */ `
           kudoVerb
           dataSourceApp
           createdAt
+          type
           link
           metadata
           giver {
@@ -250,6 +258,7 @@ export const listPeople = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -265,6 +274,7 @@ export const listPeople = /* GraphQL */ `
             kudoVerb
             dataSourceApp
             createdAt
+            type
             link
             metadata
             updatedAt
@@ -272,6 +282,70 @@ export const listPeople = /* GraphQL */ `
           nextToken
         }
         createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const kudosByDate = /* GraphQL */ `
+  query KudosByDate(
+    $type: String!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelKudoFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    kudosByDate(
+      type: $type
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        giverId
+        receiverId
+        message
+        kudoVerb
+        dataSourceApp
+        createdAt
+        type
+        link
+        metadata
+        giver {
+          id
+          username
+          email
+          profileImageUrl
+          dataSourceApp
+          kudosGiven {
+            nextToken
+          }
+          kudosReceived {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        receiver {
+          id
+          username
+          email
+          profileImageUrl
+          dataSourceApp
+          kudosGiven {
+            nextToken
+          }
+          kudosReceived {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         updatedAt
       }
       nextToken
