@@ -18,6 +18,7 @@ jobs:
     env:
       amplify_env: dev
       amplify_appId: d5u222qsuh3lu
+    concurrency: ${{ github.workflow }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
