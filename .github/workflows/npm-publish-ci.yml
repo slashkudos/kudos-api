@@ -17,9 +17,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    environment:
-      name: "@slashkudos/kudos-api - npm"
-      url: https://github.com/slashkudos/kudos-api/packages/1236830
     env:
       amplify_env: dev
       amplify_appId: d5u222qsuh3lu
