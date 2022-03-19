@@ -20,11 +20,17 @@ import {
   ModelPersonConnection,
   ModelSortDirection,
   Person,
+  SearchableKudoConnection,
+  SearchableKudoFilterInput,
+  SearchablePersonFilterInput,
   SearchKudosQuery,
   SearchKudosQueryVariables,
+  SearchPeopleQuery,
+  SearchPeopleQueryVariables,
 } from "./API";
+import { searchKudosTotal } from "./graphql/extensions";
 import { createKudo, createPerson } from "./graphql/mutations";
-import { kudosByDate, listKudos, listPeople } from "./graphql/queries";
+import { kudosByDate, listKudos, listPeople, searchKudos, searchPeople } from "./graphql/queries";
 import { LoggerService } from "./LoggerService";
 
 export interface KudosGraphQLConfig {
@@ -41,21 +47,6 @@ export interface createKudoOptions {
   giverProfileImageUrl?: string;
   receiverProfileImageUrl?: string;
 }
-
-const searchKudosTotal = /* GraphQL */ `
-  query SearchKudos(
-    $filter: SearchableKudoFilterInput
-    $sort: [SearchableKudoSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableKudoAggregationInput]
-  ) {
-    searchKudos(filter: $filter, sort: $sort, limit: $limit, nextToken: $nextToken, from: $from, aggregates: $aggregates) {
-      total
-    }
-  }
-`;
 
 export class KudosApiClient {
   private readonly graphQLClient: GraphQLClient;
@@ -129,23 +120,15 @@ export class KudosApiClient {
   }
 
   public async listPeople(queryVariables: ListPeopleQueryVariables): Promise<ModelPersonConnection> {
-    const rawResponse = await this.graphQLClient.request(listPeople, queryVariables);
-    this.logger.http(JSON.stringify(rawResponse));
-    const listPeopleResponse = rawResponse as ListPeopleQuery;
-    if (!listPeopleResponse) {
-      throw new Error("Expected a ListPeopleQuery response from listPeople");
-    }
+    const listPeopleResponse = await this.graphQLClient.request<ListPeopleQuery, ListPeopleQueryVariables>(listPeople, queryVariables);
+    this.logger.http(JSON.stringify(listPeopleResponse));
     const modelPersonConnection = listPeopleResponse.listPeople as ModelPersonConnection;
     return modelPersonConnection;
   }
 
   public async listKudos(queryVariables?: ListKudosQueryVariables): Promise<ModelKudoConnection> {
-    const rawResponse = await this.graphQLClient.request(listKudos, queryVariables);
-    this.logger.http(JSON.stringify(rawResponse));
-    const listKudosResponse = rawResponse as ListKudosQuery;
-    if (!listKudosResponse) {
-      throw new Error("Expected a ListKudosQuery response from listKudos");
-    }
+    const listKudosResponse = await this.graphQLClient.request<ListKudosQuery, ListKudosQueryVariables>(listKudos, queryVariables);
+    this.logger.http(JSON.stringify(listKudosResponse));
     const modelKudoConnection = listKudosResponse.listKudos as ModelKudoConnection;
     return modelKudoConnection;
   }
@@ -154,7 +137,7 @@ export class KudosApiClient {
     queryVariables: KudosByDateQueryVariables = { type: "Kudo", sortDirection: ModelSortDirection.DESC }
   ): Promise<ModelKudoConnection> {
     queryVariables.type = "Kudo";
-    const listKudosResponse = await this.graphQLClient.request<KudosByDateQuery>(kudosByDate, queryVariables);
+    const listKudosResponse = await this.graphQLClient.request<KudosByDateQuery, KudosByDateQueryVariables>(kudosByDate, queryVariables);
     this.logger.http(JSON.stringify(listKudosResponse));
     const modelKudoConnection = listKudosResponse.kudosByDate as ModelKudoConnection;
     return modelKudoConnection;
@@ -171,9 +154,44 @@ export class KudosApiClient {
         dataSourceApp: { eq: dataSource },
       },
     };
-    const result = await this.graphQLClient.request<SearchKudosQuery>(searchKudosTotal, queryVariables);
+    const result = await this.graphQLClient.request<SearchKudosQuery, SearchKudosQueryVariables>(searchKudosTotal, queryVariables);
     this.logger.http(JSON.stringify(result));
     return result.searchKudos?.total || undefined;
+  }
+
+  public async searchKudosByUser(usernameSearchTerm: string): Promise<SearchableKudoConnection> {
+    const users = await this.searchUsers(usernameSearchTerm);
+    const userIdFilters: SearchableKudoFilterInput[] = [];
+    users.forEach((user) => {
+      userIdFilters.push({ receiverId: { eq: user.id } }, { giverId: { eq: user.id } });
+    });
+    const queryVariables: SearchKudosQueryVariables = {
+      filter: { or: userIdFilters },
+    };
+    const result = await this.graphQLClient.request<SearchKudosQuery, SearchKudosQueryVariables>(searchKudos, queryVariables);
+    this.logger.http(JSON.stringify(result));
+    const connection = result.searchKudos as SearchableKudoConnection;
+    return connection;
+  }
+
+  public async searchUsers(usernameSearchTerm: string, dataSource?: DataSourceApp): Promise<Person[]> {
+    this.logger.info(`Searching users with username ${usernameSearchTerm}`);
+
+    const filter: SearchablePersonFilterInput = {
+      username: { wildcard: `*${usernameSearchTerm}*` },
+    };
+    if (dataSource) {
+      filter.dataSourceApp = { eq: dataSource };
+    }
+
+    const peopleResponse = await this.graphQLClient.request<SearchPeopleQuery, SearchPeopleQueryVariables>(searchPeople, {
+      filter: filter,
+    });
+
+    const people = peopleResponse.searchPeople?.items as Person[];
+    this.logger.info(`Found ${people.length} users`);
+
+    return people;
   }
 
   private async sendCreateKudoRequest(mutationVariables: CreateKudoMutationVariables): Promise<Kudo> {
@@ -182,15 +200,11 @@ export class KudosApiClient {
       ...mutationVariables.input,
       kudoVerb: KudoVerb.kudos,
     };
-    const rawResponse = await this.graphQLClient.request(createKudo, {
+    const createKudoResponse = await this.graphQLClient.request<CreateKudoMutation, CreateKudoMutationVariables>(createKudo, {
       ...mutationVariables,
       input,
     });
-    this.logger.http(JSON.stringify(rawResponse));
-    const createKudoResponse = rawResponse as CreateKudoMutation;
-    if (!createKudoResponse) {
-      throw new Error("Expected a CreateKudoMutation response from createKudo");
-    }
+    this.logger.http(JSON.stringify(createKudoResponse));
     const kudo = createKudoResponse.createKudo as Kudo;
     this.logger.info(`Created Kudo ${kudo.id}`);
     return kudo;
@@ -201,15 +215,11 @@ export class KudosApiClient {
     const input: CreatePersonInput = {
       ...mutationVariables.input,
     };
-    const rawResponse = await this.graphQLClient.request(createPerson, {
+    const createPersonResponse = await this.graphQLClient.request<CreatePersonMutation, CreatePersonMutationVariables>(createPerson, {
       ...mutationVariables,
       input,
     });
-    this.logger.http(JSON.stringify(rawResponse));
-    const createPersonResponse = rawResponse as CreatePersonMutation;
-    if (!createPersonResponse) {
-      throw new Error("Expected a CreatePersonMutation response from createPerson");
-    }
+    this.logger.http(JSON.stringify(createPersonResponse));
     const person = createPersonResponse.createPerson as Person;
     return person;
   }
@@ -229,6 +239,9 @@ export class KudosApiClient {
 
     if (people.length === 0) {
       return null;
+    }
+    if (people.length > 1) {
+      this.logger.warn(`Found more than one user for username ${username}`);
     }
 
     // Sort the array to get the newest (just in case there are more than 1)
