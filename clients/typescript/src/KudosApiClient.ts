@@ -161,6 +161,15 @@ export class KudosApiClient {
 
   public async searchKudosByUser(usernameSearchTerm: string): Promise<SearchableKudoConnection> {
     const users = await this.searchUsers(usernameSearchTerm);
+    if (users.length === 0) {
+      const result: SearchableKudoConnection = {
+        __typename: "SearchableKudoConnection",
+        total: 0,
+        items: [],
+        aggregateItems: [],
+      };
+      return result;
+    }
     const userIdFilters: SearchableKudoFilterInput[] = [];
     users.forEach((user) => {
       userIdFilters.push({ receiverId: { eq: user.id } }, { giverId: { eq: user.id } });
@@ -174,19 +183,20 @@ export class KudosApiClient {
     return connection;
   }
 
-  public async searchUsers(usernameSearchTerm: string, dataSource?: DataSourceApp): Promise<Person[]> {
+  public async searchUsers(usernameSearchTerm: string, dataSourceApp?: DataSourceApp): Promise<Person[]> {
     this.logger.info(`Searching users with username ${usernameSearchTerm}`);
 
     const filter: SearchablePersonFilterInput = {
       username: { wildcard: `*${usernameSearchTerm}*` },
     };
-    if (dataSource) {
-      filter.dataSourceApp = { eq: dataSource };
+    if (dataSourceApp) {
+      filter.dataSourceApp = { eq: dataSourceApp };
     }
 
     const peopleResponse = await this.graphQLClient.request<SearchPeopleQuery, SearchPeopleQueryVariables>(searchPeople, {
       filter: filter,
     });
+    this.logger.http(JSON.stringify(peopleResponse));
 
     const people = peopleResponse.searchPeople?.items as Person[];
     this.logger.info(`Found ${people.length} users`);
