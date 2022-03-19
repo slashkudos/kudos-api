@@ -41,4 +41,6 @@ jobs:
           ./scripts/update_src.sh
           ./clients/typescript/scripts/run_mock_tests.sh
       - name: amplify push
-        run: amplify push --yes
+        run: |
+          # GraphQL transformer version 2 outputs GraphQL API Key even with "CreateAPIKey": 0
+          amplify push --yes | grep -v "GraphQL API KEY"
