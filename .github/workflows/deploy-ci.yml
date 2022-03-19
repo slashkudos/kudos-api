@@ -28,8 +28,8 @@ jobs:
           aws-region: us-east-1
       - name: amplify pull
         run: ./scripts/amplify_pull.sh ${{ env.amplify_env }} ${{ env.amplify_appId }}
-      - name: amplify diff
-        run: amplify status -v
+      - name: amplify status
+        run: amplify status -v | grep -v "GraphQL API KEY"
       - name: Run Mock Integration Tests
         run: |
           ./scripts/update_src.sh

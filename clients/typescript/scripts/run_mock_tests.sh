@@ -10,15 +10,16 @@ ROOT_DIR=$SCRIPT_DIR/..
 export API_URL='http://localhost:20002/graphql'
 export API_KEY='da2-fakeApiId123456'
 
+cd $ROOT_DIR
+echo "Installing dependencies..."
+npm ci
+cd - 1>/dev/null
+
 echo "Starting mock api..."
 while IFS= read -r line; do
   echo "$line"
   if [[ "$line" == *"AppSync Mock endpoint is running at "* ]]; then
     cd $ROOT_DIR
-
-    echo "Installing dependencies..."
-    npm ci
-
     echo "Executing integration tests..."
     npm run test:int
 
