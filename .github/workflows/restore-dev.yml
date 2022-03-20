@@ -25,4 +25,4 @@ jobs:
     name: Redeploy Dev
     needs: restore
     uses: ./.github/workflows/deploy-dev.yml
-    if: succeeded() || failed()
+    if: success() || failure()
