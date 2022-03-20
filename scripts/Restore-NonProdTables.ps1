@@ -6,6 +6,8 @@ Param()
 $ErrorActionPreference = "Stop"
 
 function Invoke-BackupAndRestore {
+  Write-Host "Beginning restore and backup of DynamoDB tables..."
+  
   $tables = @(
     @{ sourceTableName = "Kudo-zw2r5gwxinglxmd3g3yvffwi2e-prod"; targetTableName = "Kudo-bu7sog55jfdeboiekpcjbz5caa-dev" }
     @{ sourceTableName = "Person-zw2r5gwxinglxmd3g3yvffwi2e-prod"; targetTableName = "Person-bu7sog55jfdeboiekpcjbz5caa-dev" }
@@ -30,6 +32,8 @@ function Invoke-BackupAndRestore {
 
     Remove-Table $tempTableName
   }
+
+  Write-Host "Done"
 }
 
 function Backup-Table($tableName) {
