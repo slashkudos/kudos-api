@@ -1,0 +1,28 @@
+# This workflow will restore dev DyanmoDB tables from prod
+
+name: Restore Dev Tables
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  restore:
+    name: Restore Tables
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Run Restore-NonProdTables.ps1
+        run: ./scripts/Restore-NonProdTables.ps1
+      - name: amplify status
+        run: amplify status -v | grep -v "GraphQL API KEY"
+  deploy:
+    name: Redeploy Dev
+    needs: restore
+    uses: ./.github/workflows/deploy-dev.yml

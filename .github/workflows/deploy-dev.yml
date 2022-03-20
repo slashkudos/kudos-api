@@ -6,7 +6,8 @@ on:
   push:
     branches: [develop]
     paths: [amplify/**]
-  workflow_dispatch:
+  workflow_call: {}
+  workflow_dispatch: {}
 
 jobs:
   deploy:

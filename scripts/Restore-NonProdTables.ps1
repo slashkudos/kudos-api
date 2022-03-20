@@ -19,13 +19,16 @@ function Invoke-BackupAndRestore {
     $targetBackupArn = Backup-Table $table.targetTableName
 
     # Restore target table to temp table
-    Restore-Table "$($table.targetTableName)-temp" $targetBackupArn
+    $tempTableName = "$($table.targetTableName)-temp"
+    Restore-Table $tempTableName $targetBackupArn
 
     # Drop target table
     Remove-Table $table.targetTableName
 
     # Restore source to target
     Restore-Table $table.targetTableName $sourceBackupArn
+
+    Remove-Table $tempTableName
   }
 }
 
@@ -47,7 +50,7 @@ function Backup-Table($tableName) {
     $backupDescribe = $backupDescribeJson | ConvertFrom-Json
 
     $status = $backupDescribe.BackupDescription.BackupDetails.BackupStatus
-    Start-Sleep -Seconds 3
+    Start-Sleep -Seconds 1
   } while ($status -eq "CREATING")
 
   if ($status -ne "AVAILABLE") {
@@ -72,7 +75,9 @@ function Restore-Table($targetTableName, $backupArn) {
     $tableDescribe = $tableDescribeJson | ConvertFrom-Json
 
     $status = $tableDescribe.Table.TableStatus
-    Start-Sleep -Seconds 3
+    
+    Write-Host "Sleep 10 seconds..."
+    Start-Sleep -Seconds 10
   } while ($status -eq "CREATING")
 
   if ($status -ne "ACTIVE") {
@@ -93,6 +98,22 @@ function Remove-Table($tableName) {
   $deleteTableJson = aws dynamodb delete-table --table-name $tableName
   if (!$?) { throw "Delete table failed" }
   Write-Host $deleteTableJson
+
+  # Wait till done "Deleting"
+  do {
+    $tableDescribeJson = aws dynamodb describe-table --table-name $tableName
+
+    # If the table is deleted we will get an error
+    if (!$?) { break }
+
+    Write-Host $tableDescribeJson
+    $tableDescribe = $tableDescribeJson | ConvertFrom-Json
+  
+    $status = $tableDescribe.Table.TableStatus
+    Start-Sleep -Seconds 3
+  } while ($status -eq "DELETING")
+  
+  Write-Host "Delete complete"
 }
 
 Invoke-BackupAndRestore
