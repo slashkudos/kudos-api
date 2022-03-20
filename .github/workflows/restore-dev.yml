@@ -24,5 +24,6 @@ jobs:
   deploy:
     name: Redeploy Dev
     needs: restore
+    # TODO - Call amplify push with --force option to make sure elastic search streams are back up
     uses: ./.github/workflows/deploy-dev.yml
     if: success() || failure()

@@ -45,3 +45,4 @@ jobs:
         run: |
           # GraphQL transformer version 2 outputs GraphQL API Key even with "CreateAPIKey": 0
           amplify push --yes | grep -v "GraphQL API KEY"
+      # TODO - Run integration tests against new deployment
