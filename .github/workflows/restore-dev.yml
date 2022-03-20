@@ -19,6 +19,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Run Restore-NonProdTables.ps1
+        shell: pwsh
         run: ./scripts/Restore-NonProdTables.ps1
       - name: amplify status
         run: amplify status -v | grep -v "GraphQL API KEY"
