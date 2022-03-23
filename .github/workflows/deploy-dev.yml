@@ -18,7 +18,13 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force push to AWS"
+        default: false
+        required: false
+        type: boolean
 
 jobs:
   deploy:
