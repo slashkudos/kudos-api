@@ -1,9 +1,6 @@
 #!/bin/bash
 # Run integration tests against local mock graphql api
 
-# Exit immediately if a command exits with a non-zero status.
-set -e
-
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 ROOT_DIR=$SCRIPT_DIR/..
 
@@ -16,23 +13,23 @@ npm ci
 cd - 1>/dev/null
 
 echo "Starting mock api..."
-while IFS= read -r line; do
-  echo "$line"
-  if [[ "$line" == *"AppSync Mock endpoint is running at "* ]]; then
-    cd $ROOT_DIR
+amplify mock api | while read line; do
+  cd $ROOT_DIR
+
+  if echo $line | grep -q "AppSync Mock endpoint is running.*"; then
     echo "Executing integration tests..."
     npm run test:int
-
-    cd - 1>/dev/null
 
     echo "Terminating mock api..."
     lsof -ti tcp:20002 | xargs kill
   fi
-  if [[ "$line" == *"Port 20003 is already in use"* ]]; then
+  if echo $line | grep -q "Port 20003 is already in use.*"; then
     echo "Port is already in use. Attempting to run tests..."
     npm run test:int
 
     echo "Terminating mock api..."
     lsof -ti tcp:20002 | xargs kill
   fi
-done < <(amplify mock api)
+
+  cd - 1>/dev/null
+done
