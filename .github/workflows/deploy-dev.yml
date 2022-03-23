@@ -13,6 +13,11 @@ on:
         default: false
         required: false
         type: boolean
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
   workflow_dispatch: {}
 
 jobs:

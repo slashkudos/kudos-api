@@ -105,7 +105,7 @@ function Remove-Table($tableName) {
 
   # Wait till done "Deleting"
   do {
-    $tableDescribeJson = aws dynamodb describe-table --table-name $tableName
+    $tableDescribeJson = aws dynamodb describe-table --table-name $tableName 2>&1
 
     # If the table is deleted we will get an error
     if (!$?) { break }
