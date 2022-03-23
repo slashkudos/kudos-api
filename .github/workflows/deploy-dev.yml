@@ -62,7 +62,7 @@ jobs:
         shell: pwsh
         run: |
           # GraphQL transformer version 2 outputs GraphQL API Key even with "CreateAPIKey": 0
-          $shouldForce = "${{ inputs.force }}" ? [Convert]::ToBoolean("${{ inputs.force }}") : $false
+          $shouldForce = "${{ inputs.force }}${{ github.event.inputs.force }}" ? [Convert]::ToBoolean("${{ inputs.force }}${{ github.event.inputs.force }}") : $false
           if($shouldForce) {
             Write-Host "Running amplify push --yes --force"
             amplify push --yes --force | grep -v "GraphQL API KEY"
