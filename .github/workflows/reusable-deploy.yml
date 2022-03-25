@@ -1,6 +1,6 @@
 # This workflow will deploy the API using AWS Amplify
 
-name: Deploy Dev API
+name: Deploy Amplify App
 
 on:
   workflow_call:
