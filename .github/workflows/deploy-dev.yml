@@ -6,19 +6,7 @@ on:
   push:
     branches: [develop]
     paths: [amplify/**]
-  workflow_call:
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
-  workflow_dispatch:
-    inputs:
-      force:
-        description: "Force push to AWS"
-        default: false
-        required: false
-        type: boolean
+  workflow_dispatch: {}
 
 jobs:
   build_test:
