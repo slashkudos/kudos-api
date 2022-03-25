@@ -35,7 +35,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   deploy:
     name: Deploy
-    uses: ./.github/workflows/reusable-deploy.yml
+    uses: ./.github/workflows/reusable/deploy.yml
     needs: build_test
     with:
       force: ${{ inputs.force }}
