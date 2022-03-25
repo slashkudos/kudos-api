@@ -6,8 +6,25 @@ on:
   push:
     branches: [develop]
     paths: [amplify/**]
-  workflow_call: {}
-  workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      force:
+        description: "Force push to AWS"
+        default: false
+        required: false
+        type: boolean
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force push to AWS"
+        default: false
+        required: false
+        type: boolean
 
 jobs:
   deploy:
@@ -42,6 +59,17 @@ jobs:
           ./scripts/update_src.sh
           ./clients/typescript/scripts/run_mock_tests.sh
       - name: amplify push
+        shell: pwsh
         run: |
           # GraphQL transformer version 2 outputs GraphQL API Key even with "CreateAPIKey": 0
-          amplify push --yes | grep -v "GraphQL API KEY"
+          $shouldForce = "${{ inputs.force }}${{ github.event.inputs.force }}" ? [Convert]::ToBoolean("${{ inputs.force }}${{ github.event.inputs.force }}") : $false
+          if($shouldForce) {
+            Write-Host "Running amplify push --yes --force"
+            amplify push --yes --force | grep -v "GraphQL API KEY"
+          }
+          else {
+            Write-Host "Running amplify push --yes"
+            amplify push --yes | grep -v "GraphQL API KEY"
+          }
+          if(!$?) { throw "Push failed." }
+      # TODO - Run integration tests against new deployment

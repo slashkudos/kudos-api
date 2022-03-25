@@ -12,17 +12,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: Run Restore-NonProdTables.ps1
-        shell: pwsh
-        run: ./scripts/Restore-NonProdTables.ps1
-  deploy:
-    name: Redeploy Dev
-    needs: restore
-    uses: ./.github/workflows/deploy-dev.yml
-    if: succeeded() || failed()
+      - name: Run SyncDynamoDB
+        shell: bash
+        run: node scripts/SyncDynamoDB/index.js
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
