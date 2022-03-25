@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.deployment_env }}
-      url: https://graphqlapi-dev.slashkudos.com/graphql
+      url: ${{ inputs.deployment_url }}
     env:
       amplify_env: ${{ inputs.amplify_env }}
       amplify_appId: ${{ inputs.amplify_appId }}
