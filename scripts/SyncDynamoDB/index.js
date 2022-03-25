@@ -8,6 +8,7 @@ AWS.config.update({
 
 const dynamoDb = new AWS.DynamoDB();
 const dynamoDbDocClient = new AWS.DynamoDB.DocumentClient();
+const args = process.argv.slice(2);
 
 const listEnvironmentTables = async () => {
   let tableNames = [];
@@ -130,12 +131,12 @@ const getTableNameForEnvironment = (
   return envTableNameFull;
 };
 
-const run = async () => {
+const run = async (args) => {
   console.log("Beginning sync...");
 
   const validEnvironments = ["dev"];
 
-  const envName = process.env.ENVIRONMENT;
+  const envName = args[0];
   if (!envName || !validEnvironments.includes(envName)) {
     throw new Error(
       "ENVIRONMENT must be one of: " + validEnvironments.join(", ")
@@ -180,4 +181,4 @@ const run = async () => {
   console.log("Sync complete.");
 };
 
-run();
+run(args);
