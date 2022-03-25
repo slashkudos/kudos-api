@@ -7,12 +7,6 @@ on:
     branches: [develop]
     paths: [amplify/**]
   workflow_call:
-    inputs:
-      force:
-        description: "Force push to AWS"
-        default: false
-        required: false
-        type: boolean
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -38,7 +32,6 @@ jobs:
     uses: ./.github/workflows/reusable-deploy.yml
     needs: build_test
     with:
-      force: ${{ inputs.force }}
       amplify_env: dev
       amplify_appId: d5u222qsuh3lu
       branch_ref: develop
