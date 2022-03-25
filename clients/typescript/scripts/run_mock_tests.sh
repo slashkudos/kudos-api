@@ -3,6 +3,7 @@
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 ROOT_DIR=$SCRIPT_DIR/..
+runTestsExitCode=0
 
 export API_URL='http://localhost:20002/graphql'
 export API_KEY='da2-fakeApiId123456'
@@ -13,17 +14,18 @@ npm ci
 cd - 1>/dev/null
 
 echo "Starting mock api..."
-amplify mock api | while read line; do
+while read line; do
   cd $ROOT_DIR
 
-  if echo $line | grep -q "AppSync Mock endpoint is running.*"; then
+  if echo $line | grep "AppSync Mock endpoint is running.*"; then
     echo "Executing integration tests..."
     npm run test:int
+    runTestsExitCode=$?
 
     echo "Terminating mock api..."
     lsof -ti tcp:20002 | xargs kill
   fi
-  if echo $line | grep -q "Port 20003 is already in use.*"; then
+  if echo $line | grep "Port 20003 is already in use.*"; then
     echo "Port is already in use. Attempting to run tests..."
     npm run test:int
 
@@ -32,4 +34,11 @@ amplify mock api | while read line; do
   fi
 
   cd - 1>/dev/null
-done
+done < <(amplify mock api)
+
+echo "Done."
+
+if [ "$runTestsExitCode" -ne "0" ]; then
+  echo "Integration tests failed"
+  exit 1
+fi

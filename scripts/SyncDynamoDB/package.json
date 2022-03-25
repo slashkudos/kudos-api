@@ -10,9 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1098.0",
-    "base-64": "^1.0.0",
-    "crypto-js": "^4.1.1",
-    "node-fetch": "^3.2.3"
+    "aws-sdk": "^2.1098.0"
   }
 }
