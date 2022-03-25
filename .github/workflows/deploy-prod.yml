@@ -9,9 +9,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  build_test:
+    name: Build and Test
+    uses: ./.github/workflows/deploy-ci.yml
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   deploy:
-    name: Deploy Prod
+    name: Deploy
     runs-on: ubuntu-latest
+    needs: build_test
     environment:
       name: Production
       url: https://graphqlapi.slashkudos.com/graphql
@@ -36,10 +43,6 @@ jobs:
           aws-region: us-east-1
       - name: amplify pull
         run: ./scripts/amplify_pull.sh ${{ env.amplify_env }} ${{ env.amplify_appId }}
-      - name: Run Mock Integration Tests
-        run: |
-          ./scripts/update_src.sh
-          ./clients/typescript/scripts/run_mock_tests.sh
       - name: amplify push
         run: |
           # GraphQL transformer version 2 outputs GraphQL API Key even with "CreateAPIKey": 0
