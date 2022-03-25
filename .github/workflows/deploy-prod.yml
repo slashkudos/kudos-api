@@ -17,34 +17,14 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   deploy:
     name: Deploy
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/reusable-deploy.yml
     needs: build_test
-    environment:
-      name: Production
-      url: https://graphqlapi.slashkudos.com/graphql
-    env:
+    with:
       amplify_env: prod
       amplify_appId: d5u222qsuh3lu
-    concurrency: ${{ github.workflow }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: main
-      - name: Setup Amplify
-        uses: ./.github/workflows/composite/amplify-setup
-        with:
-          node_version: "16.x"
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      - name: amplify pull
-        run: ./scripts/amplify_pull.sh ${{ env.amplify_env }} ${{ env.amplify_appId }}
-      - name: amplify push
-        run: |
-          # GraphQL transformer version 2 outputs GraphQL API Key even with "CreateAPIKey": 0
-          amplify push --yes | grep -v "GraphQL API KEY"
-      # TODO - Run integration tests against new deployment
+      branch_ref: main
+      deployment_env: Production
+      deployment_url: https://graphqlapi.slashkudos.com/graphql
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
