@@ -71,4 +71,5 @@ jobs:
             Write-Host "Running amplify push --yes"
             amplify push --yes | grep -v "GraphQL API KEY"
           }
+          if(!$?) { throw "Push failed." }
       # TODO - Run integration tests against new deployment
