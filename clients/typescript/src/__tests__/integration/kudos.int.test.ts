@@ -85,29 +85,25 @@ describe("kudos client", () => {
       expect(total).toBeGreaterThanOrEqual(1);
     });
 
-    // @searchable mocking is not supported. Search queries will not work as expected.
-    it.skip("search kudos by username partial", async () => {
+    it("search kudos by username partial", async () => {
       const receiverUsername = "testReceiverUser";
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const connection = await kudosClient.searchKudosByUser(receiverUsername);
-      expect(connection.total).toBeGreaterThanOrEqual(1);
       expect(connection.items.length).toBeGreaterThanOrEqual(1);
     });
 
-    it.skip("search kudos by username exact", async () => {
+    it("search kudos by username exact", async () => {
       const receiverUsername = "testReceiverUsername";
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const connection = await kudosClient.searchKudosByUser(receiverUsername);
-      expect(connection.total).toBeGreaterThanOrEqual(1);
       expect(connection.items.length).toBeGreaterThanOrEqual(1);
     });
 
-    it.skip("search kudos by username different casing", async () => {
+    it("search kudos by username different casing does NOT work", async () => {
       const receiverUsername = "testreceiverusername";
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const connection = await kudosClient.searchKudosByUser(receiverUsername);
-      expect(connection.total).toBeGreaterThanOrEqual(1);
-      expect(connection.items.length).toBeGreaterThanOrEqual(1);
+      expect(connection.items.length).toBe(0);
     });
   });
 });

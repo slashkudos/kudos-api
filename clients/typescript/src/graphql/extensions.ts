@@ -23,3 +23,14 @@ export const kudosByDateTotal = /* GraphQL */ `
     }
   }
 `;
+
+export const listPeopleIds = /* GraphQL */ `
+  query ListPeopleIds($filter: ModelPersonFilterInput, $limit: Int, $nextToken: String) {
+    listPeople(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+      }
+      nextToken
+    }
+  }
+`;
