@@ -50,6 +50,25 @@ query KudosByDate(
   }
 }
 
+# filter: { "receiverId" : { "eq": "dd65acc8-bea8-410f-a120-07fb76f433e8" }, "dataSourceApp": { "eq": "twitter" } }
+query KudosByDateTotal(
+  $filter: ModelKudoFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  kudosByDate(
+    type: "Kudo"
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+    }
+    nextToken
+  }
+}
+
 query GetKudo($id: ID!) {
   getKudo(id: $id) {
     id
@@ -172,21 +191,49 @@ query GetPerson($id: ID!) {
   }
 }
 
-query ListPersons(
+# {"username": {"contains": "philip"}}
+query ListPeople(
   $filter: ModelPersonFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listPersons(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listPeople(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
       username
       email
+      profileImageUrl
       dataSourceApp
       kudosGiven {
+        items {
+          id
+          giverId
+          receiverId
+          message
+          kudoVerb
+          dataSourceApp
+          createdAt
+          type
+          link
+          metadata
+          updatedAt
+        }
         nextToken
       }
       kudosReceived {
+        items {
+          id
+          giverId
+          receiverId
+          message
+          kudoVerb
+          dataSourceApp
+          createdAt
+          type
+          link
+          metadata
+          updatedAt
+        }
         nextToken
       }
       createdAt

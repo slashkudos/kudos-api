@@ -78,14 +78,14 @@ describe("kudos client", () => {
       expect(kudos.items.length).toBeGreaterThanOrEqual(1);
     });
 
-    // @searchable mocking is not supported. Search queries will not work as expected.
-    it.skip("get total kudos for receiver", async () => {
+    it("get total kudos for receiver", async () => {
       const receiverUsername = "testReceiverUsername";
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const total = await kudosClient.getTotalKudosForReceiver(receiverUsername, DataSourceApp.twitter);
       expect(total).toBeGreaterThanOrEqual(1);
     });
 
+    // @searchable mocking is not supported. Search queries will not work as expected.
     it.skip("search kudos by username partial", async () => {
       const receiverUsername = "testReceiverUser";
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });

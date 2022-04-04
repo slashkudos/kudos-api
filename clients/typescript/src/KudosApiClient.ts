@@ -28,7 +28,7 @@ import {
   SearchPeopleQuery,
   SearchPeopleQueryVariables,
 } from "./API";
-import { searchKudosTotal } from "./graphql/extensions";
+import { kudosByDateTotal } from "./graphql/extensions";
 import { createKudo, createPerson } from "./graphql/mutations";
 import { kudosByDate, listKudos, listPeople, searchKudos, searchPeople } from "./graphql/queries";
 import { LoggerService } from "./LoggerService";
@@ -148,15 +148,34 @@ export class KudosApiClient {
     if (!receiver) {
       return null;
     }
-    const queryVariables: SearchKudosQueryVariables = {
+
+    let total = 0;
+    const queryVariables: KudosByDateQueryVariables = {
+      type: "Kudo",
+      sortDirection: ModelSortDirection.DESC,
       filter: {
         receiverId: { eq: receiver.id },
         dataSourceApp: { eq: dataSource },
       },
+      limit: 1000,
     };
-    const result = await this.graphQLClient.request<SearchKudosQuery, SearchKudosQueryVariables>(searchKudosTotal, queryVariables);
-    this.logger.http(JSON.stringify(result));
-    return result.searchKudos?.total || undefined;
+
+    let nextToken: string | null | undefined;
+
+    do {
+      const result = await this.graphQLClient.request<KudosByDateQuery, KudosByDateQueryVariables>(kudosByDateTotal, queryVariables);
+      this.logger.http(JSON.stringify(result));
+      if (!result.kudosByDate) {
+        throw new Error("Expected kudosByDate to be returned from kudosByDateTotal");
+      }
+      total += result.kudosByDate.items.length;
+      nextToken = result.kudosByDate.nextToken;
+      queryVariables.nextToken = nextToken;
+    } while (nextToken);
+
+    this.logger.info(`Total kudos for ${username}: ${total}"`);
+
+    return total;
   }
 
   public async searchKudosByUser(usernameSearchTerm: string): Promise<SearchableKudoConnection> {
