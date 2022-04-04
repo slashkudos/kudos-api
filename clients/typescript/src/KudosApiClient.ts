@@ -133,6 +133,8 @@ export class KudosApiClient {
     queryVariables: KudosByDateQueryVariables = { type: "Kudo", sortDirection: ModelSortDirection.DESC },
     queryOverride?: string
   ): Promise<ModelKudoConnection> {
+    const defaultVariables = { type: "Kudo", sortDirection: ModelSortDirection.DESC };
+    queryVariables = { ...defaultVariables, ...queryVariables };
     queryVariables.type = "Kudo";
     const query = queryOverride || kudosByDate;
     const listKudosResponse = await this.graphQLClient.request<KudosByDateQuery, KudosByDateQueryVariables>(query, queryVariables);
