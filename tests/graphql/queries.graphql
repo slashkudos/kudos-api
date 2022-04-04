@@ -1,27 +1,6 @@
 # Queries copied from src/graphql/queries.ts
 # Pass Map object with double-quoted JSON (i.e. { "username" : "philip" } )
 
-# { "receiverId" : { "eq": "dd65acc8-bea8-410f-a120-07fb76f433e8" }, "dataSourceApp": { "eq": "twitter" } }
-query SearchKudos(
-  $filter: SearchableKudoFilterInput
-  $sort: [SearchableKudoSortInput]
-  $limit: Int
-  $nextToken: String
-  $from: Int
-  $aggregates: [SearchableKudoAggregationInput]
-) {
-  searchKudos(
-    filter: $filter
-    sort: $sort
-    limit: $limit
-    nextToken: $nextToken
-    from: $from
-    aggregates: $aggregates
-  ) {
-    total
-  }
-}
-
 query KudosByDate(
   $createdAt: ModelStringKeyConditionInput
   $filter: ModelKudoFilterInput

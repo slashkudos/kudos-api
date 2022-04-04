@@ -1,17 +1,4 @@
-export const searchKudosTotal = /* GraphQL */ `
-  query SearchKudos(
-    $filter: SearchableKudoFilterInput
-    $sort: [SearchableKudoSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableKudoAggregationInput]
-  ) {
-    searchKudos(filter: $filter, sort: $sort, limit: $limit, nextToken: $nextToken, from: $from, aggregates: $aggregates) {
-      total
-    }
-  }
-`;
+// Custom graphql queries used to optimize the response size
 
 export const kudosByDateTotal = /* GraphQL */ `
   query KudosByDateTotal($type: String!, $sortDirection: ModelSortDirection, $filter: ModelKudoFilterInput, $limit: Int, $nextToken: String) {
