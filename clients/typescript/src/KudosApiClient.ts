@@ -17,20 +17,15 @@ import {
   ListPeopleQuery,
   ListPeopleQueryVariables,
   ModelKudoConnection,
+  ModelKudoFilterInput,
   ModelPersonConnection,
+  ModelPersonFilterInput,
   ModelSortDirection,
   Person,
-  SearchableKudoConnection,
-  SearchableKudoFilterInput,
-  SearchablePersonFilterInput,
-  SearchKudosQuery,
-  SearchKudosQueryVariables,
-  SearchPeopleQuery,
-  SearchPeopleQueryVariables,
 } from "./API";
-import { searchKudosTotal } from "./graphql/extensions";
+import { listPeopleIds } from "./graphql/extensions";
 import { createKudo, createPerson } from "./graphql/mutations";
-import { kudosByDate, listKudos, listPeople, searchKudos, searchPeople } from "./graphql/queries";
+import { kudosByDate, listKudos, listPeople } from "./graphql/queries";
 import { LoggerService } from "./LoggerService";
 
 export interface KudosGraphQLConfig {
@@ -119,8 +114,9 @@ export class KudosApiClient {
     }
   }
 
-  public async listPeople(queryVariables: ListPeopleQueryVariables): Promise<ModelPersonConnection> {
-    const listPeopleResponse = await this.graphQLClient.request<ListPeopleQuery, ListPeopleQueryVariables>(listPeople, queryVariables);
+  public async listPeople(queryVariables: ListPeopleQueryVariables, queryOverride?: string): Promise<ModelPersonConnection> {
+    const query = queryOverride || listPeople;
+    const listPeopleResponse = await this.graphQLClient.request<ListPeopleQuery, ListPeopleQueryVariables>(query, queryVariables);
     this.logger.http(JSON.stringify(listPeopleResponse));
     const modelPersonConnection = listPeopleResponse.listPeople as ModelPersonConnection;
     return modelPersonConnection;
@@ -134,10 +130,12 @@ export class KudosApiClient {
   }
 
   public async listKudosByDate(
-    queryVariables: KudosByDateQueryVariables = { type: "Kudo", sortDirection: ModelSortDirection.DESC }
+    queryVariables: KudosByDateQueryVariables = { type: "Kudo", sortDirection: ModelSortDirection.DESC },
+    queryOverride?: string
   ): Promise<ModelKudoConnection> {
     queryVariables.type = "Kudo";
-    const listKudosResponse = await this.graphQLClient.request<KudosByDateQuery, KudosByDateQueryVariables>(kudosByDate, queryVariables);
+    const query = queryOverride || kudosByDate;
+    const listKudosResponse = await this.graphQLClient.request<KudosByDateQuery, KudosByDateQueryVariables>(query, queryVariables);
     this.logger.http(JSON.stringify(listKudosResponse));
     const modelKudoConnection = listKudosResponse.kudosByDate as ModelKudoConnection;
     return modelKudoConnection;
@@ -148,57 +146,75 @@ export class KudosApiClient {
     if (!receiver) {
       return null;
     }
-    const queryVariables: SearchKudosQueryVariables = {
+
+    let total = 0;
+    const queryVariables: KudosByDateQueryVariables = {
+      type: "Kudo",
+      sortDirection: ModelSortDirection.DESC,
       filter: {
         receiverId: { eq: receiver.id },
         dataSourceApp: { eq: dataSource },
       },
+      limit: 1000,
     };
-    const result = await this.graphQLClient.request<SearchKudosQuery, SearchKudosQueryVariables>(searchKudosTotal, queryVariables);
-    this.logger.http(JSON.stringify(result));
-    return result.searchKudos?.total || undefined;
+
+    let nextToken: string | null | undefined;
+
+    do {
+      const result = await this.listKudosByDate(queryVariables);
+      this.logger.http(JSON.stringify(result));
+      if (!result) {
+        throw new Error("Expected kudosByDate to be returned from kudosByDateTotal");
+      }
+      total += result.items.length;
+      nextToken = result.nextToken;
+      queryVariables.nextToken = nextToken;
+    } while (nextToken);
+
+    this.logger.info(`Total kudos for ${username}: ${total}"`);
+
+    return total;
   }
 
-  public async searchKudosByUser(usernameSearchTerm: string): Promise<SearchableKudoConnection> {
-    const users = await this.searchUsers(usernameSearchTerm);
-    if (users.length === 0) {
-      const result: SearchableKudoConnection = {
-        __typename: "SearchableKudoConnection",
-        total: 0,
+  public async searchKudosByUser(usernameSearchTerm: string): Promise<ModelKudoConnection> {
+    const people = await this.searchPeople(usernameSearchTerm, { queryOverride: listPeopleIds });
+    if (people.length === 0) {
+      const result: ModelKudoConnection = {
+        __typename: "ModelKudoConnection",
         items: [],
-        aggregateItems: [],
       };
       return result;
     }
-    const userIdFilters: SearchableKudoFilterInput[] = [];
-    users.forEach((user) => {
-      userIdFilters.push({ receiverId: { eq: user.id } }, { giverId: { eq: user.id } });
+    const personIdFilters: ModelKudoFilterInput[] = [];
+    people.forEach((person) => {
+      personIdFilters.push({ receiverId: { eq: person.id } }, { giverId: { eq: person.id } });
     });
-    const queryVariables: SearchKudosQueryVariables = {
-      filter: { or: userIdFilters },
+    const queryVariables: KudosByDateQueryVariables = {
+      type: "Kudo",
+      filter: { or: personIdFilters },
     };
-    const result = await this.graphQLClient.request<SearchKudosQuery, SearchKudosQueryVariables>(searchKudos, queryVariables);
-    this.logger.http(JSON.stringify(result));
-    const connection = result.searchKudos as SearchableKudoConnection;
-    return connection;
+    const queryConnection = await this.listKudosByDate(queryVariables);
+    return queryConnection;
   }
 
-  public async searchUsers(usernameSearchTerm: string, dataSourceApp?: DataSourceApp): Promise<Person[]> {
+  public async searchPeople(usernameSearchTerm: string, options: { dataSourceApp?: DataSourceApp; queryOverride?: string }): Promise<Person[]> {
     this.logger.info(`Searching users with username ${usernameSearchTerm}`);
 
-    const filter: SearchablePersonFilterInput = {
-      username: { wildcard: `*${usernameSearchTerm}*` },
+    // Search people by username
+    const filter: ModelPersonFilterInput = {
+      username: { contains: usernameSearchTerm },
     };
-    if (dataSourceApp) {
-      filter.dataSourceApp = { eq: dataSourceApp };
+    if (options.dataSourceApp) {
+      filter.dataSourceApp = { eq: options.dataSourceApp };
     }
+    const peopleResponse = await this.listPeople(
+      {
+        filter: filter,
+      },
+      options.queryOverride
+    );
 
-    const peopleResponse = await this.graphQLClient.request<SearchPeopleQuery, SearchPeopleQueryVariables>(searchPeople, {
-      filter: filter,
-    });
-    this.logger.http(JSON.stringify(peopleResponse));
-
-    const people = peopleResponse.searchPeople?.items as Person[];
+    const people = peopleResponse.items as Person[];
     this.logger.info(`Found ${people.length} users`);
 
     return people;
