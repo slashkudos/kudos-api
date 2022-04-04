@@ -13,7 +13,7 @@ enum KudoVerb {
   fireworks
 }
 
-type Kudo @model @searchable @auth(rules: [{ allow: public }]) {
+type Kudo @model @auth(rules: [{ allow: public }]) {
   id: ID!
   giverId: ID!
     @index(name: "byPerson", sortKeyFields: ["receiverId"])
@@ -36,7 +36,7 @@ type Kudo @model @searchable @auth(rules: [{ allow: public }]) {
   receiver: Person @belongsTo(fields: ["receiverId"])
 }
 
-type Person @model @searchable @auth(rules: [{ allow: public }]) {
+type Person @model @auth(rules: [{ allow: public }]) {
   id: ID!
   username: String! @index(name: "byUsername")
   email: String
