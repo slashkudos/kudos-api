@@ -9,7 +9,7 @@ if (!apiUrl) {
 const apiKey = process.env.API_KEY || "da2-fakeApiId123456";
 
 describe("kudos client", () => {
-  it("creates twitter kudos for new users", async () => {
+  it("creates twitter kudos", async () => {
     const receiverUsername = "testReceiverUsername";
     const receiverProfileImageUrl = "https://slashkudos.com/receiverProfileImageUrl";
     const giverUsername = "testGiverUsername";
@@ -18,7 +18,7 @@ describe("kudos client", () => {
     const tweetId = "testTweetId";
 
     const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
-    const { kudo, receiver } = await kudosClient.createKudo({
+    const test1 = await kudosClient.createKudo({
       giverUsername,
       receiverUsername,
       message: message,
@@ -27,12 +27,32 @@ describe("kudos client", () => {
       receiverProfileImageUrl,
       dataSource: DataSourceApp.twitter,
     });
-    expect(kudo.message).toEqual(message);
-    expect(kudo.giver?.username).toEqual(giverUsername);
-    expect(kudo.giver?.profileImageUrl).toEqual(giverProfileImageUrl);
-    expect(kudo.receiver?.username).toEqual(receiverUsername);
-    expect(kudo.receiver?.profileImageUrl).toEqual(receiverProfileImageUrl);
-    expect(receiver.kudosReceived?.items.length).toBeGreaterThanOrEqual(1);
+    expect(test1.kudo.message).toEqual(message);
+    expect(test1.kudo.giver?.username).toEqual(giverUsername);
+    expect(test1.kudo.giver?.profileImageUrl).toEqual(giverProfileImageUrl);
+    expect(test1.kudo.receiver?.username).toEqual(receiverUsername);
+    expect(test1.kudo.receiver?.profileImageUrl).toEqual(receiverProfileImageUrl);
+    expect(test1.receiver.kudosReceived?.items.length).toBeGreaterThanOrEqual(1);
+
+    // Create another kudo to test sort by date
+    await new Promise((r) => setTimeout(r, 500));
+
+    const message2 = "testMessage2";
+    const test2 = await kudosClient.createKudo({
+      giverUsername,
+      receiverUsername,
+      message: message2,
+      tweetId: tweetId,
+      giverProfileImageUrl,
+      receiverProfileImageUrl,
+      dataSource: DataSourceApp.twitter,
+    });
+    expect(test2.kudo.message).toEqual(message2);
+    expect(test2.kudo.giver?.username).toEqual(giverUsername);
+    expect(test2.kudo.giver?.profileImageUrl).toEqual(giverProfileImageUrl);
+    expect(test2.kudo.receiver?.username).toEqual(receiverUsername);
+    expect(test2.kudo.receiver?.profileImageUrl).toEqual(receiverProfileImageUrl);
+    expect(test2.receiver.kudosReceived?.items.length).toBeGreaterThanOrEqual(2);
   });
 
   it("throws exception with bad url", async () => {
@@ -69,13 +89,32 @@ describe("kudos client", () => {
       const kudos = await kudosClient.listKudosByDate();
       expect(kudos).not.toBeNull();
       expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+      const sorted = kudos.items.slice().sort((a, b) => Date.parse(b!.createdAt) - Date.parse(a!.createdAt));
+      for (let i = 0; i < sorted.length - 1; i++) {
+        expect(kudos.items[i]?.createdAt).toBe(sorted[i]?.createdAt);
+      }
     });
 
-    it("lists kudos by date with bad type", async () => {
+    it("lists kudos by date with bad type should still work", async () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const kudos = await kudosClient.listKudosByDate({ type: "badType" });
       expect(kudos).not.toBeNull();
       expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+      const sorted = kudos.items.slice().sort((a, b) => Date.parse(b!.createdAt) - Date.parse(a!.createdAt));
+      for (let i = 0; i < sorted.length - 1; i++) {
+        expect(kudos.items[i]?.createdAt).toBe(sorted[i]?.createdAt);
+      }
+    });
+
+    it("lists kudos by date with no sort order", async () => {
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const kudos = await kudosClient.listKudosByDate({ type: "Kudo" });
+      expect(kudos).not.toBeNull();
+      expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+      const sorted = kudos.items.slice().sort((a, b) => Date.parse(b!.createdAt) - Date.parse(a!.createdAt));
+      for (let i = 0; i < sorted.length - 1; i++) {
+        expect(kudos.items[i]?.createdAt).toBe(sorted[i]?.createdAt);
+      }
     });
 
     it("get total kudos for receiver", async () => {
