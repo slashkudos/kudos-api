@@ -1,6 +1,6 @@
 {
   "name": "@slashkudos/kudos-api",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "The Kudos API SDK for Typescript",
   "type": "commonjs",
   "repository": {
