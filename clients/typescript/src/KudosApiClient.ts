@@ -23,7 +23,7 @@ import {
   ModelSortDirection,
   Person,
 } from "./API";
-import { listPeopleIds } from "./graphql/extensions";
+import { kudosByDateTotal, listPeopleIds } from "./graphql/extensions";
 import { createKudo, createPerson } from "./graphql/mutations";
 import { kudosByDate, listKudos, listPeople } from "./graphql/queries";
 import { LoggerService } from "./LoggerService";
@@ -163,7 +163,7 @@ export class KudosApiClient {
     let nextToken: string | null | undefined;
 
     do {
-      const result = await this.listKudosByDate(queryVariables);
+      const result = await this.listKudosByDate(queryVariables, kudosByDateTotal);
       this.logger.http(JSON.stringify(result));
       if (!result) {
         throw new Error("Expected kudosByDate to be returned from kudosByDateTotal");
