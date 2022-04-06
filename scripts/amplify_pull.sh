@@ -32,7 +32,7 @@ if [ -z "$(amplify env get --name $amplify_env | grep 'No environment found')" ]
     rm -rf amplify-temp
 
     # GraphQL transformer version 2 outputs GraphQL API Key even with "CreateAPIKey": 0
-    amplify status | grep -v "GraphQL API KEY"
+    amplify status -v | grep -v "GraphQL API KEY"
 
     status=$?
     exit $status
