@@ -194,6 +194,7 @@ export class KudosApiClient {
     const queryVariables: KudosByDateQueryVariables = {
       type: "Kudo",
       filter: { or: personIdFilters },
+      limit: 1000,
     };
     const queryConnection = await this.listKudosByDate(queryVariables);
     return queryConnection;
