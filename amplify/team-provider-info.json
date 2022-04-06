@@ -1,17 +1,4 @@
 {
-  "prod": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-kudosapi-prod-62303-authRole",
-      "UnauthRoleArn": "arn:aws:iam::391437285077:role/amplify-kudosapi-prod-62303-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::391437285077:role/amplify-kudosapi-prod-62303-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-kudosapi-prod-62303-deployment",
-      "UnauthRoleName": "amplify-kudosapi-prod-62303-unauthRole",
-      "StackName": "amplify-kudosapi-prod-62303",
-      "StackId": "arn:aws:cloudformation:us-east-1:391437285077:stack/amplify-kudosapi-prod-62303/1f49f690-6094-11ec-abe8-0a7fd7c86da5",
-      "AmplifyAppId": "d5u222qsuh3lu"
-    }
-  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-kudos-dev-33359-authRole",
@@ -22,6 +9,19 @@
       "UnauthRoleName": "amplify-kudos-dev-33359-unauthRole",
       "StackName": "amplify-kudos-dev-33359",
       "StackId": "arn:aws:cloudformation:us-east-1:391437285077:stack/amplify-kudos-dev-33359/68e9b120-abec-11ec-aa5b-0e0d579d9d23",
+      "AmplifyAppId": "d5u222qsuh3lu"
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-kudosapi-prod-62303-authRole",
+      "UnauthRoleArn": "arn:aws:iam::391437285077:role/amplify-kudosapi-prod-62303-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::391437285077:role/amplify-kudosapi-prod-62303-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-kudosapi-prod-62303-deployment",
+      "UnauthRoleName": "amplify-kudosapi-prod-62303-unauthRole",
+      "StackName": "amplify-kudosapi-prod-62303",
+      "StackId": "arn:aws:cloudformation:us-east-1:391437285077:stack/amplify-kudosapi-prod-62303/1f49f690-6094-11ec-abe8-0a7fd7c86da5",
       "AmplifyAppId": "d5u222qsuh3lu"
     }
   }
