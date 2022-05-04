@@ -178,7 +178,7 @@ export class KudosApiClient {
     return total;
   }
 
-  public async searchKudosByUser(usernameSearchTerm: string): Promise<ModelKudoConnection> {
+  public async searchKudosByUser(usernameSearchTerm: string, limit: number | null = 25, nextToken?: string | null): Promise<ModelKudoConnection> {
     const people = await this.searchPeople(usernameSearchTerm, { queryOverride: listPeopleIds });
     if (people.length === 0) {
       const result: ModelKudoConnection = {
@@ -194,7 +194,8 @@ export class KudosApiClient {
     const queryVariables: KudosByDateQueryVariables = {
       type: "Kudo",
       filter: { or: personIdFilters },
-      limit: 1000,
+      limit: limit,
+      nextToken: nextToken,
     };
     const queryConnection = await this.listKudosByDate(queryVariables);
     return queryConnection;
