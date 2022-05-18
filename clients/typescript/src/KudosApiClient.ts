@@ -180,11 +180,6 @@ export class KudosApiClient {
   }
 
   public async searchKudosByUser(usernameSearchTerm: string, limit: number | null = 25, nextToken?: string | null): Promise<ModelKudoConnection> {
-    // Skip filters and searching for people if we have a nextToken
-    if (nextToken) {
-      const queryConnection = await this.listKudosByDate({ type: "Kudo", nextToken: nextToken, limit: limit });
-      return queryConnection;
-    }
     const people = await this.searchPeople(usernameSearchTerm, { queryOverride: listPeopleIds });
     if (people.length === 0) {
       const result: ModelKudoConnection = {
