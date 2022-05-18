@@ -32,7 +32,7 @@ describe("kudos client", () => {
     expect(test1.kudo.giver?.profileImageUrl).toEqual(giverProfileImageUrl);
     expect(test1.kudo.receiver?.username).toEqual(receiverUsername);
     expect(test1.kudo.receiver?.profileImageUrl).toEqual(receiverProfileImageUrl);
-    expect(test1.receiver.kudosReceived?.items.length).toBeGreaterThanOrEqual(1);
+    expect(test1.receiver.kudosReceived?.items.length).toEqual(1);
 
     // Create another kudo to test sort by date
     await new Promise((r) => setTimeout(r, 500));
@@ -52,7 +52,7 @@ describe("kudos client", () => {
     expect(test2.kudo.giver?.profileImageUrl).toEqual(giverProfileImageUrl);
     expect(test2.kudo.receiver?.username).toEqual(receiverUsername);
     expect(test2.kudo.receiver?.profileImageUrl).toEqual(receiverProfileImageUrl);
-    expect(test2.receiver.kudosReceived?.items.length).toBeGreaterThanOrEqual(2);
+    expect(test2.receiver.kudosReceived?.items.length).toEqual(2);
   });
 
   it("throws exception with bad url", async () => {
@@ -80,14 +80,14 @@ describe("kudos client", () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const kudos = await kudosClient.listKudos();
       expect(kudos).not.toBeNull();
-      expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+      expect(kudos.items.length).toEqual(2);
     });
 
     it("lists kudos by date", async () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const kudos = await kudosClient.listKudosByDate();
       expect(kudos).not.toBeNull();
-      expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+      expect(kudos.items.length).toEqual(2);
       const sorted = kudos.items.slice().sort((a, b) => Date.parse(b!.createdAt) - Date.parse(a!.createdAt));
       for (let i = 0; i < sorted.length - 1; i++) {
         expect(kudos.items[i]?.createdAt).toBe(sorted[i]?.createdAt);
@@ -98,7 +98,7 @@ describe("kudos client", () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const kudos = await kudosClient.listKudosByDate({ type: "badType" });
       expect(kudos).not.toBeNull();
-      expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+      expect(kudos.items.length).toEqual(2);
       const sorted = kudos.items.slice().sort((a, b) => Date.parse(b!.createdAt) - Date.parse(a!.createdAt));
       for (let i = 0; i < sorted.length - 1; i++) {
         expect(kudos.items[i]?.createdAt).toBe(sorted[i]?.createdAt);
@@ -109,7 +109,7 @@ describe("kudos client", () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const kudos = await kudosClient.listKudosByDate({ type: "Kudo" });
       expect(kudos).not.toBeNull();
-      expect(kudos.items.length).toBeGreaterThanOrEqual(1);
+      expect(kudos.items.length).toEqual(2);
       const sorted = kudos.items.slice().sort((a, b) => Date.parse(b!.createdAt) - Date.parse(a!.createdAt));
       for (let i = 0; i < sorted.length - 1; i++) {
         expect(kudos.items[i]?.createdAt).toBe(sorted[i]?.createdAt);
@@ -119,19 +119,19 @@ describe("kudos client", () => {
     it("get total kudos for receiver", async () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const total = await kudosClient.getTotalKudosForReceiver(receiverUsername, DataSourceApp.twitter);
-      expect(total).toBeGreaterThanOrEqual(1);
+      expect(total).toEqual(2);
     });
 
     it("search kudos by username partial", async () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const connection = await kudosClient.searchKudosByUser("testReceiverUser");
-      expect(connection.items.length).toBeGreaterThanOrEqual(1);
+      expect(connection.items.length).toEqual(2);
     });
 
     it("search kudos by username exact", async () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const connection = await kudosClient.searchKudosByUser(receiverUsername);
-      expect(connection.items.length).toBeGreaterThanOrEqual(1);
+      expect(connection.items.length).toEqual(2);
     });
 
     it("search kudos by receiver with pagination", async () => {
@@ -139,6 +139,9 @@ describe("kudos client", () => {
       const connection = await kudosClient.searchKudosByUser(receiverUsername, 1);
       expect(connection.items.length).toEqual(1);
       expect(connection.nextToken).not.toBeNull();
+      const nextConnection = await kudosClient.searchKudosByUser(receiverUsername, 1, connection.nextToken);
+      expect(nextConnection.items.length).toEqual(1);
+      expect(nextConnection.nextToken).toBeNull();
     });
 
     it("search kudos by giver with pagination", async () => {
@@ -146,6 +149,9 @@ describe("kudos client", () => {
       const connection = await kudosClient.searchKudosByUser(giverUsername, 1);
       expect(connection.items.length).toEqual(1);
       expect(connection.nextToken).not.toBeNull();
+      const nextConnection = await kudosClient.searchKudosByUser(giverUsername, 1, connection.nextToken);
+      expect(nextConnection.items.length).toEqual(1);
+      expect(nextConnection.nextToken).toBeNull();
     });
 
     it("search kudos by username different casing does NOT work", async () => {

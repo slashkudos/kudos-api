@@ -13,6 +13,9 @@ echo "Installing dependencies..."
 npm ci
 cd - 1>/dev/null
 
+echo "Deleting mock data..."
+rm -rf ../../amplify/mock-data/
+
 echo "Starting mock api..."
 while read line; do
   cd $ROOT_DIR
