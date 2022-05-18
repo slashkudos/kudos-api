@@ -7,12 +7,12 @@ if (!apiUrl) {
   throw new Error("API_URL environment variable is not set");
 }
 const apiKey = process.env.API_KEY || "da2-fakeApiId123456";
+const receiverUsername = "testReceiverUsername";
+const giverUsername = "testGiverUsername";
 
 describe("kudos client", () => {
   it("creates twitter kudos", async () => {
-    const receiverUsername = "testReceiverUsername";
     const receiverProfileImageUrl = "https://slashkudos.com/receiverProfileImageUrl";
-    const giverUsername = "testGiverUsername";
     const giverProfileImageUrl = "https://slashkudos.com/receiverProfileImageUrl/giverProfileImageUrl";
     const message = "testMessage";
     const tweetId = "testTweetId";
@@ -56,7 +56,6 @@ describe("kudos client", () => {
   });
 
   it("throws exception with bad url", async () => {
-    const receiverUsername = "testReceiverUsername";
     const receiverProfileImageUrl = "https://slashkudos.com/receiverProfileImageUrl";
     const giverUsername = "bad url username";
     const giverProfileImageUrl = "bad url";
@@ -118,30 +117,40 @@ describe("kudos client", () => {
     });
 
     it("get total kudos for receiver", async () => {
-      const receiverUsername = "testReceiverUsername";
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const total = await kudosClient.getTotalKudosForReceiver(receiverUsername, DataSourceApp.twitter);
       expect(total).toBeGreaterThanOrEqual(1);
     });
 
     it("search kudos by username partial", async () => {
-      const receiverUsername = "testReceiverUser";
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
-      const connection = await kudosClient.searchKudosByUser(receiverUsername);
+      const connection = await kudosClient.searchKudosByUser("testReceiverUser");
       expect(connection.items.length).toBeGreaterThanOrEqual(1);
     });
 
     it("search kudos by username exact", async () => {
-      const receiverUsername = "testReceiverUsername";
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const connection = await kudosClient.searchKudosByUser(receiverUsername);
       expect(connection.items.length).toBeGreaterThanOrEqual(1);
     });
 
-    it("search kudos by username different casing does NOT work", async () => {
-      const receiverUsername = "testreceiverusername";
+    it("search kudos by receiver with pagination", async () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
-      const connection = await kudosClient.searchKudosByUser(receiverUsername);
+      const connection = await kudosClient.searchKudosByUser(receiverUsername, 1);
+      expect(connection.items.length).toEqual(1);
+      expect(connection.nextToken).not.toBeNull();
+    });
+
+    it("search kudos by giver with pagination", async () => {
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const connection = await kudosClient.searchKudosByUser(giverUsername, 1);
+      expect(connection.items.length).toEqual(1);
+      expect(connection.nextToken).not.toBeNull();
+    });
+
+    it("search kudos by username different casing does NOT work", async () => {
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const connection = await kudosClient.searchKudosByUser("testreceiverusername");
       expect(connection.items.length).toBe(0);
     });
   });
