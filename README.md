@@ -1,6 +1,4 @@
-# slashkudos API
-
-The slashkudos API.
+# slashkudos core (API, storage and npm libraries)
 
 - [Amplify Admin UI]
 - [AppSync GraphQL API]
@@ -11,9 +9,8 @@ The slashkudos API.
 ## Stack
 
 - AWS Amplify for the back-end infrastructure
-- AWS AppSync GraphQL APIs for the core Kudos CRUD API
+- AWS AppSync GraphQL APIs for the core slashkudos API
 - DynamoDB for storage because it's cheap and easy
-- REST APIs as needed for integrations such as handling GitHub webhooks
 
 ## Commands
 
