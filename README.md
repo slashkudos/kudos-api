@@ -1,4 +1,4 @@
-# Slash Kudos API
+# slashkudos API
 
 The Kudos API.
 
