@@ -1,6 +1,6 @@
 # slashkudos API
 
-The Kudos API.
+The slashkudos API.
 
 - [Amplify Admin UI]
 - [AppSync GraphQL API]
