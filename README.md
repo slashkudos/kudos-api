@@ -15,13 +15,6 @@ The Kudos API.
 - DynamoDB for storage because it's cheap and easy
 - REST APIs as needed for integrations such as handling GitHub webhooks
 
-## Project Setup
-
-1. Create the follow Codespace secrets for your user
-   1. `AWS_ACCESS_KEY_ID` - Get from AWS Console profile
-   2. `AWS_SECRET_ACCESS_KEY` - Get from AWS Console profile
-2. Create a Codespace and you should be good to go 🚀
-
 ## Commands
 
 - `amplify init`
