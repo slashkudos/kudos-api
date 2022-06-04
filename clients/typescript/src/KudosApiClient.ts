@@ -38,7 +38,7 @@ export interface createKudoOptions {
   giverUsername: string;
   receiverUsername: string;
   message: string;
-  tweetId?: string;
+  link: string;
   giverProfileImageUrl?: string;
   receiverProfileImageUrl?: string;
 }
@@ -83,13 +83,12 @@ export class KudosApiClient {
       });
     }
 
-    const link = this.getLink(options);
     const kudo = await this.sendCreateKudoRequest({
       input: {
         giverId: giver.id,
         receiverId: receiver.id,
         message: options.message,
-        link: link,
+        link: options.link,
         dataSourceApp: options.dataSource,
         kudoVerb: KudoVerb.kudos,
       },
@@ -103,15 +102,6 @@ export class KudosApiClient {
     }
 
     return { kudo, receiver: kudo.receiver };
-  }
-
-  private getLink(options: createKudoOptions): string {
-    switch (options.dataSource) {
-      case DataSourceApp.twitter:
-        return `https://twitter.com/${options.giverUsername}/status/${options.tweetId}`;
-      default:
-        throw new Error(`Unsupported dataSource ${options.dataSource}`);
-    }
   }
 
   public async listPeople(queryVariables: ListPeopleQueryVariables, queryOverride?: string): Promise<ModelPersonConnection> {
