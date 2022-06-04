@@ -1,6 +1,6 @@
 # This workflow will run CI but NOT deploy
 
-name: Deploy CI (Dry Run)
+name: API CI
 
 on:
   pull_request: {}

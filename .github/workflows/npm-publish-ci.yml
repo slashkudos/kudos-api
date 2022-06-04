@@ -1,4 +1,4 @@
-name: npm publish ci
+name: NPM CI
 on:
   pull_request: {}
   push:

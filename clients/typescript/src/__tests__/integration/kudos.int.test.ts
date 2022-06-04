@@ -17,13 +17,14 @@ describe("kudos client", () => {
     const giverProfileImageUrl = "https://slashkudos.com/receiverProfileImageUrl/giverProfileImageUrl";
     const message = "testMessage";
     const tweetId = "testTweetId";
+    const link = `https://twitter.com/${giverUsername}/status/${tweetId}`;
 
     const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
     const test1 = await kudosClient.createKudo({
       giverUsername,
       receiverUsername,
       message: message,
-      tweetId: tweetId,
+      link,
       giverProfileImageUrl,
       receiverProfileImageUrl,
       dataSource: DataSourceApp.twitter,
@@ -43,7 +44,7 @@ describe("kudos client", () => {
       giverUsername,
       receiverUsername,
       message: message2,
-      tweetId: tweetId,
+      link,
       giverProfileImageUrl,
       receiverProfileImageUrl,
       dataSource: DataSourceApp.twitter,
@@ -60,7 +61,7 @@ describe("kudos client", () => {
       giverUsername,
       receiverUsername,
       message: "testing pagination",
-      tweetId: tweetId,
+      link,
       giverProfileImageUrl,
       receiverProfileImageUrl,
       dataSource: DataSourceApp.twitter,
@@ -79,7 +80,7 @@ describe("kudos client", () => {
           giverUsername,
           receiverUsername,
           message: "testMessage",
-          tweetId: "testTweetId",
+          link: `https://twitter.com/${giverUsername}/status/testTweetId`,
           giverProfileImageUrl,
           receiverProfileImageUrl,
           dataSource: DataSourceApp.twitter,
