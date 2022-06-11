@@ -22,6 +22,7 @@ export const createKudo = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -63,6 +64,7 @@ export const createKudo = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -124,6 +126,7 @@ export const updateKudo = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -165,6 +168,7 @@ export const updateKudo = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -226,6 +230,7 @@ export const deleteKudo = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -267,6 +272,7 @@ export const deleteKudo = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -317,6 +323,7 @@ export const createPerson = /* GraphQL */ `
       id
       username
       email
+      profileUrl
       profileImageUrl
       dataSourceApp
       kudosGiven {
@@ -335,6 +342,7 @@ export const createPerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -344,6 +352,7 @@ export const createPerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -369,6 +378,7 @@ export const createPerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -378,6 +388,7 @@ export const createPerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -401,6 +412,7 @@ export const updatePerson = /* GraphQL */ `
       id
       username
       email
+      profileUrl
       profileImageUrl
       dataSourceApp
       kudosGiven {
@@ -419,6 +431,7 @@ export const updatePerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -428,6 +441,7 @@ export const updatePerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -453,6 +467,7 @@ export const updatePerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -462,6 +477,7 @@ export const updatePerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -485,6 +501,7 @@ export const deletePerson = /* GraphQL */ `
       id
       username
       email
+      profileUrl
       profileImageUrl
       dataSourceApp
       kudosGiven {
@@ -503,6 +520,7 @@ export const deletePerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -512,6 +530,7 @@ export const deletePerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -537,6 +556,7 @@ export const deletePerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -546,6 +566,7 @@ export const deletePerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
