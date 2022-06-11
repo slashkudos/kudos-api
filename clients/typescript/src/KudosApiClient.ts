@@ -39,6 +39,8 @@ export interface createKudoOptions {
   receiverUsername: string;
   message: string;
   link: string;
+  giverProfileUrl?: string;
+  receiverProfileUrl?: string;
   giverProfileImageUrl?: string;
   receiverProfileImageUrl?: string;
   metadata?: object;
@@ -69,6 +71,7 @@ export class KudosApiClient {
         input: {
           username: options.giverUsername,
           dataSourceApp: options.dataSource,
+          profileUrl: options.giverProfileUrl,
           profileImageUrl: options.giverProfileImageUrl,
         },
       });
@@ -79,6 +82,7 @@ export class KudosApiClient {
         input: {
           username: options.receiverUsername,
           dataSourceApp: options.dataSource,
+          profileUrl: options.receiverProfileUrl,
           profileImageUrl: options.receiverProfileImageUrl,
         },
       });

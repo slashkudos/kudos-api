@@ -15,6 +15,7 @@ const totalKudos = 4;
 describe("kudos client", () => {
   it("creates twitter kudos", async () => {
     const receiverProfileImageUrl = "https://slashkudos.com/receiverProfileImageUrl";
+    const giverProfileUrl = "https://slashkudos.com/receiverProfileImageUrl/giverProfileUrl";
     const giverProfileImageUrl = "https://slashkudos.com/receiverProfileImageUrl/giverProfileImageUrl";
     const message = "testMessage";
     const tweetId = "testTweetId";
@@ -26,6 +27,7 @@ describe("kudos client", () => {
       receiverUsername,
       message: message,
       link,
+      giverProfileUrl,
       giverProfileImageUrl,
       receiverProfileImageUrl,
       dataSource: DataSourceApp.twitter,
