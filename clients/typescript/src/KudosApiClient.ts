@@ -38,9 +38,10 @@ export interface createKudoOptions {
   giverUsername: string;
   receiverUsername: string;
   message: string;
-  tweetId?: string;
+  link: string;
   giverProfileImageUrl?: string;
   receiverProfileImageUrl?: string;
+  metadata?: object;
 }
 
 export class KudosApiClient {
@@ -83,15 +84,20 @@ export class KudosApiClient {
       });
     }
 
-    const link = this.getLink(options);
+    let metadata: string | undefined = undefined;
+    if (options.metadata) {
+      metadata = JSON.stringify(options.metadata);
+    }
+
     const kudo = await this.sendCreateKudoRequest({
       input: {
         giverId: giver.id,
         receiverId: receiver.id,
         message: options.message,
-        link: link,
+        link: options.link,
         dataSourceApp: options.dataSource,
         kudoVerb: KudoVerb.kudos,
+        metadata: metadata,
       },
     });
 
@@ -103,15 +109,6 @@ export class KudosApiClient {
     }
 
     return { kudo, receiver: kudo.receiver };
-  }
-
-  private getLink(options: createKudoOptions): string {
-    switch (options.dataSource) {
-      case DataSourceApp.twitter:
-        return `https://twitter.com/${options.giverUsername}/status/${options.tweetId}`;
-      default:
-        throw new Error(`Unsupported dataSource ${options.dataSource}`);
-    }
   }
 
   public async listPeople(queryVariables: ListPeopleQueryVariables, queryOverride?: string): Promise<ModelPersonConnection> {
@@ -179,7 +176,20 @@ export class KudosApiClient {
     return total;
   }
 
-  public async searchKudosByUser(usernameSearchTerm: string, limit: number | null = 25, nextToken?: string | null): Promise<ModelKudoConnection> {
+  // Note about pagination - The limit will be applied first, then the filter.
+  // https://github.com/aws-amplify/amplify-js/issues/2358
+  public async searchKudosByUser(
+    usernameSearchTerm: string,
+    options?: {
+      limit?: number | null;
+      nextToken?: string | null;
+      dataSource?: DataSourceApp;
+    }
+  ): Promise<ModelKudoConnection> {
+    if (!options) {
+      options = {};
+    }
+    options.limit = options.limit || 25;
     const people = await this.searchPeople(usernameSearchTerm, { queryOverride: listPeopleIds });
     if (people.length === 0) {
       const result: ModelKudoConnection = {
@@ -190,13 +200,14 @@ export class KudosApiClient {
     }
     const personIdFilters: ModelKudoFilterInput[] = [];
     people.forEach((person) => {
-      personIdFilters.push({ receiverId: { eq: person.id } }, { giverId: { eq: person.id } });
+      personIdFilters.push({ or: [{ receiverId: { eq: person.id } }, { giverId: { eq: person.id } }] });
     });
+    const filter: ModelKudoFilterInput = { or: personIdFilters, and: [{ dataSourceApp: { eq: options?.dataSource } }] };
     const queryVariables: KudosByDateQueryVariables = {
       type: "Kudo",
-      filter: { or: personIdFilters },
-      limit: limit,
-      nextToken: nextToken,
+      filter: filter,
+      limit: options.limit,
+      nextToken: options.nextToken,
     };
     const queryConnection = await this.listKudosByDate(queryVariables);
     return queryConnection;
