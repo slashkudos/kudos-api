@@ -19,6 +19,7 @@ export const getKudo = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -60,6 +61,7 @@ export const getKudo = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -123,6 +125,7 @@ export const listKudos = /* GraphQL */ `
           id
           username
           email
+          profileUrl
           profileImageUrl
           dataSourceApp
           kudosGiven {
@@ -138,6 +141,7 @@ export const listKudos = /* GraphQL */ `
           id
           username
           email
+          profileUrl
           profileImageUrl
           dataSourceApp
           kudosGiven {
@@ -161,6 +165,7 @@ export const getPerson = /* GraphQL */ `
       id
       username
       email
+      profileUrl
       profileImageUrl
       dataSourceApp
       kudosGiven {
@@ -179,6 +184,7 @@ export const getPerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -188,6 +194,7 @@ export const getPerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -213,6 +220,7 @@ export const getPerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -222,6 +230,7 @@ export const getPerson = /* GraphQL */ `
             id
             username
             email
+            profileUrl
             profileImageUrl
             dataSourceApp
             createdAt
@@ -247,6 +256,7 @@ export const listPeople = /* GraphQL */ `
         id
         username
         email
+        profileUrl
         profileImageUrl
         dataSourceApp
         kudosGiven {
@@ -320,6 +330,7 @@ export const kudosByDate = /* GraphQL */ `
           id
           username
           email
+          profileUrl
           profileImageUrl
           dataSourceApp
           kudosGiven {
@@ -335,6 +346,7 @@ export const kudosByDate = /* GraphQL */ `
           id
           username
           email
+          profileUrl
           profileImageUrl
           dataSourceApp
           kudosGiven {
