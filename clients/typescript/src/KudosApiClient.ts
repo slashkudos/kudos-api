@@ -206,7 +206,10 @@ export class KudosApiClient {
     people.forEach((person) => {
       personIdFilters.push({ or: [{ receiverId: { eq: person.id } }, { giverId: { eq: person.id } }] });
     });
-    const filter: ModelKudoFilterInput = { or: personIdFilters, and: [{ dataSourceApp: { eq: options?.dataSource } }] };
+    const filter: ModelKudoFilterInput = { or: personIdFilters };
+    if (options?.dataSource) {
+      filter.and = [{ dataSourceApp: { eq: options?.dataSource } }];
+    }
     const queryVariables: KudosByDateQueryVariables = {
       type: "Kudo",
       filter: filter,
