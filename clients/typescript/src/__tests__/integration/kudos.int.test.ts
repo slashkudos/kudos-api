@@ -144,10 +144,32 @@ describe("kudos client", () => {
       }
     });
 
-    it("get total kudos for receiver", async () => {
+    it("get total kudos for receiver on twitter", async () => {
+      console.log("get total kudos for receiver on twitter");
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
-      const total = await kudosClient.getTotalKudosForReceiver(receiverUsername, DataSourceApp.twitter);
+      const total = await kudosClient.getTotalKudosForUser(receiverUsername, { dataSource: DataSourceApp.twitter });
       expect(total).toEqual(totalTwitterKudos);
+    });
+
+    it("get total kudos for receiver anywhere", async () => {
+      console.log("get total kudos for receiver anywhere");
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const total = await kudosClient.getTotalKudosForUser(receiverUsername);
+      expect(total).toEqual(totalKudos);
+    });
+
+    it("get total kudos received by giver anywhere", async () => {
+      console.log("get total kudos received by giver anywhere");
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const total = await kudosClient.getTotalKudosForUser(giverUsername, { role: "receiver" });
+      expect(total).toEqual(0);
+    });
+
+    it("get total kudos given by giver anywhere", async () => {
+      console.log("get total kudos given by giver anywhere");
+      const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
+      const total = await kudosClient.getTotalKudosForUser(giverUsername, { role: "giver" });
+      expect(total).toEqual(totalKudos);
     });
 
     it("search kudos by username partial", async () => {

@@ -46,6 +46,8 @@ export interface createKudoOptions {
   metadata?: object;
 }
 
+export type Role = "giver" | "receiver" | "any";
+
 export class KudosApiClient {
   private readonly graphQLClient: GraphQLClient;
   private readonly logger: winston.Logger;
@@ -145,34 +147,33 @@ export class KudosApiClient {
     return modelKudoConnection;
   }
 
-  public async getTotalKudosForReceiver(username: string, dataSource: DataSourceApp): Promise<number | null | undefined> {
-    const receiver = await this.getUser(username, dataSource);
-    if (!receiver) {
-      return null;
+  public async getTotalKudosForUser(
+    username: string,
+    options?: {
+      dataSource?: DataSourceApp;
+      role?: Role;
     }
-
+  ): Promise<number | null | undefined> {
+    if (!options) options = {};
+    if (!options.role) {
+      options.role = "receiver";
+    }
     let total = 0;
-    const queryVariables: KudosByDateQueryVariables = {
-      type: "Kudo",
-      sortDirection: ModelSortDirection.DESC,
-      filter: {
-        receiverId: { eq: receiver.id },
-        dataSourceApp: { eq: dataSource },
-      },
-      limit: 1000,
-    };
-
     let nextToken: string | null | undefined;
 
     do {
-      const result = await this.listKudosByDate(queryVariables, kudosByDateTotal);
-      this.logger.http(JSON.stringify(result));
+      const result = await this.searchKudosByUser(username, {
+        listKudosByDateQueryOverride: kudosByDateTotal,
+        limit: 1000,
+        nextToken,
+        dataSource: options.dataSource,
+        role: options.role,
+      });
       if (!result) {
         throw new Error("Expected kudosByDate to be returned from kudosByDateTotal");
       }
       total += result.items.length;
       nextToken = result.nextToken;
-      queryVariables.nextToken = nextToken;
     } while (nextToken);
 
     this.logger.info(`Total kudos for ${username}: ${total}"`);
@@ -188,6 +189,8 @@ export class KudosApiClient {
       limit?: number | null;
       nextToken?: string | null;
       dataSource?: DataSourceApp;
+      listKudosByDateQueryOverride?: string;
+      role?: Role;
     }
   ): Promise<ModelKudoConnection> {
     if (!options) {
@@ -204,7 +207,19 @@ export class KudosApiClient {
     }
     const personIdFilters: ModelKudoFilterInput[] = [];
     people.forEach((person) => {
-      personIdFilters.push({ or: [{ receiverId: { eq: person.id } }, { giverId: { eq: person.id } }] });
+      const receiverFilter: ModelKudoFilterInput = { receiverId: { eq: person.id } };
+      const giverFilter: ModelKudoFilterInput = { giverId: { eq: person.id } };
+      const filters: ModelKudoFilterInput[] = [];
+      if (options?.role && options.role !== "any") {
+        if (options.role === "receiver") {
+          filters.push(receiverFilter);
+        } else {
+          filters.push(giverFilter);
+        }
+      } else {
+        filters.push(receiverFilter, giverFilter);
+      }
+      personIdFilters.push({ or: filters });
     });
     const filter: ModelKudoFilterInput = { or: personIdFilters };
     if (options?.dataSource) {
@@ -216,12 +231,12 @@ export class KudosApiClient {
       limit: options.limit,
       nextToken: options.nextToken,
     };
-    const queryConnection = await this.listKudosByDate(queryVariables);
+    const queryConnection = await this.listKudosByDate(queryVariables, options?.listKudosByDateQueryOverride);
     return queryConnection;
   }
 
   public async searchPeople(usernameSearchTerm: string, options: { dataSourceApp?: DataSourceApp; queryOverride?: string }): Promise<Person[]> {
-    this.logger.info(`Searching users with username ${usernameSearchTerm}`);
+    this.logger.info(`Searching users with username ${usernameSearchTerm}\nOptions: ${JSON.stringify(options)}`);
 
     // Search people by username
     const filter: ModelPersonFilterInput = {
