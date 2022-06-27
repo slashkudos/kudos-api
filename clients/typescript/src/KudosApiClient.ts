@@ -328,10 +328,10 @@ export class KudosApiClient {
   // FIXME - remove once all users are saved with lowercase usernames
   private async savePersonUsernameLower(modelPersonConnection: ModelPersonConnection): Promise<void> {
     for (const person of modelPersonConnection.items) {
-      if (person && !person.usernameLower) {
-        person.usernameLower = person.username.toLowerCase();
+      if (person && person.usernameLower == null) {
         try {
-          this.logger.info(`Saving person usernameLower "${person.usernameLower}"`);
+          this.logger.info(`Saving usernameLower for "${person.username}"`);
+          person.usernameLower = person.username.toLowerCase();
           await this.graphQLClient.request<UpdatePersonMutation, UpdatePersonMutationVariables>(updatePerson, {
             input: { id: person.id, usernameLower: person.usernameLower },
           });
@@ -346,9 +346,9 @@ export class KudosApiClient {
   private async saveKudoMessageLower(modelKudoConnection: ModelKudoConnection): Promise<void> {
     for (const kudo of modelKudoConnection.items) {
       if (kudo && !kudo.messageLower) {
-        kudo.messageLower = kudo.message.toLowerCase();
         try {
-          this.logger.info(`Saving kudo messageLower "${kudo.messageLower}"`);
+          this.logger.info(`Saving messageLower for "${kudo.message}"`);
+          kudo.messageLower = kudo.message.toLowerCase();
           await this.graphQLClient.request<UpdateKudoMutation, UpdateKudoMutationVariables>(updateKudo, {
             input: { id: kudo.id, messageLower: kudo.messageLower },
           });
