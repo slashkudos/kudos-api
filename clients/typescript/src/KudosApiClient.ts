@@ -243,7 +243,7 @@ export class KudosApiClient {
   }
 
   public async searchPeople(usernameSearchTerm: string, options: { dataSourceApp?: DataSourceApp; queryOverride?: string }): Promise<Person[]> {
-    this.logger.info(`Searching users with username ${usernameSearchTerm}\nOptions: ${JSON.stringify(options)}`);
+    this.logger.info(`Searching users with username "${usernameSearchTerm}"\nOptions: ${JSON.stringify(options)}`);
     const usernameSearchTermLower = usernameSearchTerm.toLowerCase();
 
     // Search people by username
@@ -330,7 +330,7 @@ export class KudosApiClient {
     for (const person of modelPersonConnection.items) {
       if (person && person.username && !person.usernameLower) {
         try {
-          this.logger.info(`Saving usernameLower for "${person.username}"`);
+          this.logger.info(`Saving usernameLower for "${person.username}" data source "${person.dataSourceApp}"`);
           person.usernameLower = person.username.toLowerCase();
           await this.graphQLClient.request<UpdatePersonMutation, UpdatePersonMutationVariables>(updatePerson, {
             input: { id: person.id, usernameLower: person.usernameLower },
