@@ -249,7 +249,7 @@ export class KudosApiClient {
     // Search people by username
     // FIXME - Remove OR and only search by usernameLower once it is populated everywhere
     const filter: ModelPersonFilterInput = {
-      or: [{ username: { eq: usernameSearchTerm } }, { usernameLower: { contains: usernameSearchTermLower } }],
+      or: [{ username: { contains: usernameSearchTerm } }, { usernameLower: { contains: usernameSearchTermLower } }],
     };
     if (options.dataSourceApp) {
       filter.dataSourceApp = { eq: options.dataSourceApp };
