@@ -3,6 +3,8 @@ enum DataSourceApp {
   slack
   teams
   twitter
+  discord
+  linkedin
   other
 }
 
@@ -20,6 +22,7 @@ type Kudo @model @auth(rules: [{ allow: public }]) {
     @index(name: "byGiver")
   receiverId: ID! @index(name: "byReceiver")
   message: String!
+  messageLower: String
   kudoVerb: KudoVerb!
   dataSourceApp: DataSourceApp!
   createdAt: AWSDateTime!
@@ -39,6 +42,7 @@ type Kudo @model @auth(rules: [{ allow: public }]) {
 type Person @model @auth(rules: [{ allow: public }]) {
   id: ID!
   username: String! @index(name: "byUsername")
+  usernameLower: String
   email: String
   profileUrl: AWSURL
   profileImageUrl: AWSURL
