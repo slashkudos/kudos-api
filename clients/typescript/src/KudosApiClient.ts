@@ -244,10 +244,12 @@ export class KudosApiClient {
 
   public async searchPeople(usernameSearchTerm: string, options: { dataSourceApp?: DataSourceApp; queryOverride?: string }): Promise<Person[]> {
     this.logger.info(`Searching users with username ${usernameSearchTerm}\nOptions: ${JSON.stringify(options)}`);
+    const usernameSearchTermLower = usernameSearchTerm.toLowerCase();
 
     // Search people by username
+    // FIXME - Remove OR and only search by usernameLower once it is populated everywhere
     const filter: ModelPersonFilterInput = {
-      username: { contains: usernameSearchTerm },
+      or: [{ username: { eq: usernameSearchTerm } }, { usernameLower: { contains: usernameSearchTermLower } }],
     };
     if (options.dataSourceApp) {
       filter.dataSourceApp = { eq: options.dataSourceApp };

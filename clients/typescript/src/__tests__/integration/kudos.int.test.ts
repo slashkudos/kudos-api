@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DataSourceApp } from "../../API";
 import { KudosApiClient } from "../../KudosApiClient";
@@ -249,10 +250,10 @@ describe("kudos client", () => {
       expect(response1.items.length).toBe(1);
     });
 
-    it("search kudos by username different casing does NOT work", async () => {
+    it("search kudos by username different casing works", async () => {
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const connection = await kudosClient.searchKudosByUser(receiverUsername.toLowerCase());
-      expect(connection.items.length).toBe(0);
+      expect(connection.items.length).toBe(totalKudos);
     });
   });
 });
