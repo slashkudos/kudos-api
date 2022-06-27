@@ -22,9 +22,13 @@ import {
   ModelPersonFilterInput,
   ModelSortDirection,
   Person,
+  UpdateKudoMutation,
+  UpdateKudoMutationVariables,
+  UpdatePersonMutation,
+  UpdatePersonMutationVariables,
 } from "./API";
 import { kudosByDateTotal, listPeopleIds } from "./graphql/extensions";
-import { createKudo, createPerson } from "./graphql/mutations";
+import { createKudo, createPerson, updateKudo, updatePerson } from "./graphql/mutations";
 import { kudosByDate, listKudos, listPeople } from "./graphql/queries";
 import { LoggerService } from "./LoggerService";
 
@@ -122,6 +126,7 @@ export class KudosApiClient {
     const listPeopleResponse = await this.graphQLClient.request<ListPeopleQuery, ListPeopleQueryVariables>(query, queryVariables);
     this.logger.http(JSON.stringify(listPeopleResponse));
     const modelPersonConnection = listPeopleResponse.listPeople as ModelPersonConnection;
+    this.savePersonUsernameLower(modelPersonConnection);
     return modelPersonConnection;
   }
 
@@ -129,6 +134,7 @@ export class KudosApiClient {
     const listKudosResponse = await this.graphQLClient.request<ListKudosQuery, ListKudosQueryVariables>(listKudos, queryVariables);
     this.logger.http(JSON.stringify(listKudosResponse));
     const modelKudoConnection = listKudosResponse.listKudos as ModelKudoConnection;
+    this.saveKudoMessageLower(modelKudoConnection);
     return modelKudoConnection;
   }
 
@@ -144,6 +150,7 @@ export class KudosApiClient {
     const listKudosResponse = await this.graphQLClient.request<KudosByDateQuery, KudosByDateQueryVariables>(query, queryVariables);
     this.logger.http(JSON.stringify(listKudosResponse));
     const modelKudoConnection = listKudosResponse.kudosByDate as ModelKudoConnection;
+    this.saveKudoMessageLower(modelKudoConnection);
     return modelKudoConnection;
   }
 
@@ -261,6 +268,7 @@ export class KudosApiClient {
   private async sendCreateKudoRequest(mutationVariables: CreateKudoMutationVariables): Promise<Kudo> {
     this.logger.info(`Sending create kudo request`);
     const input: CreateKudoInput = {
+      messageLower: mutationVariables.input.message.toLowerCase(),
       ...mutationVariables.input,
       kudoVerb: KudoVerb.kudos,
     };
@@ -277,6 +285,7 @@ export class KudosApiClient {
   private async createPerson(mutationVariables: CreatePersonMutationVariables): Promise<Person> {
     this.logger.info(`Creating a person with the username ${mutationVariables.input.username}`);
     const input: CreatePersonInput = {
+      usernameLower: mutationVariables.input.username.toLowerCase(),
       ...mutationVariables.input,
     };
     const createPersonResponse = await this.graphQLClient.request<CreatePersonMutation, CreatePersonMutationVariables>(createPerson, {
@@ -312,5 +321,39 @@ export class KudosApiClient {
     people.sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
     const person = people[0];
     return person;
+  }
+
+  // FIXME - remove once all users are saved with lowercase usernames
+  private async savePersonUsernameLower(modelPersonConnection: ModelPersonConnection): Promise<void> {
+    for (const person of modelPersonConnection.items) {
+      if (person && !person.usernameLower) {
+        person.usernameLower = person.username.toLowerCase();
+        try {
+          this.logger.info(`Saving person usernameLower "${person.usernameLower}"`);
+          await this.graphQLClient.request<UpdatePersonMutation, UpdatePersonMutationVariables>(updatePerson, {
+            input: { id: person.id, usernameLower: person.usernameLower },
+          });
+        } catch (error) {
+          this.logger.error(`Error updating person usernameLower: ${error}`);
+        }
+      }
+    }
+  }
+
+  // FIXME - remove once all kudos are saved with lowercase messages
+  private async saveKudoMessageLower(modelKudoConnection: ModelKudoConnection): Promise<void> {
+    for (const kudo of modelKudoConnection.items) {
+      if (kudo && !kudo.messageLower) {
+        kudo.messageLower = kudo.message.toLowerCase();
+        try {
+          this.logger.info(`Saving kudo messageLower "${kudo.messageLower}"`);
+          await this.graphQLClient.request<UpdateKudoMutation, UpdateKudoMutationVariables>(updateKudo, {
+            input: { id: kudo.id, messageLower: kudo.messageLower },
+          });
+        } catch (error) {
+          this.logger.error(`Error updating kudo messageLower: ${error}`);
+        }
+      }
+    }
   }
 }
