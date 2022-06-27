@@ -270,7 +270,7 @@ export class KudosApiClient {
   private async sendCreateKudoRequest(mutationVariables: CreateKudoMutationVariables): Promise<Kudo> {
     this.logger.info(`Sending create kudo request`);
     const input: CreateKudoInput = {
-      messageLower: mutationVariables.input.message.toLowerCase(),
+      // messageLower: mutationVariables.input.message.toLowerCase(),
       ...mutationVariables.input,
       kudoVerb: KudoVerb.kudos,
     };
@@ -287,7 +287,7 @@ export class KudosApiClient {
   private async createPerson(mutationVariables: CreatePersonMutationVariables): Promise<Person> {
     this.logger.info(`Creating a person with the username ${mutationVariables.input.username}`);
     const input: CreatePersonInput = {
-      usernameLower: mutationVariables.input.username.toLowerCase(),
+      // usernameLower: mutationVariables.input.username.toLowerCase(),
       ...mutationVariables.input,
     };
     const createPersonResponse = await this.graphQLClient.request<CreatePersonMutation, CreatePersonMutationVariables>(createPerson, {
