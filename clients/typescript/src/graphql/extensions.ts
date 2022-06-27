@@ -16,6 +16,8 @@ export const listPeopleIds = /* GraphQL */ `
     listPeople(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        username
+        usernameLower
       }
       nextToken
     }
