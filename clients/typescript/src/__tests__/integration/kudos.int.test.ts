@@ -174,6 +174,7 @@ describe("kudos client", () => {
     });
 
     it("search kudos by username partial", async () => {
+      console.log("search kudos by username partial");
       const kudosClient = await KudosApiClient.build({ ApiKey: apiKey, ApiUrl: apiUrl });
       const connection = await kudosClient.searchKudosByUser("testReceiverUser");
       expect(connection.items.length).toEqual(totalKudos);
