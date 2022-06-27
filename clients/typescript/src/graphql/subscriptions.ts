@@ -9,6 +9,7 @@ export const onCreateKudo = /* GraphQL */ `
       giverId
       receiverId
       message
+      messageLower
       kudoVerb
       dataSourceApp
       createdAt
@@ -18,6 +19,7 @@ export const onCreateKudo = /* GraphQL */ `
       giver {
         id
         username
+        usernameLower
         email
         profileUrl
         profileImageUrl
@@ -28,6 +30,7 @@ export const onCreateKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -44,6 +47,7 @@ export const onCreateKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -60,6 +64,7 @@ export const onCreateKudo = /* GraphQL */ `
       receiver {
         id
         username
+        usernameLower
         email
         profileUrl
         profileImageUrl
@@ -70,6 +75,7 @@ export const onCreateKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -86,6 +92,7 @@ export const onCreateKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -110,6 +117,7 @@ export const onUpdateKudo = /* GraphQL */ `
       giverId
       receiverId
       message
+      messageLower
       kudoVerb
       dataSourceApp
       createdAt
@@ -119,6 +127,7 @@ export const onUpdateKudo = /* GraphQL */ `
       giver {
         id
         username
+        usernameLower
         email
         profileUrl
         profileImageUrl
@@ -129,6 +138,7 @@ export const onUpdateKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -145,6 +155,7 @@ export const onUpdateKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -161,6 +172,7 @@ export const onUpdateKudo = /* GraphQL */ `
       receiver {
         id
         username
+        usernameLower
         email
         profileUrl
         profileImageUrl
@@ -171,6 +183,7 @@ export const onUpdateKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -187,6 +200,7 @@ export const onUpdateKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -211,6 +225,7 @@ export const onDeleteKudo = /* GraphQL */ `
       giverId
       receiverId
       message
+      messageLower
       kudoVerb
       dataSourceApp
       createdAt
@@ -220,6 +235,7 @@ export const onDeleteKudo = /* GraphQL */ `
       giver {
         id
         username
+        usernameLower
         email
         profileUrl
         profileImageUrl
@@ -230,6 +246,7 @@ export const onDeleteKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -246,6 +263,7 @@ export const onDeleteKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -262,6 +280,7 @@ export const onDeleteKudo = /* GraphQL */ `
       receiver {
         id
         username
+        usernameLower
         email
         profileUrl
         profileImageUrl
@@ -272,6 +291,7 @@ export const onDeleteKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -288,6 +308,7 @@ export const onDeleteKudo = /* GraphQL */ `
             giverId
             receiverId
             message
+            messageLower
             kudoVerb
             dataSourceApp
             createdAt
@@ -310,6 +331,7 @@ export const onCreatePerson = /* GraphQL */ `
     onCreatePerson {
       id
       username
+      usernameLower
       email
       profileUrl
       profileImageUrl
@@ -320,6 +342,7 @@ export const onCreatePerson = /* GraphQL */ `
           giverId
           receiverId
           message
+          messageLower
           kudoVerb
           dataSourceApp
           createdAt
@@ -329,6 +352,7 @@ export const onCreatePerson = /* GraphQL */ `
           giver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -339,6 +363,7 @@ export const onCreatePerson = /* GraphQL */ `
           receiver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -356,6 +381,7 @@ export const onCreatePerson = /* GraphQL */ `
           giverId
           receiverId
           message
+          messageLower
           kudoVerb
           dataSourceApp
           createdAt
@@ -365,6 +391,7 @@ export const onCreatePerson = /* GraphQL */ `
           giver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -375,6 +402,7 @@ export const onCreatePerson = /* GraphQL */ `
           receiver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -396,6 +424,7 @@ export const onUpdatePerson = /* GraphQL */ `
     onUpdatePerson {
       id
       username
+      usernameLower
       email
       profileUrl
       profileImageUrl
@@ -406,6 +435,7 @@ export const onUpdatePerson = /* GraphQL */ `
           giverId
           receiverId
           message
+          messageLower
           kudoVerb
           dataSourceApp
           createdAt
@@ -415,6 +445,7 @@ export const onUpdatePerson = /* GraphQL */ `
           giver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -425,6 +456,7 @@ export const onUpdatePerson = /* GraphQL */ `
           receiver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -442,6 +474,7 @@ export const onUpdatePerson = /* GraphQL */ `
           giverId
           receiverId
           message
+          messageLower
           kudoVerb
           dataSourceApp
           createdAt
@@ -451,6 +484,7 @@ export const onUpdatePerson = /* GraphQL */ `
           giver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -461,6 +495,7 @@ export const onUpdatePerson = /* GraphQL */ `
           receiver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -482,6 +517,7 @@ export const onDeletePerson = /* GraphQL */ `
     onDeletePerson {
       id
       username
+      usernameLower
       email
       profileUrl
       profileImageUrl
@@ -492,6 +528,7 @@ export const onDeletePerson = /* GraphQL */ `
           giverId
           receiverId
           message
+          messageLower
           kudoVerb
           dataSourceApp
           createdAt
@@ -501,6 +538,7 @@ export const onDeletePerson = /* GraphQL */ `
           giver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -511,6 +549,7 @@ export const onDeletePerson = /* GraphQL */ `
           receiver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -528,6 +567,7 @@ export const onDeletePerson = /* GraphQL */ `
           giverId
           receiverId
           message
+          messageLower
           kudoVerb
           dataSourceApp
           createdAt
@@ -537,6 +577,7 @@ export const onDeletePerson = /* GraphQL */ `
           giver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
@@ -547,6 +588,7 @@ export const onDeletePerson = /* GraphQL */ `
           receiver {
             id
             username
+            usernameLower
             email
             profileUrl
             profileImageUrl
